@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    /* Cible et Module */
+    "target": "ES2020",                                  /* Génère un JS moderne mais compatible */
+    "module": "ESNext",                                  /* Permet d'utiliser 'import/export' */
+    "moduleResolution": "node",                         /* Aide TS à trouver vos fichiers */
+    
+    /* Sortie */
+    "outDir": "./dist",                                 /* Où placer les fichiers compilés */
+    "declaration": true,                                /* Génère les fichiers .d.ts pour les autres dev TS */
+    "sourceMap": true,                                  /* Aide au débogage */
+    
+    /* Rigueur (Qualité du code) */
+    "strict": true,                                     /* Active toutes les vérifications de sécurité */
+    "noImplicitAny": true,                              /* Interdit les variables sans type défini */
+    "esModuleInterop": true,                            /* Compatibilité avec les anciens modules JS */
+    "skipLibCheck": true,                               /* Accélère la compilation */
+    "forceConsistentCasingInFileNames": true,           /* Évite les erreurs Windows vs Linux/Mac */
+    
+    /* Bibliothèques incluses */
+    "lib": ["ESNext", "DOM"]                            /* On inclut le DOM pour le support Web */
+  },
+  "include": ["src/**/*"],                              /* Compile tout ce qui est dans le dossier src */
+  "exclude": ["node_modules", "dist", "tests"]          /* Ignore ces dossiers */
+}
