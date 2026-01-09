@@ -1,9 +1,6 @@
 # Dépendances (Le plus important)
 node_modules/
 
-# Compilation (On ne suit pas le dossier dist car il est généré)
-dist/
-
 # Logs
 npm-debug.log*
 yarn-debug.log*
