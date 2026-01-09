@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ValiNum Demo - RDC</title>
+    <style>
+        body { font-family: sans-serif; display: flex; justify-content: center; padding-top: 50px; background: #f4f7f6; }
+        .card { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
+        h1 { font-size: 1.5rem; color: #333; margin-bottom: 1rem; }
+        input { width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 4px; font-size: 1rem; box-sizing: border-box; outline: none; transition: border-color 0.3s; }
+        input:focus { border-color: #007bff; }
+        .result { margin-top: 1.5rem; padding: 1rem; border-radius: 4px; display: none; }
+        .operator-badge { font-weight: bold; padding: 4px 8px; border-radius: 4px; color: white; display: inline-block; margin-bottom: 10px; }
+        .Vodacom { background-color: #e60000; } /* Rouge */
+        .Orange { background-color: #ff6600; }  /* Orange */
+        .Airtel { background-color: #ff0000; }  /* Rouge/Cerise */
+        .Africell { background-color: #000000; } /* Noir/Violet foncé */
+        .error { color: #d9534f; font-size: 0.9rem; margin-top: 5px; }
+        .success { color: #5cb85c; font-weight: bold; margin-top: 5px; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h1>Testez ValiNum</h1>
+    <p>Saisissez un numéro de téléphone RDC :</p>
+    
+    <input type="text" id="phoneInput" placeholder="Ex: +243824708027 ou 081...">
+    
+    <div id="resultArea" class="result">
+        <div id="operatorBadge" class="operator-badge"></div>
+        <div id="statusMessage"></div>
+        <div id="formattedNumber" style="font-size: 0.8rem; color: #666; margin-top: 10px;"></div>
+    </div>
+</div>
+
+<script src="../dist/valinum.js"></script>
+
+<script>
+    const input = document.getElementById('phoneInput');
+    const resultArea = document.getElementById('resultArea');
+    const operatorBadge = document.getElementById('operatorBadge');
+    const statusMessage = document.getElementById('statusMessage');
+    const formattedNumber = document.getElementById('formattedNumber');
+
+    input.addEventListener('input', (e) => {
+        const val = e.target.value;
+        
+        if (val.length > 0) {
+            // Utilisation de ValiNum
+            const res = ValiNum.validateDRC(val);
+            
+            resultArea.style.display = 'block';
+            
+            // 1. Affichage de l'opérateur
+            if (res.operator) {
+                operatorBadge.innerText = res.operator;
+                operatorBadge.className = 'operator-badge ' + res.operator;
+                operatorBadge.style.display = 'inline-block';
+            } else {
+                operatorBadge.style.display = 'none';
+            }
+
+            // 2. Message de validation
+            if (res.isValid) {
+                statusMessage.innerText = "✓ Numéro valide";
+                statusMessage.className = "success";
+                input.style.borderColor = "#5cb85c";
+            } else {
+                statusMessage.innerText = res.error || "Saisie en cours...";
+                statusMessage.className = "error";
+                input.style.borderColor = res.operator ? "#ffbb33" : "#d9534f";
+            }
+
+            formattedNumber.innerText = "Format : " + res.formatted;
+
+        } else {
+            resultArea.style.display = 'none';
+            input.style.borderColor = "#ddd";
+        }
+    });
+</script>
+
+</body>
+</html>
