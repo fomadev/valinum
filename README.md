@@ -100,16 +100,6 @@ input.addEventListener('input', (e) => {
   </tbody>
 </table>
 
-## Development
-
-1. Clone the repository: git clone `https://github.com/fomadev/valinum.git`
-
-2. Install dependencies: `npm install`
-
-3. Build the project: `npm run build`
-
-4. Run tests: `npm test`
-
 ## License
 
 This project is licensed under the FomaDev Public License (FPL).
