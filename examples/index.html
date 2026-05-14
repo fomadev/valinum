@@ -1,37 +1,66 @@
+<!-- Copyright (c) 2026 Fordi / FomaDev. 
+ Licensed under FomaDev Public License.
+ See LICENSE file in the project root for full license information. -->
+ 
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ValiNum Demo - RDC</title>
+    <title>ValiNum Demo - RDC (v1.0.1)</title>
     <style>
-        body { font-family: sans-serif; display: flex; justify-content: center; padding-top: 50px; background: #f4f7f6; }
-        .card { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
-        h1 { font-size: 1.5rem; color: #333; margin-bottom: 1rem; }
-        input { width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 4px; font-size: 1rem; box-sizing: border-box; outline: none; transition: border-color 0.3s; }
-        input:focus { border-color: #007bff; }
-        .result { margin-top: 1.5rem; padding: 1rem; border-radius: 4px; display: none; }
-        .operator-badge { font-weight: bold; padding: 4px 8px; border-radius: 4px; color: white; display: inline-block; margin-bottom: 10px; }
-        .Vodacom { background-color: #e60000; } /* Rouge */
-        .Orange { background-color: #ff6600; }  /* Orange */
-        .Airtel { background-color: #ff0000; }  /* Rouge/Cerise */
-        .Africell { background-color: #000000; } /* Noir/Violet foncé */
-        .error { color: #d9534f; font-size: 0.9rem; margin-top: 5px; }
-        .success { color: #5cb85c; font-weight: bold; margin-top: 5px; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: flex; justify-content: center; padding-top: 50px; background: #f4f7f6; }
+        .card { background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
+        h1 { font-size: 1.5rem; color: #333; margin-bottom: 0.5rem; text-align: center; }
+        p { color: #666; text-align: center; margin-bottom: 1.5rem; font-size: 0.9rem; }
+        
+        /* Input styling */
+        .input-group { position: relative; }
+        input { 
+            width: 100%; 
+            padding: 14px; 
+            border: 2px solid #ddd; 
+            border-radius: 8px; 
+            font-size: 1.1rem; 
+            box-sizing: border-box; 
+            outline: none; 
+            transition: all 0.3s ease;
+            letter-spacing: 1px;
+        }
+        
+        /* Résultats */
+        .result { margin-top: 1.5rem; padding: 1rem; border-radius: 8px; display: none; background: #fafafa; border: 1px solid #eee; }
+        .operator-badge { font-weight: bold; padding: 5px 12px; border-radius: 20px; color: white; display: inline-block; margin-bottom: 10px; font-size: 0.85rem; text-transform: uppercase; }
+        
+        /* Couleurs Opérateurs */
+        .Vodacom { background-color: #e60000; box-shadow: 0 2px 8px rgba(230, 0, 0, 0.3); }
+        .Orange { background-color: #ff6600; box-shadow: 0 2px 8px rgba(255, 102, 0, 0.3); }
+        .Airtel { background-color: #ff0000; box-shadow: 0 2px 8px rgba(255, 0, 0, 0.3); }
+        .Africell { background-color: #000000; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3); }
+        
+        .status { font-size: 0.95rem; margin-top: 5px; display: block; }
+        .error { color: #d9534f; }
+        .success { color: #5cb85c; font-weight: bold; }
+        .info { color: #f0ad4e; } /* Pour le "Saisie en cours" */
+        
+        .formatted { font-family: monospace; font-size: 0.85rem; color: #888; margin-top: 12px; display: block; border-top: 1px solid #eee; pt: 8px; }
     </style>
 </head>
 <body>
 
 <div class="card">
-    <h1>Testez ValiNum</h1>
-    <p>Saisissez un numéro de téléphone RDC :</p>
+    <h1>ValiNum RDC</h1>
+    <p>Testez la validation intelligente (v1.0.1)</p>
     
-    <input type="text" id="phoneInput" placeholder="Ex: +243824708027 ou 081...">
+    <div class="input-group">
+        <input type="text" id="phoneInput" placeholder="081 234-56-78" inputmode="tel" autocomplete="off">
+    </div>
     
     <div id="resultArea" class="result">
         <div id="operatorBadge" class="operator-badge"></div>
-        <div id="statusMessage"></div>
-        <div id="formattedNumber" style="font-size: 0.8rem; color: #666; margin-top: 10px;"></div>
+        <span id="statusMessage" class="status"></span>
+        <span id="formattedNumber" class="formatted"></span>
     </div>
 </div>
 
@@ -45,15 +74,22 @@
     const formattedNumber = document.getElementById('formattedNumber');
 
     input.addEventListener('input', (e) => {
-        const val = e.target.value;
+        // 1. UX SHIELD : Blocage des caractères non autorisés (uniquement chiffres et +)
+        const rawValue = e.target.value;
+        const cleanInput = rawValue.replace(/[^\d+ \-()]/g, ''); // On laisse passer chiffres, +, espace, tiret, parenthèses
         
-        if (val.length > 0) {
-            // Utilisation de ValiNum
-            const res = ValiNum.validateDRC(val);
+        if (rawValue !== cleanInput) {
+            e.target.value = cleanInput;
+        }
+
+        if (cleanInput.trim().length > 0) {
+            // 2. UTILISATION DE VALINUM v1.0.1
+            // La bibliothèque nettoiera les espaces/tirets d'elle-même en interne
+            const res = ValiNum.validateDRC(cleanInput);
             
             resultArea.style.display = 'block';
             
-            // 1. Affichage de l'opérateur
+            // Affichage de l'opérateur
             if (res.operator) {
                 operatorBadge.innerText = res.operator;
                 operatorBadge.className = 'operator-badge ' + res.operator;
@@ -62,20 +98,24 @@
                 operatorBadge.style.display = 'none';
             }
 
-            // 2. Message de validation
+            // Message de validation et style de bordure
             if (res.isValid) {
                 statusMessage.innerText = "✓ Numéro valide";
-                statusMessage.className = "success";
+                statusMessage.className = "status success";
                 input.style.borderColor = "#5cb85c";
             } else {
                 statusMessage.innerText = res.error || "Saisie en cours...";
-                statusMessage.className = "error";
-                input.style.borderColor = res.operator ? "#ffbb33" : "#d9534f";
+                statusMessage.className = res.error ? "status error" : "status info";
+                
+                // Orange si l'opérateur est connu mais numéro incomplet, rouge si inconnu
+                input.style.borderColor = res.operator ? "#f0ad4e" : "#d9534f";
             }
 
-            formattedNumber.innerText = "Format : " + res.formatted;
+            // Affichage du format final propre
+            formattedNumber.innerText = "Format international : " + res.formatted;
 
         } else {
+            // Reset si le champ est vide
             resultArea.style.display = 'none';
             input.style.borderColor = "#ddd";
         }
