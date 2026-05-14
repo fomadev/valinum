@@ -1,7 +1,7 @@
 {
   "name": "valinum",
-  "version": "1.0.0",
-  "description": "Librairie de validation de numéros de téléphone pour la RDC et plus.",
+  "version": "1.0.1",
+  "description": "Phone number validation library.",
   "main": "./dist/valinum.js",
   "module": "./dist/valinum.mjs",
   "types": "./dist/valinum.d.ts",
