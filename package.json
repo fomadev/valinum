@@ -24,7 +24,7 @@
     "africell"
   ],
   "author": "fomadev",
-  "license": "MIT",
+  "license": "FomaDev Public License",
   "devDependencies": {
     "@rollup/plugin-typescript": "^11.1.6",
     "rollup": "^4.9.6",
