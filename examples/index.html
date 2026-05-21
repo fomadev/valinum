@@ -1,22 +1,15 @@
-<!-- Copyright (c) 2026 Fordi / FomaDev. 
- Licensed under FomaDev Public License.
- See LICENSE file in the project root for full license information. -->
- 
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ValiNum Demo - RDC (v1.0.1)</title>
+    <title>ValiNum Demo - RDC (v1.0.2)</title>
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: flex; justify-content: center; padding-top: 50px; background: #f4f7f6; }
-        .card { background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
+        .card { background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 420px; }
         h1 { font-size: 1.5rem; color: #333; margin-bottom: 0.5rem; text-align: center; }
         p { color: #666; text-align: center; margin-bottom: 1.5rem; font-size: 0.9rem; }
         
-        /* Input styling */
-        .input-group { position: relative; }
         input { 
             width: 100%; 
             padding: 14px; 
@@ -29,36 +22,41 @@
             letter-spacing: 1px;
         }
         
-        /* Résultats */
         .result { margin-top: 1.5rem; padding: 1rem; border-radius: 8px; display: none; background: #fafafa; border: 1px solid #eee; }
-        .operator-badge { font-weight: bold; padding: 5px 12px; border-radius: 20px; color: white; display: inline-block; margin-bottom: 10px; font-size: 0.85rem; text-transform: uppercase; }
+        .badge-container { display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
+        .badge { font-weight: bold; padding: 5px 12px; border-radius: 20px; color: white; font-size: 0.8rem; text-transform: uppercase; }
         
         /* Couleurs Opérateurs */
-        .Vodacom { background-color: #e60000; box-shadow: 0 2px 8px rgba(230, 0, 0, 0.3); }
-        .Orange { background-color: #ff6600; box-shadow: 0 2px 8px rgba(255, 102, 0, 0.3); }
-        .Airtel { background-color: #ff0000; box-shadow: 0 2px 8px rgba(255, 0, 0, 0.3); }
-        .Africell { background-color: #000000; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3); }
+        .Vodacom { background-color: #e60000; box-shadow: 0 2px 6px rgba(230, 0, 0, 0.2); }
+        .Orange { background-color: #ff6600; box-shadow: 0 2px 6px rgba(255, 102, 0, 0.2); }
+        .Airtel { background-color: #ff0000; box-shadow: 0 2px 6px rgba(255, 0, 0, 0.2); }
+        .Africell { background-color: #000000; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); }
+        .Unknown { background-color: #777; }
+
+        /* Types de numéros */
+        .type-badge { background-color: #007bff; color: white; }
         
         .status { font-size: 0.95rem; margin-top: 5px; display: block; }
-        .error { color: #d9534f; }
+        .error { color: #d9534f; font-weight: 500; }
         .success { color: #5cb85c; font-weight: bold; }
-        .info { color: #f0ad4e; } /* Pour le "Saisie en cours" */
+        .info { color: #f0ad4e; }
         
-        .formatted { font-family: monospace; font-size: 0.85rem; color: #888; margin-top: 12px; display: block; border-top: 1px solid #eee; pt: 8px; }
+        .formatted { font-family: monospace; font-size: 0.85rem; color: #666; margin-top: 12px; display: block; border-top: 1px solid #eee; padding-top: 8px; }
     </style>
 </head>
 <body>
 
 <div class="card">
     <h1>ValiNum RDC</h1>
-    <p>Testez la validation intelligente (v1.0.1)</p>
+    <p>Test des exceptions : Abonnés, Services & USSD (v1.0.2)</p>
     
-    <div class="input-group">
-        <input type="text" id="phoneInput" placeholder="081 234-56-78" inputmode="tel" autocomplete="off">
-    </div>
+    <input type="text" id="phoneInput" placeholder="Ex: 081234567, *1122# ou 1111" autocomplete="off">
     
     <div id="resultArea" class="result">
-        <div id="operatorBadge" class="operator-badge"></div>
+        <div class="badge-container">
+            <div id="operatorBadge" class="badge"></div>
+            <div id="typeBadge" class="badge type-badge"></div>
+        </div>
         <span id="statusMessage" class="status"></span>
         <span id="formattedNumber" class="formatted"></span>
     </div>
@@ -70,52 +68,67 @@
     const input = document.getElementById('phoneInput');
     const resultArea = document.getElementById('resultArea');
     const operatorBadge = document.getElementById('operatorBadge');
+    const typeBadge = document.getElementById('typeBadge');
     const statusMessage = document.getElementById('statusMessage');
     const formattedNumber = document.getElementById('formattedNumber');
 
     input.addEventListener('input', (e) => {
-        // 1. UX SHIELD : Blocage des caractères non autorisés (uniquement chiffres et +)
-        const rawValue = e.target.value;
-        const cleanInput = rawValue.replace(/[^\d+ \-()]/g, ''); // On laisse passer chiffres, +, espace, tiret, parenthèses
-        
-        if (rawValue !== cleanInput) {
+        const val = e.target.value;
+
+        // On autorise les chiffres, +, -, parenthèses, espaces ainsi que * et # pour les USSD
+        const cleanInput = val.replace(/[^\d+ \-()*#]/g, '');
+        if (val !== cleanInput) {
             e.target.value = cleanInput;
         }
 
         if (cleanInput.trim().length > 0) {
-            // 2. UTILISATION DE VALINUM v1.0.1
-            // La bibliothèque nettoiera les espaces/tirets d'elle-même en interne
+            // Appel de ValiNum v1.0.2
             const res = ValiNum.validateDRC(cleanInput);
             
             resultArea.style.display = 'block';
             
-            // Affichage de l'opérateur
+            // 1. Gestion du badge opérateur
             if (res.operator) {
                 operatorBadge.innerText = res.operator;
-                operatorBadge.className = 'operator-badge ' + res.operator;
+                operatorBadge.className = 'badge ' + res.operator;
                 operatorBadge.style.display = 'inline-block';
             } else {
-                operatorBadge.style.display = 'none';
+                operatorBadge.innerText = 'Inconnu';
+                operatorBadge.className = 'badge Unknown';
+                operatorBadge.style.display = res.isServiceNumber ? 'none' : 'inline-block';
             }
 
-            // Message de validation et style de bordure
+            // 2. Gestion du badge de type de numéro
+            if (res.isServiceNumber) {
+                typeBadge.innerText = res.serviceType === 'USSD' ? 'Menu USSD / Mobile Money' : 'Numéro Court';
+                typeBadge.style.display = 'inline-block';
+            } else {
+                typeBadge.style.display = 'none';
+            }
+
+            // 3. Messages de statut et couleurs de bordure
             if (res.isValid) {
-                statusMessage.innerText = "✓ Numéro valide";
+                statusMessage.innerText = "✓ Numéro d'abonné valide";
                 statusMessage.className = "status success";
                 input.style.borderColor = "#5cb85c";
             } else {
                 statusMessage.innerText = res.error || "Saisie en cours...";
-                statusMessage.className = res.error ? "status error" : "status info";
                 
-                // Orange si l'opérateur est connu mais numéro incomplet, rouge si inconnu
-                input.style.borderColor = res.operator ? "#f0ad4e" : "#d9534f";
+                if (res.isServiceNumber) {
+                    statusMessage.className = "status info";
+                    input.style.borderColor = "#f0ad4e"; // Orange pour les numéros de services interceptés
+                } else {
+                    statusMessage.className = res.error ? "status error" : "status info";
+                    input.style.borderColor = res.operator ? "#f0ad4e" : "#d9534f";
+                }
             }
 
-            // Affichage du format final propre
-            formattedNumber.innerText = "Format international : " + res.formatted;
+            // 4. Affichage du formatage
+            formattedNumber.innerText = res.serviceType === 'USSD' 
+                ? "Code USSD détecté : " + res.formatted 
+                : "Format : " + res.formatted;
 
         } else {
-            // Reset si le champ est vide
             resultArea.style.display = 'none';
             input.style.borderColor = "#ddd";
         }
