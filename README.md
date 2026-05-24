@@ -1,4 +1,4 @@
-# ValiNum (v1.0.2)
+# ValiNum (v1.0.3)
 
 **ValiNum** is a lightweight, universal JavaScript library designed to validate and identify mobile phone numbers. The current version is specifically optimized for the **Democratic Republic of the Congo (DRC)**.
 
@@ -12,7 +12,8 @@
 - **Operator Identification**: Instantly detects if a number belongs to **Vodacom, Orange, Airtel, or Africell**.
 - **Real-time Validation**: Detects if a number is incomplete, too long, or valid.
 - **Smart Sanitization**: Automatically handles spaces, dashes, parentheses, and prefixes like `+243`, `243`, or the initial `0`.
-- **Exception & Service Handling (v1.0.2)**: Intercepts and flags official carrier short codes (customer care lines) and financial USSD strings (M-Pesa, Orange Money, Airtel Money, AfriMoney) to prevent them from altering standard database forms.
+- **Exception & Service Handling**: Intercepts and flags official carrier short codes (customer care lines) and financial USSD strings (M-Pesa, Orange Money, Airtel Money, AfriMoney) to prevent them from altering standard subscriber registration forms.
+- **Strict vs Tolerant Modes (New in v1.0.3)**: Gives developers the choice between flexible user inputs (allowing local formatting like leading 0) or strict infrastructural conformity (enforcing the +243 country prefix and preventing post-indicatif zero bugs).
 - **Universal**: Compatible with React, React Native, Vue, Node.js, TypeScript, PHP, and Django.
 
 ## Installation
@@ -25,14 +26,14 @@ npm install valinum
 ## Via CDN (For Classic HTML, PHP, Django)
 Add this script tag before the closing `</body>` tag:
 ```html
-<script src="https://cdn.jsdelivr.net/gh/fomadev/valinum@v1.0.2/dist/valinum.js"
+<script src="https://cdn.jsdelivr.net/gh/fomadev/valinum@v1.0.3/dist/valinum.js"
 ```
 
 ## Usage
 
 ### 1. Basic Integration (Standard JS / CDN)
 
-The script exposes a global object named `ValiNum`.
+By default, the engine runs in tolerant mode. The script exposes a global object named `ValiNum`.
 
 ```js
 const result = ValiNum.validateDRC("081 234-56-78");
@@ -56,7 +57,29 @@ if (isValid) {
 }
 ```
 
-### 3. Special Service & USSD Detection (New in v1.0.2)
+### 3. Strict Mode Configuration (New in v1.0.3)
+
+For critical backend integrations or strict validation fields (such as SMS OTP gateways), you can pass `{ strict: true }` in options. This enforces the international country code prefix and rejects local leading zeros.
+
+```js
+import { validateDRC } from 'valinum';
+
+// This will fail in strict mode because it lacks the +243 / 243 prefix
+const localCheck = validateDRC("081234567", { strict: true });
+console.log(localCheck.isValid); // false
+console.log(localCheck.error);   // "Indicatif international (+243) obligatoire en mode strict"
+
+// This will fail because the 0 after the country code is invalid structure
+const zeroCheck = validateDRC("+243081234567", { strict: true });
+console.log(zeroCheck.isValid);  // false
+console.log(zeroCheck.error);   // "Le chiffre 0 après l'indicatif international est interdit"
+
+// This passes perfectly (spaces and hyphens are still sanitized)
+const validCheck = validateDRC("+243 812-34-56-78", { strict: true });
+console.log(validCheck.isValid); // true
+```
+
+### 4. Special Service & USSD Detection
 
 By default, official platform short codes or financial menus return `isValid: false` to avoid polluting user profile setups.
 
@@ -75,7 +98,7 @@ const customResult = validateDRC("1111", { allowServices: true });
 console.log(customResult.isValid);       // true
 ```
 
-### 4. Real-time UX Shield
+### 5. Real-time UX Shield
 
 To prevent users from typing invalid characters while preserving USSD capabilities, update your input filter as follows:
 
@@ -90,6 +113,42 @@ input.addEventListener('input', (e) => {
     // Apply your UI logic (badges, colors, etc.) here
 });
 ```
+
+## API Parameter Options
+
+The `validateDRC` function accepts an optional secondary configuration object:
+
+<table style="width: 100%; border-collapse: collapse; margin: 20px 0; font-family: sans-serif; box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);">
+    <thead>
+        <tr>
+            <th>Option</th>
+            <th>Type</th>
+            <th>Default</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>forceCountry</td>
+            <td>boolean</td>
+            <td>false</td>
+            <td>Considers the entry as part of the local country context even without explicit data declaration.</td>
+        </tr>
+        <tr>
+            <td>allowServices</td>
+            <td>boolean</td>
+            <td>false</td>
+            <td>Set to true if your specific application explicitly permits or collects utility short codes or active USSD strings.</td>
+        </tr>
+        <tr>
+            <td>strict</td>
+            <td>boolean</td>
+            <td>false</td>
+            <td>Enforces structural validation requiring +243 or 243 and flags programmatic errors such as leading zero combinations.</td>
+        </tr>
+    </tbody>
+</table>
+
 
 ## API Response Schema
 
