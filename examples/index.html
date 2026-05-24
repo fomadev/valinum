@@ -3,13 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ValiNum Demo - RDC (v1.0.2)</title>
+    <title>ValiNum Demo - RDC (v1.0.3)</title>
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: flex; justify-content: center; padding-top: 50px; background: #f4f7f6; }
         .card { background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 420px; }
         h1 { font-size: 1.5rem; color: #333; margin-bottom: 0.5rem; text-align: center; }
         p { color: #666; text-align: center; margin-bottom: 1.5rem; font-size: 0.9rem; }
         
+        /* Sélecteur de mode (Strict / Tolérant) */
+        .mode-selector {
+            display: flex;
+            background: #eee;
+            padding: 4px;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+        }
+        .mode-btn {
+            flex: 1;
+            border: none;
+            background: transparent;
+            padding: 8px;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.85rem;
+            color: #555;
+        }
+        .mode-btn.active {
+            background: white;
+            color: #007bff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
         input { 
             width: 100%; 
             padding: 14px; 
@@ -33,7 +59,6 @@
         .Africell { background-color: #000000; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); }
         .Unknown { background-color: #777; }
 
-        /* Types de numéros */
         .type-badge { background-color: #007bff; color: white; }
         
         .status { font-size: 0.95rem; margin-top: 5px; display: block; }
@@ -48,9 +73,14 @@
 
 <div class="card">
     <h1>ValiNum RDC</h1>
-    <p>Test des exceptions : Abonnés, Services & USSD (v1.0.2)</p>
+    <p>Test interactif de la configuration (v1.0.3)</p>
     
-    <input type="text" id="phoneInput" placeholder="Ex: 081234567, *1122# ou 1111" autocomplete="off">
+    <div class="mode-selector">
+        <button id="btnTolerant" class="mode-btn active">Mode Tolérant</button>
+        <button id="btnStrict" class="mode-btn">Mode Strict</button>
+    </div>
+    
+    <input type="text" id="phoneInput" placeholder="Ex: 081234567 ou +243..." autocomplete="off">
     
     <div id="resultArea" class="result">
         <div class="badge-container">
@@ -62,7 +92,7 @@
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/gh/fomadev/valinum@v1.0.2/dist/valinum.js"></script>
+<script src="../dist/valinum.js"></script>
 
 <script>
     const input = document.getElementById('phoneInput');
@@ -71,23 +101,49 @@
     const typeBadge = document.getElementById('typeBadge');
     const statusMessage = document.getElementById('statusMessage');
     const formattedNumber = document.getElementById('formattedNumber');
+    
+    const btnTolerant = document.getElementById('btnTolerant');
+    const btnStrict = document.getElementById('btnStrict');
 
+    // Configuration par défaut de l'état de l'application
+    let isStrictMode = false;
+
+    // Événements pour basculer entre les modes
+    btnTolerant.addEventListener('click', () => {
+        isStrictMode = false;
+        btnTolerant.classList.add('active');
+        btnStrict.classList.remove('active');
+        triggerValidation();
+    });
+
+    btnStrict.addEventListener('click', () => {
+        isStrictMode = true;
+        btnStrict.classList.add('active');
+        btnTolerant.classList.remove('active');
+        triggerValidation();
+    });
+
+    // Filtre de saisie utilisateur (UX Shield)
     input.addEventListener('input', (e) => {
         const val = e.target.value;
-
-        // On autorise les chiffres, +, -, parenthèses, espaces ainsi que * et # pour les USSD
         const cleanInput = val.replace(/[^\d+ \-()*#]/g, '');
         if (val !== cleanInput) {
             e.target.value = cleanInput;
         }
+        triggerValidation();
+    });
 
-        if (cleanInput.trim().length > 0) {
-            // Appel de ValiNum v1.0.2
-            const res = ValiNum.validateDRC(cleanInput);
+    // Fonction centrale de validation
+    function triggerValidation() {
+        const value = input.value;
+
+        if (value.trim().length > 0) {
+            // Appel dynamique de ValiNum avec l'option courante
+            const res = ValiNum.validateDRC(value, { strict: isStrictMode });
             
             resultArea.style.display = 'block';
             
-            // 1. Gestion du badge opérateur
+            // 1. Badge Opérateur
             if (res.operator) {
                 operatorBadge.innerText = res.operator;
                 operatorBadge.className = 'badge ' + res.operator;
@@ -98,41 +154,42 @@
                 operatorBadge.style.display = res.isServiceNumber ? 'none' : 'inline-block';
             }
 
-            // 2. Gestion du badge de type de numéro
+            // 2. Badge de Type (USSD / ShortCode)
             if (res.isServiceNumber) {
-                typeBadge.innerText = res.serviceType === 'USSD' ? 'Menu USSD / Mobile Money' : 'Numéro Court';
+                typeBadge.innerText = res.serviceType === 'USSD' ? 'Menu USSD' : 'Numéro Court';
                 typeBadge.style.display = 'inline-block';
             } else {
                 typeBadge.style.display = 'none';
             }
 
-            // 3. Messages de statut et couleurs de bordure
+            // 3. Statuts de validation et design
             if (res.isValid) {
-                statusMessage.innerText = "✓ Numéro d'abonné valide";
+                statusMessage.innerText = "✓ Numéro conforme et valide";
                 statusMessage.className = "status success";
                 input.style.borderColor = "#5cb85c";
             } else {
                 statusMessage.innerText = res.error || "Saisie en cours...";
                 
-                if (res.isServiceNumber) {
+                if (res.error && res.error.includes("obligatoire")) {
+                    statusMessage.className = "status error";
+                    input.style.borderColor = "#d9534f";
+                } else if (res.isServiceNumber) {
                     statusMessage.className = "status info";
-                    input.style.borderColor = "#f0ad4e"; // Orange pour les numéros de services interceptés
+                    input.style.borderColor = "#f0ad4e";
                 } else {
                     statusMessage.className = res.error ? "status error" : "status info";
                     input.style.borderColor = res.operator ? "#f0ad4e" : "#d9534f";
                 }
             }
 
-            // 4. Affichage du formatage
-            formattedNumber.innerText = res.serviceType === 'USSD' 
-                ? "Code USSD détecté : " + res.formatted 
-                : "Format : " + res.formatted;
+            // 4. Chaîne formatée finale
+            formattedNumber.innerText = res.formatted ? "Sortie standardisée : " + res.formatted : "Aucune sortie";
 
         } else {
             resultArea.style.display = 'none';
             input.style.borderColor = "#ddd";
         }
-    });
+    }
 </script>
 
 </body>
