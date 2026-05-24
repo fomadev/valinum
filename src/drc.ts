@@ -12,7 +12,6 @@ const OPERATORS_RDC: { [key: string]: string } = {
   '97': 'Airtel', '98': 'Airtel', '99': 'Airtel'
 };
 
-// Listes des numéros courts officiels selon l'ARPTC
 const SHORT_CODES_RDC: { [key: string]: { operator: string, label: string } } = {
   '1111': { operator: 'Vodacom', label: 'Service Client' },
   '1115': { operator: 'Vodacom', label: 'Service Client Postpaid' },
@@ -26,7 +25,6 @@ const SHORT_CODES_RDC: { [key: string]: { operator: string, label: string } } = 
   '9111': { operator: 'Africell', label: 'Service Client' }
 };
 
-// Racines USSD pour identifier l'opérateur du service financier ou autre
 const identifyUssdOperator = (ussd: string): string | null => {
   if (ussd.startsWith('*1122#') || ussd.startsWith('*100#') || ussd.startsWith('*1107#') || ussd.startsWith('*1141#') || ussd.startsWith('*1160#') || ussd.startsWith('*1489#')) return 'Vodacom';
   if (ussd.startsWith('*1234#') || ussd.startsWith('*1111#')) return 'Orange';
@@ -37,10 +35,11 @@ const identifyUssdOperator = (ussd: string): string | null => {
 
 export const validateDRC = (phone: string, options: ValidationOptions = {}): ValidationResult => {
   const trimInput = phone.trim();
+  let error: string | null = null;
 
-  // 1. DÉTECTION DES CODES USSD (Avant tout nettoyage agressif)
+  // 1. DÉTECTION DES CODES USSD
   if (trimInput.startsWith('*') && trimInput.endsWith('#')) {
-    const cleanUssd = trimInput.replace(/\s/g, ''); // Enlever uniquement les espaces
+    const cleanUssd = trimInput.replace(/\s/g, '');
     const operator = identifyUssdOperator(cleanUssd);
     
     return {
@@ -53,10 +52,37 @@ export const validateDRC = (phone: string, options: ValidationOptions = {}): Val
     };
   }
 
-  // 2. NETTOYAGE STANDARD POUR LES NUMÉROS EN SÉRIE (v1.0.1)
+  // 2. CONTRÔLE DU MODE STRICT (Validation de la structure initiale de l'indicatif)
+  if (options.strict) {
+    // En mode strict, la saisie originale doit impérativement commencer par +243 ou 243
+    if (!trimInput.startsWith('+243') && !trimInput.startsWith('243')) {
+      return {
+        isValid: false,
+        operator: null,
+        formatted: '',
+        error: "Indicatif international (+243) obligatoire en mode strict",
+        isServiceNumber: false,
+        serviceType: null
+      };
+    }
+    // Refuser explicitement l'écriture erronée de type +243081...
+    const cleanDigitsOnly = trimInput.replace(/\D/g, '');
+    if (cleanDigitsOnly.startsWith('2430')) {
+      return {
+        isValid: false,
+        operator: null,
+        formatted: '',
+        error: "Le chiffre 0 après l'indicatif international est interdit",
+        isServiceNumber: false,
+        serviceType: null
+      };
+    }
+  }
+
+  // 3. NETTOYAGE STANDARD POUR LES NUMÉROS EN SÉRIE
   let cleaned = trimInput.replace(/\D/g, '');
 
-  // 3. DÉTECTION DES NUMÉROS COURTS (Short Codes)
+  // 4. DÉTECTION DES NUMÉROS COURTS
   if (SHORT_CODES_RDC[cleaned]) {
     const service = SHORT_CODES_RDC[cleaned];
     return {
@@ -69,7 +95,7 @@ export const validateDRC = (phone: string, options: ValidationOptions = {}): Val
     };
   }
 
-  // 4. TRAITEMENT DU NUMÉRO STANDARD D'ABONNÉ
+  // 5. TRAITEMENT DE L'INDICATIF NATIONAL POUR EXTRAIRE LE NDC
   if (cleaned.startsWith('243')) {
     cleaned = cleaned.substring(3);
   } else if (cleaned.startsWith('0')) {
@@ -79,10 +105,10 @@ export const validateDRC = (phone: string, options: ValidationOptions = {}): Val
   const ndc = cleaned.substring(0, 2);
   const operator = OPERATORS_RDC[ndc] || null;
 
-  // Un numéro standard est valide s'il a un opérateur connu, fait 9 chiffres et n'est pas un numéro de service
-  const isValid = operator !== null && cleaned.length === 9;
+  // Validation de la longueur finale d'abonné (9 chiffres restants)
+  let isValid = operator !== null && cleaned.length === 9;
 
-  let error: string | null = null;
+  // Ajustement des messages d'erreur contextuels
   if (cleaned.length === 0) {
     error = "Numéro requis";
   } else if (!operator && cleaned.length >= 2) {
