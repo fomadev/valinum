@@ -9,4 +9,5 @@ export interface ValidationResult {
 export interface ValidationOptions {
     forceCountry?: boolean;
     allowServices?: boolean;
+    strict?: boolean;
 }

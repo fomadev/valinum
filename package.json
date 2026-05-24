@@ -1,10 +1,11 @@
 {
   "name": "valinum",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Phone number validation library.",
   "main": "./dist/valinum.js",
   "module": "./dist/valinum.mjs",
   "types": "./dist/valinum.d.ts",
+  "type": "module",
   "files": [
     "dist"
   ],
