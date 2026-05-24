@@ -14,5 +14,6 @@ export interface ValidationResult {
 
 export interface ValidationOptions {
   forceCountry?: boolean;    // Si true, on considère que c'est du +243 même sans le saisir
-  allowServices?: boolean;   // Optionnel : si le développeur veut exceptionnellement autoriser les services
+  allowServices?: boolean;   // Si true, autorise exceptionnellement les numéros courts/USSD
+  strict?: boolean;          // Si true, exige explicitement l'indicatif international (+243 ou 243) et refuse le 0 initial
 }
