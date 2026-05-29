@@ -1,7 +1,7 @@
 {
   "name": "valinum",
-  "version": "1.0.3",
-  "description": "Phone number validation library.",
+  "version": "1.0.4",
+  "description": "Phone number validation library with geographical metadata extraction and fixed/mobile tracking.",
   "main": "./dist/valinum.js",
   "module": "./dist/valinum.mjs",
   "types": "./dist/valinum.d.ts",
