@@ -9,10 +9,23 @@
      * See LICENSE file in the project root for full license information.
      */
     const OPERATORS_RDC = {
-        '81': 'Vodacom', '82': 'Vodacom', '83': 'Vodacom',
-        '80': 'Orange', '84': 'Orange', '85': 'Orange', '89': 'Orange',
-        '90': 'Africell', '91': 'Africell',
-        '97': 'Airtel', '98': 'Airtel', '99': 'Airtel'
+        // Vodacom
+        '81': { operator: 'Vodacom', lineType: 'Mobile', region: 'Kinshasa / Ouest' },
+        '82': { operator: 'Vodacom', lineType: 'Mobile', region: 'Grand Katanga / Sud' },
+        '83': { operator: 'Vodacom', lineType: 'Mobile', region: 'Grand Kivu / Est' },
+        '86': { operator: 'Vodacom', lineType: 'Mobile', region: 'National / Extension' },
+        // Orange
+        '80': { operator: 'Orange', lineType: 'Fixe', region: 'National' }, // Historiquement lignes fixes/CDMA
+        '84': { operator: 'Orange', lineType: 'Mobile', region: 'Kinshasa / Ouest' },
+        '85': { operator: 'Orange', lineType: 'Mobile', region: 'Grand Katanga / Sud' },
+        '89': { operator: 'Orange', lineType: 'Mobile', region: 'National / Est' },
+        // Africell
+        '90': { operator: 'Africell', lineType: 'Mobile', region: 'Kinshasa / Bas-Congo' },
+        '91': { operator: 'Africell', lineType: 'Mobile', region: 'National' },
+        // Airtel
+        '97': { operator: 'Airtel', lineType: 'Mobile', region: 'Grand Kivu / Est' },
+        '98': { operator: 'Airtel', lineType: 'Mobile', region: 'Grand Katanga / Sud' },
+        '99': { operator: 'Airtel', lineType: 'Mobile', region: 'Kinshasa / Ouest' }
     };
     const SHORT_CODES_RDC = {
         '1111': { operator: 'Vodacom', label: 'Service Client' },
@@ -50,12 +63,13 @@
                 formatted: cleanUssd,
                 error: options.allowServices ? null : "Les codes USSD ne sont pas autorisés comme numéros d'abonnés",
                 isServiceNumber: true,
-                serviceType: 'USSD'
+                serviceType: 'USSD',
+                lineType: null,
+                region: null
             };
         }
-        // 2. CONTRÔLE DU MODE STRICT (Validation de la structure initiale de l'indicatif)
+        // 2. CONTRÔLE DU MODE STRICT
         if (options.strict) {
-            // En mode strict, la saisie originale doit impérativement commencer par +243 ou 243
             if (!trimInput.startsWith('+243') && !trimInput.startsWith('243')) {
                 return {
                     isValid: false,
@@ -63,10 +77,11 @@
                     formatted: '',
                     error: "Indicatif international (+243) obligatoire en mode strict",
                     isServiceNumber: false,
-                    serviceType: null
+                    serviceType: null,
+                    lineType: null,
+                    region: null
                 };
             }
-            // Refuser explicitement l'écriture erronée de type +243081...
             const cleanDigitsOnly = trimInput.replace(/\D/g, '');
             if (cleanDigitsOnly.startsWith('2430')) {
                 return {
@@ -75,11 +90,13 @@
                     formatted: '',
                     error: "Le chiffre 0 après l'indicatif international est interdit",
                     isServiceNumber: false,
-                    serviceType: null
+                    serviceType: null,
+                    lineType: null,
+                    region: null
                 };
             }
         }
-        // 3. NETTOYAGE STANDARD POUR LES NUMÉROS EN SÉRIE
+        // 3. NETTOYAGE STANDARD
         let cleaned = trimInput.replace(/\D/g, '');
         // 4. DÉTECTION DES NUMÉROS COURTS
         if (SHORT_CODES_RDC[cleaned]) {
@@ -90,7 +107,9 @@
                 formatted: cleaned,
                 error: options.allowServices ? null : `Numéro court de service réservé (${service.label} ${service.operator})`,
                 isServiceNumber: true,
-                serviceType: 'ShortCode'
+                serviceType: 'ShortCode',
+                lineType: 'Mobile',
+                region: 'National'
             };
         }
         // 5. TRAITEMENT DE L'INDICATIF NATIONAL POUR EXTRAIRE LE NDC
@@ -101,29 +120,31 @@
             cleaned = cleaned.substring(1);
         }
         const ndc = cleaned.substring(0, 2);
-        const operator = OPERATORS_RDC[ndc] || null;
+        const metadata = OPERATORS_RDC[ndc] || null;
         // Validation de la longueur finale d'abonné (9 chiffres restants)
-        let isValid = operator !== null && cleaned.length === 9;
+        let isValid = metadata !== null && cleaned.length === 9;
         // Ajustement des messages d'erreur contextuels
         if (cleaned.length === 0) {
             error = "Numéro requis";
         }
-        else if (!operator && cleaned.length >= 2) {
+        else if (!metadata && cleaned.length >= 2) {
             error = "Opérateur inconnu en RDC";
         }
-        else if (operator && cleaned.length < 9) {
-            error = `Numéro ${operator} incomplet...`;
+        else if (metadata && cleaned.length < 9) {
+            error = `Numéro ${metadata.operator} incomplet...`;
         }
         else if (cleaned.length > 9) {
             error = "Numéro trop long";
         }
         return {
             isValid,
-            operator,
+            operator: metadata ? metadata.operator : null,
             formatted: cleaned.length > 0 ? `+243${cleaned}` : '',
             error,
             isServiceNumber: false,
-            serviceType: null
+            serviceType: null,
+            lineType: metadata ? metadata.lineType : null,
+            region: metadata ? metadata.region : null
         };
     };
 

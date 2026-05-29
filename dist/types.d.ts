@@ -10,6 +10,8 @@ export interface ValidationResult {
     error: string | null;
     isServiceNumber: boolean;
     serviceType: 'USSD' | 'ShortCode' | null;
+    lineType: 'Mobile' | 'Fixe' | null;
+    region: string | null;
 }
 export interface ValidationOptions {
     forceCountry?: boolean;

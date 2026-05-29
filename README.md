@@ -1,4 +1,4 @@
-# ValiNum (v1.0.3)
+# ValiNum (v1.0.4)
 
 **ValiNum** is a lightweight, universal JavaScript library designed to validate and identify mobile phone numbers. The current version is specifically optimized for the **Democratic Republic of the Congo (DRC)**.
 
@@ -9,11 +9,13 @@
 ---
 
 ## Features
-- **Operator Identification**: Instantly detects if a number belongs to **Vodacom, Orange, Airtel, or Africell**.
+- **Operator Identification**: Instantly detects if a number belongs to **Vodacom, Orange, Airtel, or Africell** including recent network allocation expansions like the `86` block.
+- **Geographical Metadata Extraction**: Resolves National Destination Codes (NDC) to their historical native delivery regions (such as Kinshasa, Grand Katanga, Grand Kivu) for behavioral localization.
+- **Line Type Classification**: Automatically distinguishes between traditional landlines (`Fixe` networks like legacy Orange `80` systems) and cellular architectures (`Mobile`).
 - **Real-time Validation**: Detects if a number is incomplete, too long, or valid.
 - **Smart Sanitization**: Automatically handles spaces, dashes, parentheses, and prefixes like `+243`, `243`, or the initial `0`.
 - **Exception & Service Handling**: Intercepts and flags official carrier short codes (customer care lines) and financial USSD strings (M-Pesa, Orange Money, Airtel Money, AfriMoney) to prevent them from altering standard subscriber registration forms.
-- **Strict vs Tolerant Modes (New in v1.0.3)**: Gives developers the choice between flexible user inputs (allowing local formatting like leading 0) or strict infrastructural conformity (enforcing the +243 country prefix and preventing post-indicatif zero bugs).
+- **Strict vs Tolerant Modes**: Gives developers the choice between flexible user inputs (allowing local formatting like leading 0) or strict infrastructural conformity (enforcing the +243 country prefix and preventing post-indicatif zero bugs).
 - **Universal**: Compatible with React, React Native, Vue, Node.js, TypeScript, PHP, and Django.
 
 ## Installation
@@ -26,21 +28,22 @@ npm install valinum
 ## Via CDN (For Classic HTML, PHP, Django)
 Add this script tag before the closing `</body>` tag:
 ```html
-<script src="https://cdn.jsdelivr.net/gh/fomadev/valinum@v1.0.3/dist/valinum.js"
+<script src="https://cdn.jsdelivr.net/gh/fomadev/valinum@v1.0.4/dist/valinum.js"
 ```
 
 ## Usage
 
-### 1. Basic Integration (Standard JS / CDN)
+### 1. Basic Integration / Metadata Extraction (Standard JS / CDN)
 
-By default, the engine runs in tolerant mode. The script exposes a global object named `ValiNum`.
+The schema delivers extended regional insights instantly along with core operator verification properties.
 
 ```js
-const result = ValiNum.validateDRC("081 234-56-78");
+const result = ValiNum.validateDRC("080 123-456");
 
 console.log(result.isValid);   // true
-console.log(result.operator);  // "Vodacom"
-console.log(result.formatted); // "+243812345678"
+console.log(result.operator);  // "Orange"
+console.log(result.lineType);  // "Fixe"
+console.log(result.region);    // "National"
 ```
 
 ### 2. Modern Integration (ES6 / TypeScript)
@@ -48,16 +51,15 @@ console.log(result.formatted); // "+243812345678"
 ```js
 import { validateDRC } from 'valinum';
 
-const { isValid, operator, error } = validateDRC("+243 844 000 000");
+const { isValid, operator, lineType, region } = validateDRC("+243 86 000 0000");
 
 if (isValid) {
-    console.log(`Successfully identified ${operator} number.`);
-} else {
-    console.error(error); // e.g., "Incomplete Vodacom number..."
+    console.log(`Identified ${operator} (${lineType}) allocated in: ${region}`);
+    // Output: Identified Vodacom (Mobile) allocated in: National / Extension
 }
 ```
 
-### 3. Strict Mode Configuration (New in v1.0.3)
+### 3. Strict Mode Configuration
 
 For critical backend integrations or strict validation fields (such as SMS OTP gateways), you can pass `{ strict: true }` in options. This enforces the international country code prefix and rejects local leading zeros.
 
@@ -208,7 +210,7 @@ The object returned by `validateDRC()` contains the following fields:
   <tbody>
       <tr>
           <td class="operator-name">Vodacom</td>
-          <td><code>81, 82, 83</code></td>
+          <td><code>81, 82, 83, 86</code></td>
       </tr>
       <tr>
           <td class="operator-name">Orange</td>
