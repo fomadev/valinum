@@ -10,6 +10,8 @@ export interface ValidationResult {
   error: string | null;      // Message clair pour l'utilisateur
   isServiceNumber: boolean;  // True si c'est un numéro court ou un code USSD
   serviceType: 'USSD' | 'ShortCode' | null; // Type de numéro spécial détecté
+  lineType: 'Mobile' | 'Fixe' | null;       // Nature de la ligne téléphonique
+  region: string | null;     // Région historique d'attribution ou couverture principale
 }
 
 export interface ValidationOptions {
