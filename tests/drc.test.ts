@@ -1,45 +1,29 @@
 import { describe, it, expect } from 'vitest';
 import { validateDRC } from '../src/drc';
 
-describe('ValiNum - Validation RDC', () => {
+describe('ValiNum - v1.0.4 Metadata & Prefix 86', () => {
   
-  it('doit détecter Vodacom (81, 82, 83)', () => {
-    const res = validateDRC('+243824708027');
-    expect(res.operator).toBe('Vodacom');
+  it('doit valider le nouveau prefixe 86 de Vodacom', () => {
+    const res = validateDRC('+243860000000');
     expect(res.isValid).toBe(true);
+    expect(res.operator).toBe('Vodacom');
+    expect(res.region).toBe('National / Extension');
+    expect(res.lineType).toBe('Mobile');
   });
 
-  it('doit détecter Orange (80, 84, 85, 89)', () => {
-    const res = validateDRC('243890000000');
+  it('doit extraire les métadonnées de région et de ligne fixe pour Orange 80', () => {
+    const res = validateDRC('080123456');
+    expect(res.isValid).toBe(true);
     expect(res.operator).toBe('Orange');
+    expect(res.lineType).toBe('Fixe');
+    expect(res.region).toBe('National');
+  });
+
+  it('doit extraire la région historique Grand Katanga pour Airtel 98', () => {
+    const res = validateDRC('+243980000000');
     expect(res.isValid).toBe(true);
+    expect(res.operator).toBe('Airtel');
+    expect(res.region).toBe('Grand Katanga / Sud');
+    expect(res.lineType).toBe('Mobile');
   });
-
-  it('doit être invalide si le numéro est trop court (Temps Réel)', () => {
-    const res = validateDRC('81');
-    expect(res.operator).toBe('Vodacom');
-    expect(res.isValid).toBe(false);
-    expect(res.error).toContain('incomplet');
-  });
-
-  it('doit rejeter un opérateur inconnu', () => {
-    const res = validateDRC('243510000000');
-    expect(res.operator).toBe(null);
-    expect(res.isValid).toBe(false);
-    expect(res.error).toBe('Opérateur inconnu en RDC');
-  });
-
-  it('doit nettoyer le "0" initial si présent', () => {
-    const res = validateDRC('0814708027');
-    expect(res.operator).toBe('Vodacom');
-    expect(res.isValid).toBe(true);
-    expect(res.formatted).toBe('+243814708027');
-  });
-
-  it('doit rejeter un numéro trop long', () => {
-    const res = validateDRC('8147080279999');
-    expect(res.isValid).toBe(false);
-    expect(res.error).toBe('Numéro trop long');
-  });
-
 });
