@@ -26,3 +26,5 @@ coverage/
 # OS spécifique
 .DS_Store
 Thumbs.db
+
+*.zip
