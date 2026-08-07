@@ -1,7 +1,7 @@
 {
   "name": "valinum",
   "version": "1.0.4",
-  "description": "Fast. Lightweight. Reliable phone number validation."
+  "description": "Fast. Lightweight. Reliable phone number validation.",
   "module": "./dist/valinum.mjs",
   "types": "./dist/valinum.d.ts",
   "type": "module",
