@@ -2,151 +2,379 @@
  * Licensed under FomaDev Public License.
  * See LICENSE file in the project root for full license information.
  */
-const OPERATORS_RDC = {
-    // Vodacom
-    '81': { operator: 'Vodacom', lineType: 'Mobile', region: 'Kinshasa / Ouest' },
-    '82': { operator: 'Vodacom', lineType: 'Mobile', region: 'Grand Katanga / Sud' },
-    '83': { operator: 'Vodacom', lineType: 'Mobile', region: 'Grand Kivu / Est' },
-    '86': { operator: 'Vodacom', lineType: 'Mobile', region: 'National / Extension' },
-    // Orange
-    '80': { operator: 'Orange', lineType: 'Fixe', region: 'National' }, // Historiquement lignes fixes/CDMA
-    '84': { operator: 'Orange', lineType: 'Mobile', region: 'Kinshasa / Ouest' },
-    '85': { operator: 'Orange', lineType: 'Mobile', region: 'Grand Katanga / Sud' },
-    '89': { operator: 'Orange', lineType: 'Mobile', region: 'National / Est' },
-    // Africell
-    '90': { operator: 'Africell', lineType: 'Mobile', region: 'Kinshasa / Bas-Congo' },
-    '91': { operator: 'Africell', lineType: 'Mobile', region: 'National' },
-    // Airtel
-    '97': { operator: 'Airtel', lineType: 'Mobile', region: 'Grand Kivu / Est' },
-    '98': { operator: 'Airtel', lineType: 'Mobile', region: 'Grand Katanga / Sud' },
-    '99': { operator: 'Airtel', lineType: 'Mobile', region: 'Kinshasa / Ouest' }
-};
-const SHORT_CODES_RDC = {
-    '1111': { operator: 'Vodacom', label: 'Service Client' },
-    '1115': { operator: 'Vodacom', label: 'Service Client Postpaid' },
-    '1116': { operator: 'Vodacom', label: 'Service Client Distributeurs' },
-    '1777': { operator: 'Orange', label: 'Service Client' },
-    '4000': { operator: 'Orange', label: 'Service Client' },
-    '4004': { operator: 'Orange', label: 'Messagerie Vocale' },
-    '121': { operator: 'Airtel', label: 'Service Client' },
-    '1211': { operator: 'Airtel', label: 'Service Client' },
-    '111': { operator: 'Africell', label: 'Service Client' },
-    '9111': { operator: 'Africell', label: 'Service Client' }
-};
-const identifyUssdOperator = (ussd) => {
-    if (ussd.startsWith('*1122#') || ussd.startsWith('*100#') || ussd.startsWith('*1107#') || ussd.startsWith('*1141#') || ussd.startsWith('*1160#') || ussd.startsWith('*1489#'))
-        return 'Vodacom';
-    if (ussd.startsWith('*1234#') || ussd.startsWith('*1111#'))
-        return 'Orange';
-    if (ussd.startsWith('*501#') || ussd.startsWith('*502#') || ussd.startsWith('*171#') || ussd.startsWith('*131#'))
-        return 'Airtel';
-    if (ussd.startsWith('*1112#') || ussd.startsWith('*112#') || ussd.startsWith('*111#'))
-        return 'Africell';
-    return null;
-};
-const validateDRC = (phone, options = {}) => {
-    const trimInput = phone.trim();
-    let error = null;
-    // 1. DÉTECTION DES CODES USSD
-    if (trimInput.startsWith('*') && trimInput.endsWith('#')) {
-        const cleanUssd = trimInput.replace(/\s/g, '');
-        const operator = identifyUssdOperator(cleanUssd);
+/**
+ * Normalize a phone number's syntax.
+ *
+ * Examples:
+ *
+ * 082 470-80-27
+ *     ↓
+ * 0824708027
+ *
+ * +243 824 708 027
+ *     ↓
+ * +243824708027
+ *
+ * 00243 824 708 027
+ *     ↓
+ * +243824708027
+ *
+ * The function does not remove country codes.
+ */
+function normalize(input, accept00Prefix = true) {
+    if (typeof input !== "string") {
+        throw new TypeError("Phone number must be a string");
+    }
+    let value = input.trim();
+    if (value.length === 0) {
         return {
-            isValid: options.allowServices || false,
-            operator,
-            formatted: cleanUssd,
-            error: options.allowServices ? null : "Les codes USSD ne sont pas autorisés comme numéros d'abonnés",
-            isServiceNumber: true,
-            serviceType: 'USSD',
-            lineType: null,
-            region: null
+            value: "",
+            international: false,
         };
     }
-    // 2. CONTRÔLE DU MODE STRICT
-    if (options.strict) {
-        if (!trimInput.startsWith('+243') && !trimInput.startsWith('243')) {
-            return {
-                isValid: false,
-                operator: null,
-                formatted: '',
-                error: "Indicatif international (+243) obligatoire en mode strict",
-                isServiceNumber: false,
-                serviceType: null,
-                lineType: null,
-                region: null
-            };
-        }
-        const cleanDigitsOnly = trimInput.replace(/\D/g, '');
-        if (cleanDigitsOnly.startsWith('2430')) {
-            return {
-                isValid: false,
-                operator: null,
-                formatted: '',
-                error: "Le chiffre 0 après l'indicatif international est interdit",
-                isServiceNumber: false,
-                serviceType: null,
-                lineType: null,
-                region: null
-            };
-        }
+    /*
+     * Keep only characters that are useful for phone notation.
+     *
+     * We remove:
+     * - spaces
+     * - -
+     * - (
+     * - )
+     * - .
+     */
+    value = value.replace(/[\s().-]/g, "");
+    /*
+     * Convert international dialing prefix 00 to +.
+     *
+     * Example:
+     *
+     * 00243824708027
+     *        ↓
+     * +243824708027
+     */
+    if (accept00Prefix && value.startsWith("00")) {
+        value = `+${value.slice(2)}`;
     }
-    // 3. NETTOYAGE STANDARD
-    let cleaned = trimInput.replace(/\D/g, '');
-    // 4. DÉTECTION DES NUMÉROS COURTS
-    if (SHORT_CODES_RDC[cleaned]) {
-        const service = SHORT_CODES_RDC[cleaned];
-        return {
-            isValid: options.allowServices || false,
-            operator: service.operator,
-            formatted: cleaned,
-            error: options.allowServices ? null : `Numéro court de service réservé (${service.label} ${service.operator})`,
-            isServiceNumber: true,
-            serviceType: 'ShortCode',
-            lineType: 'Mobile',
-            region: 'National'
-        };
-    }
-    // 5. TRAITEMENT DE L'INDICATIF NATIONAL POUR EXTRAIRE LE NDC
-    if (cleaned.startsWith('243')) {
-        cleaned = cleaned.substring(3);
-    }
-    else if (cleaned.startsWith('0')) {
-        cleaned = cleaned.substring(1);
-    }
-    const ndc = cleaned.substring(0, 2);
-    const metadata = OPERATORS_RDC[ndc] || null;
-    // Validation de la longueur finale d'abonné (9 chiffres restants)
-    let isValid = metadata !== null && cleaned.length === 9;
-    // Ajustement des messages d'erreur contextuels
-    if (cleaned.length === 0) {
-        error = "Numéro requis";
-    }
-    else if (!metadata && cleaned.length >= 2) {
-        error = "Opérateur inconnu en RDC";
-    }
-    else if (metadata && cleaned.length < 9) {
-        error = `Numéro ${metadata.operator} incomplet...`;
-    }
-    else if (cleaned.length > 9) {
-        error = "Numéro trop long";
-    }
+    /*
+     * Detect international notation.
+     */
+    const international = value.startsWith("+");
     return {
-        isValid,
-        operator: metadata ? metadata.operator : null,
-        formatted: cleaned.length > 0 ? `+243${cleaned}` : '',
-        error,
-        isServiceNumber: false,
-        serviceType: null,
-        lineType: metadata ? metadata.lineType : null,
-        region: metadata ? metadata.region : null
+        value,
+        international,
     };
-};
+}
 
 /* * Copyright (c) 2026 Fordi / FomaDev.
  * Licensed under FomaDev Public License.
  * See LICENSE file in the project root for full license information.
  */
+/**
+ * Parse a normalized number.
+ *
+ * IMPORTANT:
+ * This parser does not contain country-specific rules.
+ *
+ * The country code is supplied by the country module.
+ */
+function parse(normalized, dialCode) {
+    if (normalized.startsWith("+")) {
+        const digits = normalized.slice(1);
+        if (!digits.startsWith(dialCode)) {
+            return {
+                international: true,
+                countryCode: null,
+                nationalNumber: digits,
+            };
+        }
+        return {
+            international: true,
+            countryCode: dialCode,
+            nationalNumber: digits.slice(dialCode.length),
+        };
+    }
+    /*
+     * Number without +.
+     *
+     * Example:
+     * 243824708027
+     */
+    if (normalized.startsWith(dialCode)) {
+        return {
+            international: true,
+            countryCode: dialCode,
+            nationalNumber: normalized.slice(dialCode.length),
+        };
+    }
+    /*
+     * National number.
+     *
+     * Example:
+     * 0824708027
+     */
+    return {
+        international: false,
+        countryCode: null,
+        nationalNumber: normalized,
+    };
+}
+
+/* * Copyright (c) 2026 Fordi / FomaDev.
+ * Licensed under FomaDev Public License.
+ * See LICENSE file in the project root for full license information.
+ */
+/**
+ * Validate the basic structure of a national number.
+ */
+function validateBasic(nationalNumber, expectedLength) {
+    if (nationalNumber.length === 0) {
+        return {
+            valid: false,
+            error: "EMPTY_INPUT",
+        };
+    }
+    /*
+     * At this stage, the number must contain digits only.
+     */
+    if (!/^\d+$/.test(nationalNumber)) {
+        return {
+            valid: false,
+            error: "INVALID_CHARACTERS",
+        };
+    }
+    if (nationalNumber.length < expectedLength) {
+        return {
+            valid: false,
+            error: "TOO_SHORT",
+        };
+    }
+    if (nationalNumber.length > expectedLength) {
+        return {
+            valid: false,
+            error: "TOO_LONG",
+        };
+    }
+    return {
+        valid: true,
+        error: null,
+    };
+}
+
+/* * Copyright (c) 2026 Fordi / FomaDev.
+ * Licensed under FomaDev Public License.
+ * See LICENSE file in the project root for full license information.
+ */
+/**
+ * Build E.164 representation.
+ *
+ * Example:
+ *
+ * countryCode = "243"
+ * nationalNumber = "824708027"
+ *
+ * Result:
+ *
+ * +243824708027
+ */
+function formatE164(dialCode, nationalNumber) {
+    return `+${dialCode}${nationalNumber}`;
+}
+/**
+ * Build international representation.
+ *
+ * Example:
+ *
+ * +243 824 708 027
+ */
+function formatInternational(dialCode, nationalNumber) {
+    return `+${dialCode} ${nationalNumber.slice(0, 3)} ${nationalNumber.slice(3, 6)} ${nationalNumber.slice(6)}`;
+}
+/**
+ * Build national representation.
+ *
+ * Example:
+ *
+ * 082 470 8027
+ */
+function formatNational(nationalNumber) {
+    return `0${nationalNumber.slice(0, 2)} ${nationalNumber.slice(2, 5)} ${nationalNumber.slice(5)}`;
+}
+
+/* * Copyright (c) 2026 Fordi / FomaDev.
+ * Licensed under FomaDev Public License.
+ * See LICENSE file in the project root for full license information.
+ */
+const DRC = {
+    iso2: "CD",
+    dialCode: "243",
+    name: "Democratic Republic of the Congo",
+};
+const DRC_EXPECTED_LENGTH = 9;
+/**
+ * DRC operator prefixes.
+ *
+ * Only information relevant to phone validation
+ * is stored here.
+ */
+const OPERATORS = {
+    // Vodacom
+    "81": "Vodacom",
+    "82": "Vodacom",
+    "83": "Vodacom",
+    "86": "Vodacom",
+    // Orange
+    "80": "Orange",
+    "84": "Orange",
+    "85": "Orange",
+    "89": "Orange",
+    // Africell
+    "90": "Africell",
+    "91": "Africell",
+    // Airtel
+    "97": "Airtel",
+    "98": "Airtel",
+    "99": "Airtel",
+};
+/**
+ * Validate a DRC phone number.
+ */
+function validateDRC(input, options = {}) {
+    const { accept00Prefix = true, strict = false, } = options;
+    /*
+     * 1. NORMALIZATION
+     */
+    const normalized = normalize(input, accept00Prefix);
+    if (!normalized.value) {
+        return {
+            valid: false,
+            country: DRC,
+            operator: null,
+            number: null,
+            error: "EMPTY_INPUT",
+        };
+    }
+    /*
+     * 2. STRICT MODE
+     *
+     * In strict mode, only:
+     *
+     * +243XXXXXXXXX
+     * 00243XXXXXXXXX
+     * 243XXXXXXXXX
+     *
+     * are accepted.
+     *
+     * Note:
+     * normalize() already converts 00243 to +243.
+     */
+    if (strict) {
+        const strictInternational = normalized.value.startsWith("+243") ||
+            normalized.value.startsWith("243");
+        if (!strictInternational) {
+            return {
+                valid: false,
+                country: DRC,
+                operator: null,
+                number: null,
+                error: "INVALID_COUNTRY_CODE",
+            };
+        }
+    }
+    /*
+     * 3. PARSING
+     */
+    const parsed = parse(normalized.value, DRC.dialCode);
+    let national = parsed.nationalNumber;
+    /*
+     * 4. NATIONAL FORMAT
+     *
+     * 0824708027
+     *     ↓
+     * 824708027
+     */
+    if (!parsed.international && national.startsWith("0")) {
+        national = national.slice(1);
+    }
+    /*
+     * Prevent:
+     *
+     * +2430824708027
+     *
+     * The zero after +243 is not valid.
+     */
+    if (parsed.international &&
+        national.startsWith("0")) {
+        return {
+            valid: false,
+            country: DRC,
+            operator: null,
+            number: null,
+            error: "INVALID_PREFIX",
+        };
+    }
+    /*
+     * 5. BASIC VALIDATION
+     */
+    const basic = validateBasic(national, DRC_EXPECTED_LENGTH);
+    if (!basic.valid) {
+        return {
+            valid: false,
+            country: DRC,
+            operator: null,
+            number: null,
+            error: basic.error,
+        };
+    }
+    /*
+     * 6. OPERATOR DETECTION
+     */
+    const prefix = national.slice(0, 2);
+    const operatorName = OPERATORS[prefix];
+    if (!operatorName) {
+        return {
+            valid: false,
+            country: DRC,
+            operator: null,
+            number: {
+                national: national,
+                international: formatInternational(DRC.dialCode, national),
+                e164: formatE164(DRC.dialCode, national),
+            },
+            error: "INVALID_PREFIX",
+        };
+    }
+    const operator = {
+        name: operatorName,
+        prefix,
+    };
+    /*
+     * 7. FORMATTING
+     */
+    const number = {
+        national: formatNational(national),
+        international: formatInternational(DRC.dialCode, national),
+        e164: formatE164(DRC.dialCode, national),
+    };
+    /*
+     * 8. SUCCESS
+     */
+    return {
+        valid: true,
+        country: DRC,
+        operator,
+        number,
+        error: null,
+    };
+}
+
+/* * Copyright (c) 2026 Fordi / FomaDev.
+ * Licensed under FomaDev Public License.
+ * See LICENSE file in the project root for full license information.
+ */
+/**
+ * ValiNum v2
+ */
 const validate = validateDRC;
 
-export { validate, validateDRC };
+export { validate as default, formatE164, formatInternational, formatNational, normalize, parse, validate, validateBasic };
 //# sourceMappingURL=valinum.mjs.map
