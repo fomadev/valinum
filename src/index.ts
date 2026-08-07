@@ -3,9 +3,18 @@
  * See LICENSE file in the project root for full license information.
  */
 
-export * from './types';
-export * from './drc';
+/**
+ * ValiNum v2
+ */
 
-// Petit bonus : une fonction générique
-import { validateDRC } from './drc';
+import { validateDRC } from "./countries/drc";
+
+export * from "./types";
+export * from "./core/normalize";
+export * from "./core/parser";
+export * from "./core/validator";
+export * from "./core/formatter";
+
 export const validate = validateDRC;
+
+export default validate;
