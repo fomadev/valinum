@@ -3,19 +3,61 @@
  * See LICENSE file in the project root for full license information.
  */
 
-export interface ValidationResult {
-  isValid: boolean;          // True si 9 chiffres exacts, opérateur connu ET pas un numéro spécial
-  operator: string | null;   // Vodacom, Orange, Airtel, Africell
-  formatted: string;         // Le numéro au format +243... ou le code USSD brut nettoyé
-  error: string | null;      // Message clair pour l'utilisateur
-  isServiceNumber: boolean;  // True si c'est un numéro court ou un code USSD
-  serviceType: 'USSD' | 'ShortCode' | null; // Type de numéro spécial détecté
-  lineType: 'Mobile' | 'Fixe' | null;       // Nature de la ligne téléphonique
-  region: string | null;     // Région historique d'attribution ou couverture principale
+export interface CountryInfo {
+  iso2: string;
+  dialCode: string;
+  name: string;
 }
 
+export interface OperatorInfo {
+  name: string;
+  prefix: string;
+}
+
+export interface NumberInfo {
+  national: string;
+  international: string;
+  e164: string;
+}
+
+export type ValidationError =
+  | "EMPTY_INPUT"
+  | "INVALID_CHARACTERS"
+  | "INVALID_COUNTRY_CODE"
+  | "INVALID_LENGTH"
+  | "INVALID_PREFIX"
+  | "TOO_SHORT"
+  | "TOO_LONG"
+  | null;
+
 export interface ValidationOptions {
-  forceCountry?: boolean;    // Si true, on considère que c'est du +243 même sans le saisir
-  allowServices?: boolean;   // Si true, autorise exceptionnellement les numéros courts/USSD
-  strict?: boolean;          // Si true, exige explicitement l'indicatif international (+243 ou 243) et refuse le 0 initial
+  /**
+   * Accept 00 as international dialing prefix.
+   *
+   * Example:
+   * 00243824708027 === +243824708027
+   *
+   * Default: true
+   */
+  accept00Prefix?: boolean;
+
+  /**
+   * Strict international validation.
+   *
+   * When enabled, a national number without an international
+   * country code is rejected.
+   */
+  strict?: boolean;
+}
+
+export interface ValidationResult {
+  valid: boolean;
+
+  country: CountryInfo | null;
+
+  operator: OperatorInfo | null;
+
+  number: NumberInfo | null;
+
+  error: ValidationError;
 }

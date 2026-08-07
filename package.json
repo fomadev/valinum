@@ -1,8 +1,7 @@
 {
   "name": "valinum",
-  "version": "1.0.4",
-  "description": "Phone number validation library with geographical metadata extraction and fixed/mobile tracking.",
-  "main": "./dist/valinum.js",
+  "version": "2.0.0",
+  "description": "Fast. Lightweight. Reliable phone number validation.",
   "module": "./dist/valinum.mjs",
   "types": "./dist/valinum.d.ts",
   "type": "module",
@@ -16,17 +15,12 @@
   },
   "keywords": [
     "validation",
-    "phone",
-    "rdc",
-    "drc",
-    "vodacom",
-    "orange",
-    "airtel",
-    "africell"
+    "phone"
   ],
   "author": "fomadev",
   "license": "FomaDev Public License",
   "devDependencies": {
+    "@rollup/plugin-terser": "^1.0.0",
     "@rollup/plugin-typescript": "^11.1.6",
     "rollup": "^4.9.6",
     "tslib": "^2.6.2",
