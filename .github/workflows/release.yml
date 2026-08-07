@@ -3,7 +3,7 @@ name: Automatic Production Release & NPM Publish
 on:
   push:
     tags:
-      - 'v*'
+      - "v*"
 
 jobs:
   publish:
@@ -22,24 +22,29 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
-          registry-url: 'https://registry.npmjs.org'
+          registry-url: "https://registry.npmjs.org"
 
-      - name: Install dependencies
+      - name: Install full workspace dependencies
         run: npm ci
 
-      - name: Run tests
-        run: npm test
+      - name: Strict verification of test suite
+        run: npx vitest run
 
-      - name: Build production artifacts
+      - name: Build production artifact
         run: npm run build
 
-      - name: Create distribution archive
+      - name: Create production distribution artifact
+        id: package_artifact
         run: |
           TAG_VERSION=${GITHUB_REF#refs/tags/}
           echo "Detected version: $TAG_VERSION"
+
           mkdir -p release-artifacts
-          zip -r "release-artifacts/valinum-${TAG_VERSION}-dist.zip" dist/
-          echo "ZIP_NAME=valinum-${TAG_VERSION}-dist.zip" >> $GITHUB_ENV
+
+          ZIP_NAME="valinum-${TAG_VERSION}-dist.zip"
+          zip -r "release-artifacts/${ZIP_NAME}" dist/
+
+          echo "zip_name=${ZIP_NAME}" >> "$GITHUB_OUTPUT"
 
       - name: Create GitHub Release and upload asset
         uses: softprops/action-gh-release@v2
@@ -48,7 +53,7 @@ jobs:
           name: Release ${{ github.ref_name }}
           draft: false
           prerelease: false
-          files: release-artifacts/${{ env.ZIP_NAME }}
+          files: release-artifacts/${{ steps.package_artifact.outputs.zip_name }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
