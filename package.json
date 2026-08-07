@@ -21,7 +21,7 @@
   "license": "FomaDev Public License",
   "devDependencies": {
     "@rollup/plugin-terser": "^1.0.0",
-    "@rollup/plugin-typescript": "^11.1.6",
+    "@rollup/plugin-typescript": "^12.3.0",
     "rollup": "^4.9.6",
     "tslib": "^2.6.2",
     "typescript": "^5.3.3",
