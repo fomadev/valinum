@@ -1,37 +1,26 @@
-/**
- * Normalise un numéro de téléphone.
- *
- * Exemples :
- * 0824708027
- * +243824708027
- * 00243824708027
- * 243824708027
- * 082 470-80-27
+/* * Copyright (c) 2026 Fordi / FomaDev. 
+ * Licensed under FomaDev Public License.
+ * See LICENSE file in the project root for full license information.
  */
+
 export function normalize(input: string): string {
+    if (typeof input !== "string") {
+        throw new TypeError("Phone number must be a string");
+    }
+
     let value = input.trim();
 
-    // 00 devient +
-    if (value.startsWith("00")) {
-        value = "+" + value.slice(2);
+    if (value.length === 0) {
+        return "";
     }
 
-    // Supprime espaces, parenthèses, tirets et points
+    // Remove common formatting characters.
     value = value.replace(/[\s().-]/g, "");
 
-    // Supprime le +
-    if (value.startsWith("+")) {
-        value = value.slice(1);
-    }
-
-    // Supprime le code pays 243
-    if (value.startsWith("243")) {
-        value = value.slice(3);
-    }
-
-    // Supprime le zéro local
-    if (value.startsWith("0")) {
-        value = value.slice(1);
+    // International dialing prefix:
+    // 00XXXXXXXX → +XXXXXXXX
+    if (value.startsWith("00")) {
+        value = "+" + value.slice(2);
     }
 
     return value;
