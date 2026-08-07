@@ -3,42 +3,65 @@
  * See LICENSE file in the project root for full license information.
  */
 
-export interface ParsedPhoneNumber {
-    countryCode: string | null;
-    nationalNumber: string;
-    international: boolean;
+export interface ParsedNumber {
+  international: boolean;
+  countryCode: string | null;
+  nationalNumber: string;
 }
 
-export function parse(input: string): ParsedPhoneNumber {
-    const normalized = input;
+/**
+ * Parse a normalized number.
+ *
+ * IMPORTANT:
+ * This parser does not contain country-specific rules.
+ *
+ * The country code is supplied by the country module.
+ */
+export function parse(
+  normalized: string,
+  dialCode: string
+): ParsedNumber {
+  if (normalized.startsWith("+")) {
+    const digits = normalized.slice(1);
 
-    if (normalized.startsWith("+")) {
-        const digits = normalized.slice(1);
-
-        /*
-         * Le code pays sera déterminé à partir
-         * du registre des pays supportés.
-         */
-        const countryCode = detectCountryCode(digits);
-
-        if (!countryCode) {
-            return {
-                countryCode: null,
-                nationalNumber: digits,
-                international: true,
-            };
-        }
-
-        return {
-            countryCode,
-            nationalNumber: digits.slice(countryCode.length),
-            international: true,
-        };
+    if (!digits.startsWith(dialCode)) {
+      return {
+        international: true,
+        countryCode: null,
+        nationalNumber: digits,
+      };
     }
 
     return {
-        countryCode: null,
-        nationalNumber: normalized,
-        international: false,
+      international: true,
+      countryCode: dialCode,
+      nationalNumber: digits.slice(dialCode.length),
     };
+  }
+
+  /*
+   * Number without +.
+   *
+   * Example:
+   * 243824708027
+   */
+  if (normalized.startsWith(dialCode)) {
+    return {
+      international: true,
+      countryCode: dialCode,
+      nationalNumber: normalized.slice(dialCode.length),
+    };
+  }
+
+  /*
+   * National number.
+   *
+   * Example:
+   * 0824708027
+   */
+  return {
+    international: false,
+    countryCode: null,
+    nationalNumber: normalized,
+  };
 }
