@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - c.i
   schedule:
     - cron: '0 6 * * 1'
 
