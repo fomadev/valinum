@@ -374,7 +374,11 @@ function validateDRC(input, options = {}) {
 /**
  * ValiNum v2
  */
+/**
+ * Validate a Democratic Republic of the Congo
+ * phone number.
+ */
 const validate = validateDRC;
 
-export { validate as default, formatE164, formatInternational, formatNational, normalize, parse, validate, validateBasic };
+export { formatE164, formatInternational, formatNational, normalize, parse, validate, validateBasic };
 //# sourceMappingURL=valinum.mjs.map

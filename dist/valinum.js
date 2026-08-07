@@ -380,9 +380,12 @@
     /**
      * ValiNum v2
      */
+    /**
+     * Validate a Democratic Republic of the Congo
+     * phone number.
+     */
     const validate = validateDRC;
 
-    exports.default = validate;
     exports.formatE164 = formatE164;
     exports.formatInternational = formatInternational;
     exports.formatNational = formatNational;
@@ -390,8 +393,6 @@
     exports.parse = parse;
     exports.validate = validate;
     exports.validateBasic = validateBasic;
-
-    Object.defineProperty(exports, '__esModule', { value: true });
 
 }));
 //# sourceMappingURL=valinum.js.map
