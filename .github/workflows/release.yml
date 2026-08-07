@@ -1,0 +1,58 @@
+name: Automatic Production Release & NPM Publish
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  publish:
+    name: Production Release Setup
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+      id-token: write
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js Environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test
+
+      - name: Build production artifacts
+        run: npm run build
+
+      - name: Create distribution archive
+        run: |
+          TAG_VERSION=${GITHUB_REF#refs/tags/}
+          echo "Detected version: $TAG_VERSION"
+          mkdir -p release-artifacts
+          zip -r "release-artifacts/valinum-${TAG_VERSION}-dist.zip" dist/
+          echo "ZIP_NAME=valinum-${TAG_VERSION}-dist.zip" >> $GITHUB_ENV
+
+      - name: Create GitHub Release and upload asset
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: Release ${{ github.ref_name }}
+          draft: false
+          prerelease: false
+          files: release-artifacts/${{ env.ZIP_NAME }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish package to npm
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
