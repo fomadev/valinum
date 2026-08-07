@@ -3,25 +3,79 @@
  * See LICENSE file in the project root for full license information.
  */
 
-export function normalize(input: string): string {
-    if (typeof input !== "string") {
-        throw new TypeError("Phone number must be a string");
-    }
+export interface NormalizedInput {
+  value: string;
+  international: boolean;
+}
 
-    let value = input.trim();
+/**
+ * Normalize a phone number's syntax.
+ *
+ * Examples:
+ *
+ * 082 470-80-27
+ *     ↓
+ * 0824708027
+ *
+ * +243 824 708 027
+ *     ↓
+ * +243824708027
+ *
+ * 00243 824 708 027
+ *     ↓
+ * +243824708027
+ *
+ * The function does not remove country codes.
+ */
+export function normalize(
+  input: string,
+  accept00Prefix = true
+): NormalizedInput {
+  if (typeof input !== "string") {
+    throw new TypeError("Phone number must be a string");
+  }
 
-    if (value.length === 0) {
-        return "";
-    }
+  let value = input.trim();
 
-    // Remove common formatting characters.
-    value = value.replace(/[\s().-]/g, "");
+  if (value.length === 0) {
+    return {
+      value: "",
+      international: false,
+    };
+  }
 
-    // International dialing prefix:
-    // 00XXXXXXXX → +XXXXXXXX
-    if (value.startsWith("00")) {
-        value = "+" + value.slice(2);
-    }
+  /*
+   * Keep only characters that are useful for phone notation.
+   *
+   * We remove:
+   * - spaces
+   * - -
+   * - (
+   * - )
+   * - .
+   */
+  value = value.replace(/[\s().-]/g, "");
 
-    return value;
+  /*
+   * Convert international dialing prefix 00 to +.
+   *
+   * Example:
+   *
+   * 00243824708027
+   *        ↓
+   * +243824708027
+   */
+  if (accept00Prefix && value.startsWith("00")) {
+    value = `+${value.slice(2)}`;
+  }
+
+  /*
+   * Detect international notation.
+   */
+  const international = value.startsWith("+");
+
+  return {
+    value,
+    international,
+  };
 }
