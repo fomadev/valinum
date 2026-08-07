@@ -2,138 +2,197 @@
 
 ## Introduction
 
-ValiNum is a lightweight JavaScript and TypeScript library for validating and formatting phone numbers for the Democratic Republic of the Congo (DRC). Version 2.0.0 introduces a cleaner architecture based on a small set of reusable core modules:
+ValiNum is a small library that helps you validate telephone numbers in a structured and predictable way. In this version, the goal is simple: take a phone number written in different forms, normalize it, understand what it represents, and return a clear result that your application can use.
 
-- normalization for input cleaning
-- parsing for country-aware structure analysis
-- validation for rule-based checks
-- formatting for consistent output
+This guide is written for beginners. If you are new to JavaScript libraries, TypeScript, or phone validation, you will still be able to follow it from the beginning. By the end, you should understand:
 
-The library is designed to be simple to integrate in browsers, Node.js applications, and modern JavaScript build pipelines.
+- what ValiNum does
+- how it accepts different input formats
+- how validation results are structured
+- how the library is organized internally
+- how to use it in a real project
 
-## What ValiNum v2.0.0 Provides
+## What problem does ValiNum solve?
 
-ValiNum v2.0.0 currently supports:
+People enter phone numbers in many different ways. One user may write:
 
-- validation of DRC national and international phone numbers
-- normalization of common formatting styles such as spaces, hyphens, dots, and parentheses
-- support for both `+243` and `00` international prefixes
+```txt
+0824708027
+```
+
+Another may write:
+
+```txt
++243 824 708 027
+```
+
+Another may use:
+
+```txt
+00243 824 708 027
+```
+
+All of these may refer to the same number. ValiNum helps you handle those variations consistently.
+
+## What ValiNum supports
+
+In version 2.0.0, the library focuses on the Democratic Republic of the Congo. It supports:
+
+- national numbers such as `0824708027`
+- international numbers such as `+243824708027`
+- numbers written with spaces, hyphens, dots, or parentheses
+- the `00` prefix as an alternative to `+`
 - operator detection for major DRC mobile networks
-- generation of consistent formatted outputs in national, international, and E.164 forms
-
-The current version focuses on the DRC and uses the dialing code `243` as a country-specific rule in the DRC country module.
-
-## Supported Scope
-
-At this stage, ValiNum targets the Democratic Republic of the Congo.
-
-Supported operators:
-
-- Vodacom: `81`, `82`, `83`, `86`
-- Orange: `80`, `84`, `85`, `89`
-- Africell: `90`, `91`
-- Airtel: `97`, `98`, `99`
+- formatting in national, international, and E.164 forms
 
 ## Installation
 
-### npm
+Install the package with npm:
 
 ```bash
 npm install valinum
 ```
 
-### CDN
+If you are using a browser directly, you can also load one of the built files from the distribution folder.
 
-For browser usage, you can include the UMD build directly:
+## Your first example
 
-```html
-<script src="https://cdn.jsdelivr.net/gh/fomadev/valinum@v2.0.0/dist/valinum.js"></script>
-```
+Here is the most basic example:
 
-For the minified browser build:
-
-```html
-<script src="https://cdn.jsdelivr.net/gh/fomadev/valinum@v2.0.0/dist/valinum.min.js"></script>
-```
-
-For ES module usage:
-
-```html
-<script type="module">
-  import { validate } from "https://cdn.jsdelivr.net/gh/fomadev/valinum@v2.0.0/dist/valinum.mjs";
-
-  const result = validate("+243824708027");
-  console.log(result);
-</script>
-```
-
-## Quick Start
-
-### CommonJS / Node.js
-
-```js
-const { validate } = require("valinum");
+```ts
+import { validate } from "valinum";
 
 const result = validate("0824708027");
 
-console.log(result);
+console.log(result.valid);
+console.log(result.number?.e164);
 ```
 
-### ES Modules
+If everything works, the output will show that the number is valid and that its E.164 form is `+243824708027`.
 
-```js
-import { validate } from "valinum";
+## How validation works
 
-const result = validate("+243824708027");
+The validation process is divided into four simple steps:
 
-console.log(result);
+1. normalization
+2. parsing
+3. validation
+4. formatting
+
+Each step has a clear role.
+
+### 1. Normalization
+
+Normalization is the first step. Its job is to clean the input so the library can work with it more easily.
+
+For example, this input:
+
+```txt
+082 470-80-27
 ```
 
-## Public API
+is transformed into:
 
-The main public entry point is:
+```txt
+0824708027
+```
+
+This step removes spaces, hyphens, dots, and parentheses. It also converts the `00` prefix to `+` when allowed.
+
+### 2. Parsing
+
+Once the input is normalized, the parser examines the structure of the number. It decides whether the number is:
+
+- a national number
+- an international number
+- a number that includes the country code
+
+This step helps the library understand what part is the country code and what part is the national number.
+
+### 3. Validation
+
+Validation checks whether the number follows the expected rules.
+
+For example, the library checks:
+
+- whether the input is empty
+- whether it contains invalid characters
+- whether it is too short
+- whether it is too long
+- whether the operator prefix is valid
+- whether the number matches the expected DRC structure
+
+### 4. Formatting
+
+If the number passes validation, ValiNum returns a formatted version of it in different styles:
+
+- national format
+- international format
+- E.164 format
+
+## Supported input formats
+
+ValiNum accepts many common forms.
+
+### National format
 
 ```ts
-validate(input: string, options?: ValidationOptions): ValidationResult
+validate("0824708027");
 ```
 
-You can also import the DRC-specific validator directly:
+### International format with `+`
 
 ```ts
-import { validateDRC } from "valinum";
+validate("+243824708027");
 ```
 
-## Validation Options
+### International format without `+`
 
-The `validate` function accepts an optional options object.
+```ts
+validate("243824708027");
+```
 
-### `accept00Prefix`
-
-Default: `true`
-
-Allows the international dialing prefix `00` to be treated as `+`.
+### International format with `00`
 
 ```ts
 validate("00243824708027");
 ```
 
-### `strict`
-
-Default: `false`
-
-When enabled, the validator only accepts numbers that explicitly use the DRC international format, such as:
-
-- `+243...`
-- `243...`
-- `00243...`
+### Formatted input with separators
 
 ```ts
-validate("0824708027", { strict: true });
+validate("082 470 80 27");
+validate("082-470-80-27");
+validate("082.470.80.27");
+validate("(082) 470 80 27");
+validate("+243 824 708 027");
 ```
 
-## Result Object
+## Options
 
-The validation function returns a `ValidationResult` object.
+The validation function accepts optional settings.
+
+### `accept00Prefix`
+
+This option allows the library to understand `00` as the international prefix.
+
+```ts
+const result = validate("00243824708027");
+```
+
+This is enabled by default.
+
+### `strict`
+
+This option makes validation stricter. In strict mode, the library expects the number to use an explicit international form such as `+243...`, `243...`, or `00243...`.
+
+```ts
+const result = validate("0824708027", { strict: true });
+```
+
+## Result object
+
+When you call `validate`, you receive a result object.
 
 ```ts
 interface ValidationResult {
@@ -145,17 +204,22 @@ interface ValidationResult {
 }
 ```
 
-### Example result
+### Example
 
-```js
+```ts
 const result = validate("0824708027");
 
-console.log(result);
+console.log(result.valid);
+console.log(result.country?.name);
+console.log(result.operator?.name);
+console.log(result.number?.national);
+console.log(result.number?.international);
+console.log(result.number?.e164);
 ```
 
-Example output:
+A successful result may look like this:
 
-```js
+```ts
 {
   valid: true,
   country: {
@@ -176,79 +240,11 @@ Example output:
 }
 ```
 
-## Supported Input Formats
+## Error codes
 
-ValiNum normalizes common input forms automatically.
+When validation fails, the library returns an error code.
 
-### Valid examples
-
-```js
-validate("0824708027");
-validate("+243824708027");
-validate("243824708027");
-validate("00243824708027");
-validate("082 470 80 27");
-validate("082-470-80-27");
-validate("082.470.80.27");
-validate("(082) 470 80 27");
-validate("+243 824 708 027");
-```
-
-### Invalid examples
-
-```js
-validate("+2430824708027");
-validate("082470802");
-validate("08247080270");
-validate("0872345678");
-validate("");
-```
-
-## Normalization Behavior
-
-The normalization layer removes common formatting characters such as spaces, hyphens, dots, and parentheses. It also converts `00` prefixes into `+` when enabled.
-
-Examples:
-
-```txt
-082 470-80-27        -> 0824708027
-+243 824 708 027     -> +243824708027
-00243 824 708 027    -> +243824708027
-```
-
-## Formatting Outputs
-
-The library can return the same number in three formats:
-
-### National format
-
-```js
-const result = validate("0824708027");
-console.log(result.number?.national);
-// 082 470 8027
-```
-
-### International format
-
-```js
-const result = validate("0824708027");
-console.log(result.number?.international);
-// +243 824 708 027
-```
-
-### E.164 format
-
-```js
-const result = validate("0824708027");
-console.log(result.number?.e164);
-// +243824708027
-```
-
-## Error Codes
-
-Validation failures return a standard error code.
-
-Available error values:
+Common values include:
 
 - `EMPTY_INPUT`
 - `INVALID_CHARACTERS`
@@ -261,16 +257,53 @@ Available error values:
 
 Example:
 
-```js
+```ts
 const result = validate("082470802");
 
 console.log(result.valid); // false
 console.log(result.error); // "TOO_SHORT"
 ```
 
-## Architecture Overview
+## Supported operators
 
-The v2.0.0 structure is intentionally modular.
+ValiNum can detect the following DRC operator groups:
+
+- Vodacom: `81`, `82`, `83`, `86`
+- Orange: `80`, `84`, `85`, `89`
+- Africell: `90`, `91`
+- Airtel: `97`, `98`, `99`
+
+## Formatting examples
+
+The library can return the same number in three formats.
+
+### National format
+
+```ts
+const result = validate("0824708027");
+console.log(result.number?.national);
+// 082 470 8027
+```
+
+### International format
+
+```ts
+const result = validate("0824708027");
+console.log(result.number?.international);
+// +243 824 708 027
+```
+
+### E.164 format
+
+```ts
+const result = validate("0824708027");
+console.log(result.number?.e164);
+// +243824708027
+```
+
+## How the library is organized
+
+The v2.0.0 code is split into a few simple modules.
 
 ```txt
 src/
@@ -287,69 +320,39 @@ src/
 
 ### Core modules
 
-- `normalize.ts` handles syntax normalization and formatting cleanup
-- `parser.ts` analyzes the structure of the input and extracts the country and national parts
-- `validator.ts` performs basic structural validation rules
-- `formatter.ts` builds national, international, and E.164 representations
+- `normalize.ts` cleans the input and removes formatting noise
+- `parser.ts` understands the structure of the number
+- `validator.ts` applies validation rules
+- `formatter.ts` formats the final output
 
 ### Country module
 
-- `countries/drc.ts` contains DRC-specific rules such as the dialing code `243`, the expected national length, and operator prefixes
+- `drc.ts` contains DRC-specific rules such as the dialing code `243`, expected length, and operator prefixes
 
-This separation keeps the library extensible for future country modules.
+This separation makes the library easier to extend later with support for more countries.
 
-## Development
+## Development workflow
 
-### Install dependencies
+If you want to work on the project locally, use these commands:
 
 ```bash
 npm install
-```
-
-### Run tests
-
-```bash
 npm test
-```
-
-### Build the library
-
-```bash
 npm run build
 ```
 
-The build produces:
+The build generates:
 
 - `dist/valinum.js`
 - `dist/valinum.min.js`
 - `dist/valinum.mjs`
 
-## Testing
+## Summary
 
-The project uses Vitest for automated tests.
+By now, you should understand that ValiNum v2.0.0 is a simple and modular library for validating DRC phone numbers. It accepts many common input styles, normalizes them, validates them, and returns structured results you can use in applications.
 
-To run the full test suite:
-
-```bash
-npm test
-```
-
-## Publishing and Distribution
-
-The package is prepared for publishing as a library with:
-
-- npm distribution
-- browser UMD builds
-- ES module build for modern applications
-
-The version number is maintained in the package manifest and should be aligned with the Git tag used for release.
+If you want to go further, the next step is to use it in a real form, a backend API, or a frontend interface.
 
 ## License
 
 This project is distributed under the FomaDev Public License.
-
-Please refer to the LICENSE file for full terms and conditions.
-
-## Contributing
-
-Contributions are welcome. If you want to add support for another country, the recommended path is to add a new country module under `src/countries` and keep the core normalization and validation logic reusable.
