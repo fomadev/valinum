@@ -1,0 +1,54 @@
+name: ValiNum v2 - Tests & Build
+
+on:
+  push:
+    branches:
+      - main
+      - v2
+  pull_request:
+    branches:
+      - main
+jobs:
+  test:
+    name: Test ValiNum v2.0.0
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test
+
+      - name: Build package
+        run: npm run build
+
+      - name: Verify distribution files
+        run: |
+          set -e
+
+          echo "=== Vérification de dist/ ==="
+
+          test -f dist/valinum.js
+          test -f dist/valinum.min.js
+          test -f dist/valinum.mjs
+
+          echo "✓ dist/valinum.js"
+          echo "✓ dist/valinum.min.js"
+          echo "✓ dist/valinum.mjs"
+
+          echo ""
+          echo "=== Distribution ValiNum ==="
+          ls -lh dist/
+
+          echo ""
+          echo "✓ Tous les fichiers de distribution sont présents."
