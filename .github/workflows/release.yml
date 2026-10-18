@@ -17,12 +17,26 @@ jobs:
     steps:
       - name: Checkout source code
         uses: actions/checkout@v7
+        with:
+          # Full history and tags are needed to compare
+          # this release with the previous one.
+          fetch-depth: 0
 
       - name: Setup Node.js Environment
         uses: actions/setup-node@v7
         with:
           node-version: 22
           registry-url: "https://registry.npmjs.org"
+
+      - name: Check that the tag matches package.json
+        run: |
+          TAG_VERSION="${GITHUB_REF_NAME#v}"
+          PACKAGE_VERSION="$(node -p "require('./package.json').version")"
+
+          if [ "$TAG_VERSION" != "$PACKAGE_VERSION" ]; then
+            echo "::error::Tag ${GITHUB_REF_NAME} does not match package.json version ${PACKAGE_VERSION}."
+            exit 1
+          fi
 
       - name: Install full workspace dependencies
         run: npm ci
@@ -46,11 +60,80 @@ jobs:
 
           echo "zip_name=${ZIP_NAME}" >> "$GITHUB_OUTPUT"
 
+      - name: Write release notes
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG="${GITHUB_REF_NAME}"
+          VERSION="${TAG#v}"
+          PREVIOUS_TAG="$(git describe --tags --abbrev=0 --match 'v*' "${TAG}^" 2>/dev/null || true)"
+          NOTES=release-notes.md
+
+          if [ -n "$PREVIOUS_TAG" ]; then
+            RANGE="${PREVIOUS_TAG}..${TAG}"
+          else
+            RANGE="${TAG}"
+          fi
+
+          echo "Release ${TAG} (previous: ${PREVIOUS_TAG:-none})"
+
+          {
+            echo "## What's new in ${TAG}"
+            echo
+
+            # 1. The matching section of CHANGELOG.md, when there is one.
+            CHANGELOG_SECTION=""
+            if [ -f CHANGELOG.md ]; then
+              CHANGELOG_SECTION="$(awk -v version="$VERSION" '
+                $0 ~ "^## \\[" version "\\]" { found = 1; next }
+                found && /^## \[/ { exit }
+                found { print }
+              ' CHANGELOG.md | sed '/./,$!d')"
+            fi
+
+            if [ -n "$(echo "$CHANGELOG_SECTION" | tr -d '[:space:]')" ]; then
+              echo "$CHANGELOG_SECTION"
+            else
+              # 2. Otherwise, the list of commits since the previous release.
+              git log "$RANGE" --no-merges --format='- %s (%h)'
+            fi
+
+            echo
+            echo "## Contributors"
+            echo
+            echo "Thanks to everyone who contributed to this release:"
+            echo
+
+            # GitHub logins (rendered as avatars on the release page),
+            # falling back to the git author name. Bots are left out.
+            git log "$RANGE" --no-merges --format='%H' | while read -r SHA; do
+              LOGIN="$(gh api "repos/${GITHUB_REPOSITORY}/commits/${SHA}" --jq '.author.login // empty' 2>/dev/null || true)"
+              if [ -n "$LOGIN" ]; then
+                echo "@${LOGIN}"
+              else
+                git log -1 --format='%an' "$SHA"
+              fi
+            done | grep -v '\[bot\]$' | sort -fu | sed 's/^/- /'
+
+            echo
+            if [ -n "$PREVIOUS_TAG" ]; then
+              echo "**Full changelog:** https://github.com/${GITHUB_REPOSITORY}/compare/${PREVIOUS_TAG}...${TAG}"
+            else
+              echo "**Full changelog:** https://github.com/${GITHUB_REPOSITORY}/commits/${TAG}"
+            fi
+          } > "$NOTES"
+
+          cat "$NOTES"
+
       - name: Create GitHub Release and upload asset
         uses: softprops/action-gh-release@v3
         with:
           tag_name: ${{ github.ref_name }}
           name: Release ${{ github.ref_name }}
+          body_path: release-notes.md
+          # Appends GitHub's list of merged pull requests
+          # and first-time contributors below our notes.
+          generate_release_notes: true
           draft: false
           prerelease: false
           files: release-artifacts/${{ steps.package_artifact.outputs.zip_name }}
