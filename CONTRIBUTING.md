@@ -4,26 +4,31 @@ First of all, thank you for considering contributing to **ValiNum**! By contribu
 
 ---
 
-## ⚖️ License Agreement
+## License Agreement
+
 By contributing to this repository, you agree that:
-1. Your contributions will be licensed under the **FomaDev Public License (FPL)**.
-2. FomaDev retains full authority over the project.
+
+1. Your contributions will be licensed under the **Fordima Public License (FPL) v1.0**.
+2. Fordima Inc. retains full authority over the project.
 3. Independent or permanent forks created to bypass the official project are strictly prohibited.
 
 ---
 
-## 🚀 How Can I Contribute?
+## How Can I Contribute?
 
 ### 1. Reporting Bugs
+
 - Check the **Issues** tab to see if the bug has already been reported.
-- If not, open a new issue. 
+- If not, open a new issue.
 - Describe the problem clearly, including the input used (e.g., the phone number) and the expected vs. actual result.
 
 ### 2. Suggesting Enhancements
+
 - We are always looking to improve the UX and logic.
 - If you want to add support for a new country (e.g., Congo-Brazzaville, Angola), please provide the official NDC (National Destination Code) mapping for the operators.
 
 ### 3. Pull Requests (The Process)
+
 Forks are authorized **ONLY** for the purpose of submitting a Pull Request to the official FomaDev repository.
 
 1. **Fork** the repository to your own account.
@@ -36,33 +41,38 @@ Forks are authorized **ONLY** for the purpose of submitting a Pull Request to th
 
 ---
 
-## 🛠️ Development Setup
+## Development Setup
 
 1. **Install dependencies**:
-   ```bash
+
+```bash
    npm install
-   ```
+```
 
 2. **Build the project**:
-    ```bash
-    npm run build
-    ```
+
+```bash
+   npm run build
+```
 
 3. **Run tests**:
-    ```bash
-    npm test
-    ```
+
+```bash
+   npm test
+```
+
+---
 
 ## Coding Standards
 
-* Use **TypeScript** for any logic changes.
+- Use **TypeScript** for any logic changes.
+- Ensure the `dist/` folder is updated before submitting (via `npm run build`).
+- Keep the `ValidationResult` interface consistent to avoid breaking changes for existing users.
 
-* Ensure the `dist/` folder is updated before submitting (via `npm run build`).
-
-* Keep the `ValidationResult` interface consistent to avoid breaking changes for existing users.
+---
 
 ## Questions?
 
-If you have questions about the logic or the FPL license, please reach out to **FomaDev** via GitHub Issues.
+If you have questions about the logic or the FPL license, please reach out to the maintainers via GitHub Issues.
 
 **Thank you for building the future of digital tools with us!**
