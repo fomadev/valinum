@@ -27,3 +27,15 @@ export declare function formatInternational(dialCode: string, nationalNumber: st
  * 082 470 8027
  */
 export declare function formatNational(nationalNumber: string): string;
+/**
+ * Split digits into groups separated by spaces.
+ *
+ * Example:
+ *
+ * formatGroups("771234567", [2, 3, 2, 2])
+ *
+ * Result:
+ *
+ * 77 123 45 67
+ */
+export declare function formatGroups(digits: string, groups: number[]): string;

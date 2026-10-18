@@ -1,9 +1,9 @@
 {
   "name": "valinum",
-  "version": "2.0.1",
-  "description": "Fast. Lightweight. Reliable phone number validation.",
+  "version": "2.1.0",
+  "description": "Fast. Lightweight. Reliable phone number validation for DR Congo, Congo-Brazzaville, Cameroon, Côte d'Ivoire and Senegal.",
   "module": "./dist/valinum.mjs",
-  "types": "./dist/valinum.d.ts",
+  "types": "./dist/index.d.ts",
   "type": "module",
   "files": [
     "dist"
@@ -15,7 +15,14 @@
   },
   "keywords": [
     "validation",
-    "phone"
+    "phone",
+    "phone-number",
+    "drc",
+    "congo",
+    "cameroon",
+    "cote-divoire",
+    "senegal",
+    "africa"
   ],
   "author": "fomadev",
   "license": "FomaDev Public License",

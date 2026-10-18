@@ -9,9 +9,11 @@
     "target": "ES2020",                                  /* Génère un JS moderne mais compatible */
     "module": "ESNext",                                  /* Permet d'utiliser 'import/export' */
     "moduleResolution": "node",                         /* Aide TS à trouver vos fichiers */
+    "ignoreDeprecations": "6.0",                        /* node10 est déprécié en TS 6 */
     
     /* Sortie */
     "outDir": "./dist",                                 /* Où placer les fichiers compilés */
+    "rootDir": "./src",                                 /* Racine des sources (requis par TS 6) */
     "declaration": true,                                /* Génère les fichiers .d.ts pour les autres dev TS */
     "sourceMap": true,                                  /* Aide au débogage */
     

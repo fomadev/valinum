@@ -5,9 +5,14 @@
 
 /**
  * ValiNum v2
+ *
+ * Supported countries:
+ * - CD: Democratic Republic of the Congo
+ * - CG: Republic of the Congo (Congo-Brazzaville)
+ * - CM: Cameroon
+ * - CI: Côte d'Ivoire
+ * - SN: Senegal
  */
-
-import { validateDRC } from "./countries/drc";
 
 export * from "./types";
 export * from "./core/normalize";
@@ -15,8 +20,17 @@ export * from "./core/parser";
 export * from "./core/validator";
 export * from "./core/formatter";
 
+export { getSupportedCountries } from "./countries";
+export { validateDRC } from "./countries/drc";
+export { validateCongoBrazzaville } from "./countries/congo";
+export { validateCameroon } from "./countries/cameroon";
+export { validateIvoryCoast } from "./countries/ivory-coast";
+export { validateSenegal } from "./countries/senegal";
+
 /**
- * Validate a Democratic Republic of the Congo
- * phone number.
+ * Validate a phone number from any supported country.
+ *
+ * National numbers default to the DRC
+ * (see the defaultCountry option).
  */
-export const validate = validateDRC;
+export { validate } from "./validate";
