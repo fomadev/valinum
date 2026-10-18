@@ -48,3 +48,37 @@ export function formatNational(
 ): string {
   return `0${nationalNumber.slice(0, 2)} ${nationalNumber.slice(2, 5)} ${nationalNumber.slice(5)}`;
 }
+
+/**
+ * Split digits into groups separated by spaces.
+ *
+ * Example:
+ *
+ * formatGroups("771234567", [2, 3, 2, 2])
+ *
+ * Result:
+ *
+ * 77 123 45 67
+ */
+export function formatGroups(
+  digits: string,
+  groups: number[]
+): string {
+  const parts: string[] = [];
+  let index = 0;
+
+  for (const size of groups) {
+    if (index >= digits.length) {
+      break;
+    }
+
+    parts.push(digits.slice(index, index + size));
+    index += size;
+  }
+
+  if (index < digits.length) {
+    parts.push(digits.slice(index));
+  }
+
+  return parts.join(" ");
+}

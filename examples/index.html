@@ -3,159 +3,133 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ValiNum Demo - RDC (v1.0.4)</title>
+    <title>ValiNum Demo (v2.1.0)</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: flex; justify-content: center; padding-top: 50px; background: #f4f7f6; }
-        .card { background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 420px; }
-        h1 { font-size: 1.5rem; color: #333; margin-bottom: 0.5rem; text-align: center; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: flex; justify-content: center; padding: 50px 16px; background: #f4f7f6; margin: 0; }
+        .card { background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 440px; }
+        h1 { font-size: 1.5rem; color: #333; margin: 0 0 0.5rem; text-align: center; }
         p { color: #666; text-align: center; margin-bottom: 1.5rem; font-size: 0.9rem; }
-        
-        .mode-selector { display: flex; background: #eee; padding: 4px; border-radius: 8px; margin-bottom: 1.5rem; }
-        .mode-btn { flex: 1; border: none; background: transparent; padding: 8px; font-weight: 600; border-radius: 6px; cursor: pointer; transition: all 0.2s ease; font-size: 0.85rem; color: #555; }
+
+        .mode-selector { display: flex; background: #eee; padding: 4px; border-radius: 8px; margin-bottom: 1rem; }
+        .mode-btn { flex: 1; border: none; background: transparent; padding: 8px; font-weight: 600; border-radius: 6px; cursor: pointer; font-size: 0.85rem; color: #555; }
         .mode-btn.active { background: white; color: #007bff; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
 
-        input { width: 100%; padding: 14px; border: 2px solid #ddd; border-radius: 8px; font-size: 1.1rem; box-sizing: border-box; outline: none; transition: all 0.3s ease; letter-spacing: 1px; }
-        
-        .result { margin-top: 1.5rem; padding: 1rem; border-radius: 8px; display: none; background: #fafafa; border: 1px solid #eee; }
-        .badge-container { display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
-        .badge { font-weight: bold; padding: 5px 12px; border-radius: 20px; color: white; font-size: 0.8rem; text-transform: uppercase; }
-        
-        .Vodacom { background-color: #e60000; box-shadow: 0 2px 6px rgba(230, 0, 0, 0.2); }
-        .Orange { background-color: #ff6600; box-shadow: 0 2px 6px rgba(255, 102, 0, 0.2); }
-        .Airtel { background-color: #ff0000; box-shadow: 0 2px 6px rgba(255, 0, 0, 0.2); }
-        .Africell { background-color: #000000; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); }
-        .Unknown { background-color: #777; }
-        .type-badge { background-color: #007bff; color: white; }
-        
-        .status { font-size: 0.95rem; margin-top: 5px; display: block; }
+        select, input { width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 1rem; box-sizing: border-box; outline: none; margin-bottom: 1rem; }
+        input { font-size: 1.1rem; letter-spacing: 1px; transition: border-color 0.3s ease; }
+
+        .result { padding: 1rem; border-radius: 8px; display: none; background: #fafafa; border: 1px solid #eee; }
+        .badges { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
+        .badge { font-weight: bold; padding: 5px 12px; border-radius: 20px; color: white; font-size: 0.8rem; background: #777; }
+        .badge.country { background: #007bff; }
+        .badge.line { background: #6f42c1; }
+
+        .status { font-size: 0.95rem; display: block; }
         .error { color: #d9534f; font-weight: 500; }
         .success { color: #5cb85c; font-weight: bold; }
-        .info { color: #f0ad4e; }
-        
-        .metadata-box { margin-top: 10px; background: #fff; padding: 8px; border-radius: 6px; border: 1px dashed #ccc; font-size: 0.85rem; color: #444; display: none; }
-        .metadata-item { margin: 4px 0; display: flex; justify-content: space-between; }
-        .metadata-label { font-weight: 600; color: #777; }
 
-        .formatted { font-family: monospace; font-size: 0.85rem; color: #666; margin-top: 12px; display: block; border-top: 1px solid #eee; padding-top: 8px; }
+        dl { margin: 12px 0 0; font-family: monospace; font-size: 0.85rem; color: #444; display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; border-top: 1px solid #eee; padding-top: 8px; }
+        dt { color: #777; }
+        dd { margin: 0; }
     </style>
 </head>
 <body>
 
 <div class="card">
-    <h1>ValiNum RDC</h1>
-    <p>Extraction Géographique & Métadonnées (v1.0.4)</p>
-    
+    <h1>ValiNum</h1>
+    <p>RDC · Congo · Cameroun · Côte d'Ivoire · Sénégal — détection automatique</p>
+
     <div class="mode-selector">
         <button id="btnTolerant" class="mode-btn active">Mode Tolérant</button>
         <button id="btnStrict" class="mode-btn">Mode Strict</button>
     </div>
-    
-    <input type="text" id="phoneInput" placeholder="Ex: 086123456 ou 080123456" autocomplete="off">
-    
+
+    <select id="countrySelect">
+        <option value="">Détection automatique</option>
+    </select>
+
+    <input type="text" id="phoneInput" placeholder="Ex: 082 470 8027, +237 671 23 45 67, 77 123 45 67" autocomplete="off">
+
     <div id="resultArea" class="result">
-        <div class="badge-container">
-            <div id="operatorBadge" class="badge"></div>
-            <div id="typeBadge" class="badge type-badge"></div>
+        <div class="badges">
+            <span id="countryBadge" class="badge country"></span>
+            <span id="operatorBadge" class="badge"></span>
+            <span id="lineBadge" class="badge line"></span>
         </div>
         <span id="statusMessage" class="status"></span>
-        
-        <div id="metadataBox" class="metadata-box">
-            <div class="metadata-item"><span class="metadata-label">Type de ligne :</span> <span id="metaLineType">-</span></div>
-            <div class="metadata-item"><span class="metadata-label">Région d'origine :</span> <span id="metaRegion">-</span></div>
-        </div>
-
-        <span id="formattedNumber" class="formatted"></span>
+        <dl id="formats">
+            <dt>National</dt><dd id="fmtNational">-</dd>
+            <dt>International</dt><dd id="fmtInternational">-</dd>
+            <dt>E.164</dt><dd id="fmtE164">-</dd>
+        </dl>
     </div>
 </div>
 
 <script src="../dist/valinum.js"></script>
 
 <script>
-    const input = document.getElementById('phoneInput');
-    const resultArea = document.getElementById('resultArea');
-    const operatorBadge = document.getElementById('operatorBadge');
-    const typeBadge = document.getElementById('typeBadge');
-    const statusMessage = document.getElementById('statusMessage');
-    const metadataBox = document.getElementById('metadataBox');
-    const metaLineType = document.getElementById('metaLineType');
-    const metaRegion = document.getElementById('metaRegion');
-    const formattedNumber = document.getElementById('formattedNumber');
-    
-    const btnTolerant = document.getElementById('btnTolerant');
-    const btnStrict = document.getElementById('btnStrict');
+    const $ = (id) => document.getElementById(id);
+    const input = $('phoneInput');
+    const select = $('countrySelect');
 
-    let isStrictMode = false;
+    const ERRORS = {
+        EMPTY_INPUT: 'Saisie vide',
+        INVALID_CHARACTERS: 'Caractères invalides',
+        INVALID_COUNTRY_CODE: 'Indicatif pays non pris en charge',
+        INVALID_PREFIX: 'Préfixe opérateur inconnu',
+        TOO_SHORT: 'Numéro trop court',
+        TOO_LONG: 'Numéro trop long',
+    };
 
-    btnTolerant.addEventListener('click', () => { isStrictMode = false; btnTolerant.classList.add('active'); btnStrict.classList.remove('active'); triggerValidation(); });
-    btnStrict.addEventListener('click', () => { isStrictMode = true; btnStrict.classList.add('active'); btnTolerant.classList.remove('active'); triggerValidation(); });
+    let strict = false;
 
-    input.addEventListener('input', (e) => {
-        const val = e.target.value;
-        const cleanInput = val.replace(/[^\d+ \-()*#]/g, '');
-        if (val !== cleanInput) e.target.value = cleanInput;
-        triggerValidation();
-    });
+    for (const country of ValiNum.getSupportedCountries()) {
+        select.add(new Option(`${country.name} (+${country.dialCode})`, country.iso2));
+    }
 
-    function triggerValidation() {
-        const value = input.value;
+    $('btnTolerant').addEventListener('click', () => setMode(false));
+    $('btnStrict').addEventListener('click', () => setMode(true));
+    select.addEventListener('change', render);
+    input.addEventListener('input', render);
 
-        if (value.trim().length > 0) {
-            const res = ValiNum.validateDRC(value, { strict: isStrictMode });
-            resultArea.style.display = 'block';
-            
-            // 1. Badge Opérateur
-            if (res.operator) {
-                operatorBadge.innerText = res.operator;
-                operatorBadge.className = 'badge ' + res.operator;
-                operatorBadge.style.display = 'inline-block';
-            } else {
-                operatorBadge.innerText = 'Inconnu';
-                operatorBadge.className = 'badge Unknown';
-                operatorBadge.style.display = res.isServiceNumber ? 'none' : 'inline-block';
-            }
+    function setMode(value) {
+        strict = value;
+        $('btnTolerant').classList.toggle('active', !strict);
+        $('btnStrict').classList.toggle('active', strict);
+        render();
+    }
 
-            // 2. Badge de Type Spécial
-            if (res.isServiceNumber) {
-                typeBadge.innerText = res.serviceType === 'USSD' ? 'Menu USSD' : 'Numéro Court';
-                typeBadge.style.display = 'inline-block';
-            } else {
-                typeBadge.style.display = 'none';
-            }
+    function show(id, text) {
+        $(id).textContent = text || '';
+        $(id).style.display = text ? 'inline-block' : 'none';
+    }
 
-            // 3. Statuts et Design
-            if (res.isValid) {
-                statusMessage.innerText = "✓ Numéro conforme et valide";
-                statusMessage.className = "status success";
-                input.style.borderColor = "#5cb85c";
-            } else {
-                statusMessage.innerText = res.error || "Saisie en cours...";
-                if (res.error && res.error.includes("obligatoire")) {
-                    statusMessage.className = "status error";
-                    input.style.borderColor = "#d9534f";
-                } else if (res.isServiceNumber) {
-                    statusMessage.className = "status info";
-                    input.style.borderColor = "#f0ad4e";
-                } else {
-                    statusMessage.className = res.error ? "status error" : "status info";
-                    input.style.borderColor = res.operator ? "#f0ad4e" : "#d9534f";
-                }
-            }
+    function render() {
+        if (!input.value.trim()) {
+            $('resultArea').style.display = 'none';
+            input.style.borderColor = '#ddd';
+            return;
+        }
 
-            // 4. Affichage des Métadonnées v1.0.4
-            if (res.lineType || res.region) {
-                metadataBox.style.display = 'block';
-                metaLineType.innerText = res.lineType || 'Inconnu';
-                metaRegion.innerText = res.region || 'Inconnu';
-            } else {
-                metadataBox.style.display = 'none';
-            }
+        const res = ValiNum.validate(input.value, {
+            strict,
+            country: select.value || undefined,
+        });
 
-            formattedNumber.innerText = res.formatted ? "Sortie standardisée : " + res.formatted : "Aucune sortie";
+        $('resultArea').style.display = 'block';
 
-        } else {
-            resultArea.style.display = 'none';
-            metadataBox.style.display = 'none';
-            input.style.borderColor = "#ddd";
+        show('countryBadge', res.country && `${res.country.iso2} +${res.country.dialCode}`);
+        show('operatorBadge', res.operator && res.operator.name);
+        show('lineBadge', res.lineType && (res.lineType === 'mobile' ? 'Mobile' : 'Fixe'));
+
+        $('statusMessage').textContent = res.valid ? '✓ Numéro conforme et valide' : (ERRORS[res.error] || res.error);
+        $('statusMessage').className = 'status ' + (res.valid ? 'success' : 'error');
+        input.style.borderColor = res.valid ? '#5cb85c' : '#d9534f';
+
+        $('formats').style.display = res.valid ? 'grid' : 'none';
+        if (res.valid) {
+            $('fmtNational').textContent = res.number.national;
+            $('fmtInternational').textContent = res.number.international;
+            $('fmtE164').textContent = res.number.e164;
         }
     }
 </script>

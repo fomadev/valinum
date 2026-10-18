@@ -9,7 +9,7 @@ on:
       - main
 jobs:
   test:
-    name: Test ValiNum v2.0.0
+    name: Test ValiNum v2
     runs-on: ubuntu-latest
 
     steps:
