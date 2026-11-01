@@ -33,6 +33,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Auto-detection of national numbers tries the countries supported since 2.1.0 first. A number that 2.1.0 recognized keeps the same country, even when it is also valid in a new country (for example `077 123 4567`: Côte d'Ivoire, also Zambia).
 
+- `DOCUMENTATION.md` is rewritten as a complete course (Chapter 0 to Chapter 18, plus a glossary) for readers with no prior knowledge, and every example in it was checked against the library.
+
+### Fixed
+
+- `import { validate } from "valinum"` and `require("valinum")` now work in Node.js. The package only declared a `module` field, which Node ignores. It now ships a CommonJS build (`dist/valinum.cjs`) and declares `main` and an `exports` map (`import`, `require`, `types`). Deep imports such as `valinum/dist/valinum.min.js` keep working.
+
 ## [2.1.0] - 2026-10-18
 
 ### Added

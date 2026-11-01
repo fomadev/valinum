@@ -35,6 +35,14 @@ export default {
       format: "es",
       sourcemap: true,
     },
+
+    {
+      // Node.js / CommonJS (require)
+      file: "dist/valinum.cjs",
+      format: "cjs",
+      exports: "named",
+      sourcemap: true,
+    },
   ],
 
   plugins: [
