@@ -1,6 +1,6 @@
 # Contributing to ValiNum
 
-First of all, thank you for considering contributing to **ValiNum**! By contributing, you help make mobile number validation more reliable for everyone in the DRC and beyond.
+First of all, thank you for considering contributing to **ValiNum**! By contributing, you help make phone number validation more reliable for everyone across Africa.
 
 ---
 
@@ -25,7 +25,8 @@ By contributing to this repository, you agree that:
 ### 2. Suggesting Enhancements
 
 - We are always looking to improve the UX and logic.
-- If you want to add support for a new country (e.g., Congo-Brazzaville, Angola), please provide the official NDC (National Destination Code) mapping for the operators.
+- If you want to add support for a new country (e.g., Mali, Kenya), please provide the official numbering plan: number length, trunk prefix, and the operator of each prefix, with a source (regulator or ITU document).
+- If an operator received a new prefix or changed its name, open an issue with the prefix and a source.
 
 ### 3. Pull Requests (The Process)
 
@@ -66,8 +67,13 @@ Forks are authorized **ONLY** for the purpose of submitting a Pull Request to th
 ## Coding Standards
 
 - Use **TypeScript** for any logic changes.
-- Ensure the `dist/` folder is updated before submitting (via `npm run build`).
+- Add or update **tests** for every change (`tests/`).
+- Run `npm run build` and **commit the `dist/` folder**: CDNs serve it straight from GitHub, and the CI fails if it does not match the sources.
+- Add your change to **`CHANGELOG.md`**.
 - Keep the `ValidationResult` interface consistent to avoid breaking changes for existing users.
+- A new country must not change the result for numbers that are already recognized: add it to a new group in `DETECTION_TIERS`.
+
+Adding a country step by step is explained in [The ValiNum Course, Chapter 17.2](DOCUMENTATION.md#172-adding-a-country), and how the code is organized in [Chapter 14](DOCUMENTATION.md#chapter-14-how-valinum-works-inside).
 
 ---
 

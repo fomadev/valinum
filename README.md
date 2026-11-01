@@ -2,7 +2,7 @@
 
 ValiNum is a lightweight JavaScript and TypeScript library for validating and formatting phone numbers in 15 African countries. You pass it whatever the user typed; ValiNum works out the country, the operator, the line type and the standard formats. You never have to hard-code prefixes such as "82 is Vodacom" in your own code.
 
-For the full beginner-friendly guide, see [DOCUMENTATION.md](DOCUMENTATION.md). Release notes are in [CHANGELOG.md](CHANGELOG.md).
+New to ValiNum, or even to phone numbers? Read **[The ValiNum Course](DOCUMENTATION.md)**: it explains everything from Chapter 0 to the last chapter, with no prior knowledge needed. Release notes are in [CHANGELOG.md](CHANGELOG.md).
 
 ## Supported countries
 
@@ -36,6 +36,13 @@ For the full beginner-friendly guide, see [DOCUMENTATION.md](DOCUMENTATION.md). 
 
 ```bash
 npm install valinum
+```
+
+Works with ES modules, CommonJS and TypeScript (types included):
+
+```js
+import { validate } from "valinum"; // ES modules
+const { validate } = require("valinum"); // CommonJS
 ```
 
 ### Without installing (CDN)
@@ -135,4 +142,4 @@ npm run build
 
 ## More information
 
-The complete documentation, including a full tutorial from the basics to advanced usage, is available in [DOCUMENTATION.md](DOCUMENTATION.md).
+[The ValiNum Course](DOCUMENTATION.md) covers everything in 19 chapters: phone number basics, every option and error code, the 15 countries, ready-to-use recipes, how the library works inside, and how to contribute.
