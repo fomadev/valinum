@@ -9,8 +9,8 @@
  *
  * 07 07 12 34 56 / +225 07 07 12 34 56
  */
-import { ValidationOptions, ValidationResult } from "../types";
-import { CountryDefinition } from "../core/engine";
+import { ValidationOptions, ValidationResult } from "../types.js";
+import { CountryDefinition } from "../core/engine.js";
 export declare const IVORY_COAST: CountryDefinition;
 /**
  * Validate a Côte d'Ivoire phone number.

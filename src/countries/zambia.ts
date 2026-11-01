@@ -14,13 +14,13 @@
  * 097 123 4567 / +260 97 123 4567
  */
 
-import { ValidationOptions, ValidationResult } from "../types";
+import { ValidationOptions, ValidationResult } from "../types.js";
 import {
   CountryDefinition,
   groupedFormats,
   ranges,
   validateWithDefinition,
-} from "../core/engine";
+} from "../core/engine.js";
 
 export const ZAMBIA: CountryDefinition = {
   info: {

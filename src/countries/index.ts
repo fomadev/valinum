@@ -4,23 +4,23 @@
  * See the LICENSE file in the project root for full license information.
  */
 
-import { CountryCode, CountryInfo } from "../types";
-import { CountryDefinition } from "../core/engine";
-import { DRC } from "./drc";
-import { CONGO } from "./congo";
-import { CAMEROON } from "./cameroon";
-import { IVORY_COAST } from "./ivory-coast";
-import { SENEGAL } from "./senegal";
-import { ANGOLA } from "./angola";
-import { GABON } from "./gabon";
-import { CENTRAL_AFRICAN_REPUBLIC } from "./central-african-republic";
-import { EQUATORIAL_GUINEA } from "./equatorial-guinea";
-import { NIGERIA } from "./nigeria";
-import { BENIN } from "./benin";
-import { TOGO } from "./togo";
-import { GHANA } from "./ghana";
-import { ZAMBIA } from "./zambia";
-import { BURKINA_FASO } from "./burkina-faso";
+import { CountryCode, CountryInfo } from "../types.js";
+import { CountryDefinition } from "../core/engine.js";
+import { DRC } from "./drc.js";
+import { CONGO } from "./congo.js";
+import { CAMEROON } from "./cameroon.js";
+import { IVORY_COAST } from "./ivory-coast.js";
+import { SENEGAL } from "./senegal.js";
+import { ANGOLA } from "./angola.js";
+import { GABON } from "./gabon.js";
+import { CENTRAL_AFRICAN_REPUBLIC } from "./central-african-republic.js";
+import { EQUATORIAL_GUINEA } from "./equatorial-guinea.js";
+import { NIGERIA } from "./nigeria.js";
+import { BENIN } from "./benin.js";
+import { TOGO } from "./togo.js";
+import { GHANA } from "./ghana.js";
+import { ZAMBIA } from "./zambia.js";
+import { BURKINA_FASO } from "./burkina-faso.js";
 
 export const COUNTRIES: Record<CountryCode, CountryDefinition> = {
   // Since 2.1.0

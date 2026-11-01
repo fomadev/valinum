@@ -7,8 +7,8 @@
  *
  * 90 12 34 56 / +228 90 12 34 56
  */
-import { ValidationOptions, ValidationResult } from "../types";
-import { CountryDefinition } from "../core/engine";
+import { ValidationOptions, ValidationResult } from "../types.js";
+import { CountryDefinition } from "../core/engine.js";
 export declare const TOGO: CountryDefinition;
 /**
  * Validate a Togo phone number.

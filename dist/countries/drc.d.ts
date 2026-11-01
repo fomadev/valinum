@@ -7,8 +7,8 @@
  *
  * 082 470 8027 / +243 824 708 027
  */
-import { ValidationOptions, ValidationResult } from "../types";
-import { CountryDefinition } from "../core/engine";
+import { ValidationOptions, ValidationResult } from "../types.js";
+import { CountryDefinition } from "../core/engine.js";
 export declare const DRC: CountryDefinition;
 /**
  * Validate a DRC phone number.

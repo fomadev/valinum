@@ -38,6 +38,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - `import { validate } from "valinum"` and `require("valinum")` now work in Node.js. The package only declared a `module` field, which Node ignores. It now ships a CommonJS build (`dist/valinum.cjs`) and declares `main` and an `exports` map (`import`, `require`, `types`). Deep imports such as `valinum/dist/valinum.min.js` keep working.
+- The type declarations now work with `"moduleResolution": "node16"` or `"nodenext"`. The `.d.ts` files in `dist/` used extensionless relative imports (`from "./types"`), which TypeScript rejects in that mode, so types such as `ValidationResult` and `CountryCode` could not be imported. Relative imports now carry a `.js` extension; `bundler` and `node` resolution keep working.
 
 ## [2.1.0] - 2026-10-18
 

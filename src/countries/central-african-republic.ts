@@ -15,13 +15,13 @@
  * 75 12 34 56 / +236 75 12 34 56
  */
 
-import { ValidationOptions, ValidationResult } from "../types";
+import { ValidationOptions, ValidationResult } from "../types.js";
 import {
   CountryDefinition,
   groupedFormats,
   ranges,
   validateWithDefinition,
-} from "../core/engine";
+} from "../core/engine.js";
 
 export const CENTRAL_AFRICAN_REPUBLIC: CountryDefinition = {
   info: {

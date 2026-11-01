@@ -14,13 +14,13 @@
  * 70 12 34 56 / +226 70 12 34 56
  */
 
-import { ValidationOptions, ValidationResult } from "../types";
+import { ValidationOptions, ValidationResult } from "../types.js";
 import {
   CountryDefinition,
   groupedFormats,
   ranges,
   validateWithDefinition,
-} from "../core/engine";
+} from "../core/engine.js";
 
 export const BURKINA_FASO: CountryDefinition = {
   info: {

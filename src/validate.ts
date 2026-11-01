@@ -24,14 +24,14 @@ import {
   CountryCode,
   ValidationOptions,
   ValidationResult,
-} from "./types";
-import { CountryDefinition, validateWithDefinition } from "./core/engine";
-import { normalize } from "./core/normalize";
+} from "./types.js";
+import { CountryDefinition, validateWithDefinition } from "./core/engine.js";
+import { normalize } from "./core/normalize.js";
 import {
   COUNTRIES,
   DETECTION_TIERS,
   getCountryDefinition,
-} from "./countries";
+} from "./countries/index.js";
 
 function candidates(
   options: ValidationOptions

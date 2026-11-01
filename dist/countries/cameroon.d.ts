@@ -8,8 +8,8 @@
  *
  * 6 71 23 45 67 / +237 6 71 23 45 67
  */
-import { ValidationOptions, ValidationResult } from "../types";
-import { CountryDefinition } from "../core/engine";
+import { ValidationOptions, ValidationResult } from "../types.js";
+import { CountryDefinition } from "../core/engine.js";
 export declare const CAMEROON: CountryDefinition;
 /**
  * Validate a Cameroon phone number.

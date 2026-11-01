@@ -8,7 +8,7 @@
  * normalize → strict check → parse → trunk prefix
  *           → length → operator/range → formatting
  */
-import { CountryInfo, LineType, ValidationOptions, ValidationResult } from "../types";
+import { CountryInfo, LineType, ValidationOptions, ValidationResult } from "../types.js";
 /**
  * One allocated block of the national numbering plan.
  */

@@ -7,8 +7,8 @@
  *
  * 70 12 34 56 / +226 70 12 34 56
  */
-import { ValidationOptions, ValidationResult } from "../types";
-import { CountryDefinition } from "../core/engine";
+import { ValidationOptions, ValidationResult } from "../types.js";
+import { CountryDefinition } from "../core/engine.js";
 export declare const BURKINA_FASO: CountryDefinition;
 /**
  * Validate a Burkina Faso phone number.

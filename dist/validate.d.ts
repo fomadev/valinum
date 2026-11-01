@@ -13,7 +13,7 @@
  *   never take over a number an earlier release
  *   already recognized.
  */
-import { ValidationOptions, ValidationResult } from "./types";
+import { ValidationOptions, ValidationResult } from "./types.js";
 /**
  * Validate a phone number from any supported country.
  */

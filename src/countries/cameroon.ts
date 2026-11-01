@@ -15,13 +15,13 @@
  * 6 71 23 45 67 / +237 6 71 23 45 67
  */
 
-import { ValidationOptions, ValidationResult } from "../types";
+import { ValidationOptions, ValidationResult } from "../types.js";
 import {
   CountryDefinition,
   ranges,
   validateWithDefinition,
-} from "../core/engine";
-import { formatGroups } from "../core/formatter";
+} from "../core/engine.js";
+import { formatGroups } from "../core/formatter.js";
 
 export const CAMEROON: CountryDefinition = {
   info: {

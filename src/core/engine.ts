@@ -21,12 +21,12 @@ import {
   NumberInfo,
   ValidationOptions,
   ValidationResult,
-} from "../types";
+} from "../types.js";
 
-import { normalize } from "./normalize";
-import { parse } from "./parser";
-import { validateBasic } from "./validator";
-import { formatE164, formatGroups } from "./formatter";
+import { normalize } from "./normalize.js";
+import { parse } from "./parser.js";
+import { validateBasic } from "./validator.js";
+import { formatE164, formatGroups } from "./formatter.js";
 
 /**
  * One allocated block of the national numbering plan.

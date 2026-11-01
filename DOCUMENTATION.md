@@ -216,7 +216,7 @@ import { validate } from "valinum";
 const { validate } = require("valinum");
 ```
 
-TypeScript types are included: there is nothing else to install.
+TypeScript types are included: there is nothing else to install. They work with every `moduleResolution` setting (`node`, `node16`, `nodenext`, `bundler`).
 
 ### 3.2 Without installing anything (CDN)
 
@@ -1168,6 +1168,8 @@ ValiNum is written in TypeScript and ships its types. Every type below can be im
 ```ts
 import type { ValidationResult, ValidationOptions, CountryCode } from "valinum";
 ```
+
+The types resolve with every `moduleResolution` setting in your `tsconfig.json`: `node`, `node16`, `nodenext` and `bundler`, in both ES module and CommonJS files.
 
 ### 15.1 Functions
 

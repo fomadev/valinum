@@ -8,8 +8,8 @@
  *
  * 01 97 12 34 56 / +229 01 97 12 34 56
  */
-import { ValidationOptions, ValidationResult } from "../types";
-import { CountryDefinition } from "../core/engine";
+import { ValidationOptions, ValidationResult } from "../types.js";
+import { CountryDefinition } from "../core/engine.js";
 export declare const BENIN: CountryDefinition;
 /**
  * Validate a Benin phone number.
