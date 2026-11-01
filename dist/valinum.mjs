@@ -1,6 +1,7 @@
-/* * Copyright (c) 2026 Fordi / FomaDev.
- * Licensed under FomaDev Public License.
- * See LICENSE file in the project root for full license information.
+/*
+ * Copyright (c) 2026 Fordima Inc. All rights reserved.
+ * Licensed under the Fordima Public License (FPL) v1.0.
+ * See the LICENSE file in the project root for full license information.
  */
 /**
  * Normalize a phone number's syntax.
@@ -65,9 +66,10 @@ function normalize(input, accept00Prefix = true) {
     };
 }
 
-/* * Copyright (c) 2026 Fordi / FomaDev.
- * Licensed under FomaDev Public License.
- * See LICENSE file in the project root for full license information.
+/*
+ * Copyright (c) 2026 Fordima Inc. All rights reserved.
+ * Licensed under the Fordima Public License (FPL) v1.0.
+ * See the LICENSE file in the project root for full license information.
  */
 /**
  * Parse a normalized number.
@@ -119,9 +121,10 @@ function parse(normalized, dialCode) {
     };
 }
 
-/* * Copyright (c) 2026 Fordi / FomaDev.
- * Licensed under FomaDev Public License.
- * See LICENSE file in the project root for full license information.
+/*
+ * Copyright (c) 2026 Fordima Inc. All rights reserved.
+ * Licensed under the Fordima Public License (FPL) v1.0.
+ * See the LICENSE file in the project root for full license information.
  */
 /**
  * Validate the basic structure of a national number.
@@ -160,9 +163,10 @@ function validateBasic(nationalNumber, expectedLength) {
     };
 }
 
-/* * Copyright (c) 2026 Fordi / FomaDev.
- * Licensed under FomaDev Public License.
- * See LICENSE file in the project root for full license information.
+/*
+ * Copyright (c) 2026 Fordima Inc. All rights reserved.
+ * Licensed under the Fordima Public License (FPL) v1.0.
+ * See the LICENSE file in the project root for full license information.
  */
 /**
  * Build E.164 representation.
@@ -226,19 +230,36 @@ function formatGroups(digits, groups) {
     return parts.join(" ");
 }
 
-/* * Copyright (c) 2026 Fordi / FomaDev.
- * Licensed under FomaDev Public License.
- * See LICENSE file in the project root for full license information.
+/*
+ * Copyright (c) 2026 Fordima Inc. All rights reserved.
+ * Licensed under the Fordima Public License (FPL) v1.0.
+ * See the LICENSE file in the project root for full license information.
  */
 /**
  * Build ranges sharing the same operator and line type.
  */
-function ranges(operator, lineType, prefixes) {
+function ranges(operator, lineType, prefixes, pattern) {
     return prefixes.map((prefix) => ({
         prefix,
         operator,
         lineType,
+        ...(pattern && { pattern }),
     }));
+}
+/**
+ * Build the national and international formatters of a
+ * country from its digit groups.
+ *
+ * groupedFormats("233", [2, 3, 4], "0")
+ *
+ * national:      024 123 4567
+ * international: +233 24 123 4567
+ */
+function groupedFormats(dialCode, groups, nationalPrefix = "") {
+    return {
+        formatNational: (national) => nationalPrefix + formatGroups(national, groups),
+        formatInternational: (national) => `+${dialCode} ${formatGroups(national, groups)}`,
+    };
 }
 /**
  * Find the most specific range matching a national number.
@@ -247,6 +268,7 @@ function findRange(nationalNumber, numberRanges) {
     let best = null;
     for (const range of numberRanges) {
         if (nationalNumber.startsWith(range.prefix) &&
+            (!range.pattern || range.pattern.test(nationalNumber)) &&
             (!best || range.prefix.length > best.prefix.length)) {
             best = range;
         }
@@ -353,9 +375,10 @@ function validateWithDefinition(input, definition, options = {}) {
     };
 }
 
-/* * Copyright (c) 2026 Fordi / FomaDev.
- * Licensed under FomaDev Public License.
- * See LICENSE file in the project root for full license information.
+/*
+ * Copyright (c) 2026 Fordima Inc. All rights reserved.
+ * Licensed under the Fordima Public License (FPL) v1.0.
+ * See the LICENSE file in the project root for full license information.
  */
 const DRC = {
     info: {
@@ -381,9 +404,10 @@ function validateDRC(input, options = {}) {
     return validateWithDefinition(input, DRC, options);
 }
 
-/* * Copyright (c) 2026 Fordi / FomaDev.
- * Licensed under FomaDev Public License.
- * See LICENSE file in the project root for full license information.
+/*
+ * Copyright (c) 2026 Fordima Inc. All rights reserved.
+ * Licensed under the Fordima Public License (FPL) v1.0.
+ * See the LICENSE file in the project root for full license information.
  */
 const CONGO = {
     info: {
@@ -422,9 +446,10 @@ function validateCongoBrazzaville(input, options = {}) {
     return validateWithDefinition(input, CONGO, options);
 }
 
-/* * Copyright (c) 2026 Fordi / FomaDev.
- * Licensed under FomaDev Public License.
- * See LICENSE file in the project root for full license information.
+/*
+ * Copyright (c) 2026 Fordima Inc. All rights reserved.
+ * Licensed under the Fordima Public License (FPL) v1.0.
+ * See the LICENSE file in the project root for full license information.
  */
 const CAMEROON = {
     info: {
@@ -462,9 +487,10 @@ function validateCameroon(input, options = {}) {
     return validateWithDefinition(input, CAMEROON, options);
 }
 
-/* * Copyright (c) 2026 Fordi / FomaDev.
- * Licensed under FomaDev Public License.
- * See LICENSE file in the project root for full license information.
+/*
+ * Copyright (c) 2026 Fordima Inc. All rights reserved.
+ * Licensed under the Fordima Public License (FPL) v1.0.
+ * See the LICENSE file in the project root for full license information.
  */
 const IVORY_COAST = {
     info: {
@@ -502,9 +528,10 @@ function validateIvoryCoast(input, options = {}) {
     return validateWithDefinition(input, IVORY_COAST, options);
 }
 
-/* * Copyright (c) 2026 Fordi / FomaDev.
- * Licensed under FomaDev Public License.
- * See LICENSE file in the project root for full license information.
+/*
+ * Copyright (c) 2026 Fordima Inc. All rights reserved.
+ * Licensed under the Fordima Public License (FPL) v1.0.
+ * See the LICENSE file in the project root for full license information.
  */
 const SENEGAL = {
     info: {
@@ -539,17 +566,401 @@ function validateSenegal(input, options = {}) {
     return validateWithDefinition(input, SENEGAL, options);
 }
 
-/* * Copyright (c) 2026 Fordi / FomaDev.
- * Licensed under FomaDev Public License.
- * See LICENSE file in the project root for full license information.
+/*
+ * Copyright (c) 2026 Fordima Inc. All rights reserved.
+ * Licensed under the Fordima Public License (FPL) v1.0.
+ * See the LICENSE file in the project root for full license information.
+ */
+const ANGOLA = {
+    info: {
+        iso2: "AO",
+        dialCode: "244",
+        name: "Angola",
+    },
+    nationalLength: 9,
+    trunkPrefix: null,
+    ranges: [
+        ...ranges("Unitel", "mobile", ["92", "93", "94", "97"]),
+        ...ranges("Movicel", "mobile", ["91", "99"]),
+        ...ranges("Africell", "mobile", ["95", "96"]),
+    ],
+    ...groupedFormats("244", [3, 3, 3]),
+};
+/**
+ * Validate an Angola phone number.
+ */
+function validateAngola(input, options = {}) {
+    return validateWithDefinition(input, ANGOLA, options);
+}
+
+/*
+ * Copyright (c) 2026 Fordima Inc. All rights reserved.
+ * Licensed under the Fordima Public License (FPL) v1.0.
+ * See the LICENSE file in the project root for full license information.
+ */
+const GABON = {
+    info: {
+        iso2: "GA",
+        dialCode: "241",
+        name: "Gabon",
+    },
+    nationalLength: 8,
+    trunkPrefix: "0",
+    ranges: [
+        // Mobile
+        ...ranges("Airtel", "mobile", ["74", "76", "77"]),
+        // Gabon Telecom (formerly Libertis and Moov).
+        ...ranges("Moov Africa", "mobile", [
+            "600", "601", "602", "603", "604",
+            "610",
+            "62", "65", "66",
+        ]),
+        // Fixed
+        ...ranges("Moov Africa", "fixed", ["11"]),
+    ],
+    ...groupedFormats("241", [2, 2, 2, 2], "0"),
+};
+/**
+ * Validate a Gabon phone number.
+ */
+function validateGabon(input, options = {}) {
+    return validateWithDefinition(input, GABON, options);
+}
+
+/*
+ * Copyright (c) 2026 Fordima Inc. All rights reserved.
+ * Licensed under the Fordima Public License (FPL) v1.0.
+ * See the LICENSE file in the project root for full license information.
+ */
+const CENTRAL_AFRICAN_REPUBLIC = {
+    info: {
+        iso2: "CF",
+        dialCode: "236",
+        name: "Central African Republic",
+    },
+    nationalLength: 8,
+    trunkPrefix: null,
+    ranges: [
+        // Mobile
+        ...ranges("Orange", "mobile", ["72", "73", "74"]),
+        ...ranges("Telecel", "mobile", ["75", "76"]),
+        ...ranges("Moov Africa", "mobile", ["70"]),
+        // Fixed
+        ...ranges("Socatel", "fixed", ["21", "22"]),
+    ],
+    ...groupedFormats("236", [2, 2, 2, 2]),
+};
+/**
+ * Validate a Central African Republic phone number.
+ */
+function validateCentralAfricanRepublic(input, options = {}) {
+    return validateWithDefinition(input, CENTRAL_AFRICAN_REPUBLIC, options);
+}
+
+/*
+ * Copyright (c) 2026 Fordima Inc. All rights reserved.
+ * Licensed under the Fordima Public License (FPL) v1.0.
+ * See the LICENSE file in the project root for full license information.
+ */
+const EQUATORIAL_GUINEA = {
+    info: {
+        iso2: "GQ",
+        dialCode: "240",
+        name: "Equatorial Guinea",
+    },
+    nationalLength: 9,
+    trunkPrefix: null,
+    ranges: [
+        // Mobile
+        ...ranges("GETESA", "mobile", ["222"]),
+        ...ranges("Muni", "mobile", ["55"]),
+        // Fixed
+        ...ranges("GETESA", "fixed", ["3"], /^(?:33[0-24-9]\d[46]\d{4}|3(?:33|5\d)\d[7-9]\d{4})$/),
+    ],
+    ...groupedFormats("240", [3, 3, 3]),
+};
+/**
+ * Validate an Equatorial Guinea phone number.
+ */
+function validateEquatorialGuinea(input, options = {}) {
+    return validateWithDefinition(input, EQUATORIAL_GUINEA, options);
+}
+
+/*
+ * Copyright (c) 2026 Fordima Inc. All rights reserved.
+ * Licensed under the Fordima Public License (FPL) v1.0.
+ * See the LICENSE file in the project root for full license information.
+ */
+const NIGERIA = {
+    info: {
+        iso2: "NG",
+        dialCode: "234",
+        name: "Nigeria",
+    },
+    nationalLength: 10,
+    trunkPrefix: "0",
+    ranges: [
+        ...ranges("MTN", "mobile", [
+            "703", "704", "706", "707", "7025", "7026",
+            "803", "806", "810", "813", "814", "816",
+            "903", "906", "910", "913", "916",
+        ]),
+        ...ranges("Airtel", "mobile", [
+            "701", "708",
+            "802", "808", "812",
+            "901", "902", "904", "907", "911", "912",
+        ]),
+        ...ranges("Glo", "mobile", [
+            "705",
+            "805", "807", "811", "815",
+            "905", "915",
+        ]),
+        ...ranges("9mobile", "mobile", [
+            "809", "817", "818",
+            "908", "909",
+        ]),
+        ...ranges("Ntel", "mobile", ["7021", "7022", "804"]),
+        ...ranges("Smile", "mobile", ["7020"]),
+        ...ranges("Prestel", "mobile", ["7024"]),
+        ...ranges("Multilinks", "mobile", ["7027", "709"]),
+        ...ranges("Starcomms", "mobile", ["7028", "7029", "8190", "8191"]),
+        ...ranges("Lebara", "mobile", ["72"]),
+        ...ranges("MAFAB", "mobile", ["801"]),
+    ],
+    ...groupedFormats("234", [3, 3, 4], "0"),
+};
+/**
+ * Validate a Nigeria phone number.
+ */
+function validateNigeria(input, options = {}) {
+    return validateWithDefinition(input, NIGERIA, options);
+}
+
+/*
+ * Copyright (c) 2026 Fordima Inc. All rights reserved.
+ * Licensed under the Fordima Public License (FPL) v1.0.
+ * See the LICENSE file in the project root for full license information.
+ */
+const BENIN = {
+    info: {
+        iso2: "BJ",
+        dialCode: "229",
+        name: "Benin",
+    },
+    nationalLength: 10,
+    trunkPrefix: null,
+    ranges: [
+        // Mobile
+        ...ranges("MTN", "mobile", [
+            "0142", "0146",
+            "015",
+            "0161", "0162", "0166", "0167", "0169",
+            "0190", "0191", "0196", "0197",
+        ]),
+        ...ranges("Moov", "mobile", [
+            "0145",
+            "0155", "0158",
+            "0160", "0163", "0164", "0165", "0168",
+            "0194", "0195", "0198", "0199",
+        ]),
+        // SBIN.
+        ...ranges("Celtiis", "mobile", ["0128", "014", "0192", "0193"]),
+        // Fixed
+        ...ranges("Celtiis", "fixed", ["0120", "0121", "0122", "0123", "0124"]),
+    ],
+    ...groupedFormats("229", [2, 2, 2, 2, 2]),
+};
+/**
+ * Validate a Benin phone number.
+ */
+function validateBenin(input, options = {}) {
+    return validateWithDefinition(input, BENIN, options);
+}
+
+/*
+ * Copyright (c) 2026 Fordima Inc. All rights reserved.
+ * Licensed under the Fordima Public License (FPL) v1.0.
+ * See the LICENSE file in the project root for full license information.
+ */
+const TOGO = {
+    info: {
+        iso2: "TG",
+        dialCode: "228",
+        name: "Togo",
+    },
+    nationalLength: 8,
+    trunkPrefix: null,
+    ranges: [
+        // Mobile
+        // Formerly Togocom (Togo Cellulaire / Togo Telecom).
+        ...ranges("Yas", "mobile", [
+            "70", "71", "72", "73",
+            "90", "91", "92", "93",
+        ]),
+        ...ranges("Moov Africa", "mobile", ["78", "79", "96", "97", "98", "99"]),
+        // Fixed
+        ...ranges("Yas", "fixed", [
+            "222", "223", "224", "225", "226", "227",
+            "232", "233",
+            "244", "245",
+            "255",
+            "266", "267",
+            "277",
+        ]),
+    ],
+    ...groupedFormats("228", [2, 2, 2, 2]),
+};
+/**
+ * Validate a Togo phone number.
+ */
+function validateTogo(input, options = {}) {
+    return validateWithDefinition(input, TOGO, options);
+}
+
+/*
+ * Copyright (c) 2026 Fordima Inc. All rights reserved.
+ * Licensed under the Fordima Public License (FPL) v1.0.
+ * See the LICENSE file in the project root for full license information.
+ */
+const GHANA = {
+    info: {
+        iso2: "GH",
+        dialCode: "233",
+        name: "Ghana",
+    },
+    nationalLength: 9,
+    trunkPrefix: "0",
+    ranges: [
+        ...ranges("MTN", "mobile", [
+            "24", "256", "257",
+            "53", "54", "55",
+            "591", "592", "593", "594", "595", "596", "597", "598", "599",
+        ]),
+        // Formerly Vodafone Ghana.
+        ...ranges("Telecel", "mobile", ["20", "50"]),
+        // Formerly AirtelTigo.
+        ...ranges("AT", "mobile", ["23", "26", "27", "56", "57"]),
+    ],
+    ...groupedFormats("233", [2, 3, 4], "0"),
+};
+/**
+ * Validate a Ghana phone number.
+ */
+function validateGhana(input, options = {}) {
+    return validateWithDefinition(input, GHANA, options);
+}
+
+/*
+ * Copyright (c) 2026 Fordima Inc. All rights reserved.
+ * Licensed under the Fordima Public License (FPL) v1.0.
+ * See the LICENSE file in the project root for full license information.
+ */
+const ZAMBIA = {
+    info: {
+        iso2: "ZM",
+        dialCode: "260",
+        name: "Zambia",
+    },
+    nationalLength: 9,
+    trunkPrefix: "0",
+    ranges: [
+        // Mobile
+        ...ranges("Airtel", "mobile", ["97", "77", "57"]),
+        ...ranges("MTN", "mobile", ["96", "76", "56"]),
+        ...ranges("Zamtel", "mobile", ["95", "75", "55"]),
+        // 078 and 058 are reserved for Zedmobile but not active yet.
+        ...ranges("Zedmobile", "mobile", ["98"]),
+        // Fixed
+        ...ranges("Zamtel", "fixed", [
+            "211", "212", "213", "214", "215", "216", "217", "218",
+        ]),
+    ],
+    ...groupedFormats("260", [2, 3, 4], "0"),
+};
+/**
+ * Validate a Zambia phone number.
+ */
+function validateZambia(input, options = {}) {
+    return validateWithDefinition(input, ZAMBIA, options);
+}
+
+/*
+ * Copyright (c) 2026 Fordima Inc. All rights reserved.
+ * Licensed under the Fordima Public License (FPL) v1.0.
+ * See the LICENSE file in the project root for full license information.
+ */
+const BURKINA_FASO = {
+    info: {
+        iso2: "BF",
+        dialCode: "226",
+        name: "Burkina Faso",
+    },
+    nationalLength: 8,
+    trunkPrefix: null,
+    ranges: [
+        // Mobile
+        ...ranges("Orange", "mobile", [
+            "04", "05", "06", "07",
+            "44", "45", "46",
+            "54", "55", "56", "57",
+            "64", "65", "66", "67",
+            "74", "75", "76", "77",
+        ]),
+        // ONATEL.
+        ...ranges("Moov Africa", "mobile", [
+            "01", "02", "03",
+            "50", "51", "52", "53",
+            "60", "61", "62", "63",
+            "70", "71", "72", "73",
+        ]),
+        ...ranges("Telecel Faso", "mobile", ["58", "68", "69", "78", "79"]),
+        // Fixed
+        ...ranges("Moov Africa", "fixed", ["2"], /^2(?:0(?:49|5[23]|6[5-7]|9[016-9])|4(?:4[569]|5[4-6]|6[5-7]|7[0179])|5(?:[34]\d|50|6[5-8]))\d{4}$/),
+    ],
+    ...groupedFormats("226", [2, 2, 2, 2]),
+};
+/**
+ * Validate a Burkina Faso phone number.
+ */
+function validateBurkinaFaso(input, options = {}) {
+    return validateWithDefinition(input, BURKINA_FASO, options);
+}
+
+/*
+ * Copyright (c) 2026 Fordima Inc. All rights reserved.
+ * Licensed under the Fordima Public License (FPL) v1.0.
+ * See the LICENSE file in the project root for full license information.
  */
 const COUNTRIES = {
+    // Since 2.1.0
     CD: DRC,
     CG: CONGO,
     CM: CAMEROON,
     CI: IVORY_COAST,
     SN: SENEGAL,
+    // Since 2.2.0
+    AO: ANGOLA,
+    GA: GABON,
+    CF: CENTRAL_AFRICAN_REPUBLIC,
+    GQ: EQUATORIAL_GUINEA,
+    NG: NIGERIA,
+    BJ: BENIN,
+    TG: TOGO,
+    GH: GHANA,
+    ZM: ZAMBIA,
+    BF: BURKINA_FASO,
 };
+/**
+ * Countries grouped by the release that added them.
+ *
+ * Auto-detection of national numbers tries older groups
+ * first, so adding a country never changes how a number
+ * that ValiNum already recognized is interpreted.
+ */
+const DETECTION_TIERS = [
+    ["CD", "CG", "CM", "CI", "SN"],
+    ["AO", "GA", "CF", "GQ", "NG", "BJ", "TG", "GH", "ZM", "BF"],
+];
 /**
  * Resolve a country code (case-insensitive).
  */
@@ -567,9 +978,10 @@ function getSupportedCountries() {
     return Object.values(COUNTRIES).map((c) => c.info);
 }
 
-/* * Copyright (c) 2026 Fordi / FomaDev.
- * Licensed under FomaDev Public License.
- * See LICENSE file in the project root for full license information.
+/*
+ * Copyright (c) 2026 Fordima Inc. All rights reserved.
+ * Licensed under the Fordima Public License (FPL) v1.0.
+ * See the LICENSE file in the project root for full license information.
  */
 function candidates(options) {
     const allowed = (options.countries?.length
@@ -637,18 +1049,26 @@ function validate(input, options = {}) {
     /*
      * 4. NATIONAL NUMBER OF ANOTHER COUNTRY
      *
-     * Only when a single country recognizes it.
+     * Only when a single country recognizes it. Older
+     * tiers are tried first; an ambiguous tier stops the
+     * search instead of guessing.
      */
     if (!options.strict) {
-        const matches = others
-            .map((c) => validateWithDefinition(input, c, options))
-            .filter((r) => r.valid);
-        if (matches.length === 1) {
-            return matches[0];
+        for (const tier of DETECTION_TIERS) {
+            const matches = others
+                .filter((c) => tier.includes(c.info.iso2))
+                .map((c) => validateWithDefinition(input, c, options))
+                .filter((r) => r.valid);
+            if (matches.length === 1) {
+                return matches[0];
+            }
+            if (matches.length > 1) {
+                break;
+            }
         }
     }
     return primaryResult;
 }
 
-export { formatE164, formatGroups, formatInternational, formatNational, getSupportedCountries, normalize, parse, validate, validateBasic, validateCameroon, validateCongoBrazzaville, validateDRC, validateIvoryCoast, validateSenegal };
+export { formatE164, formatGroups, formatInternational, formatNational, getSupportedCountries, normalize, parse, validate, validateAngola, validateBasic, validateBenin, validateBurkinaFaso, validateCameroon, validateCentralAfricanRepublic, validateCongoBrazzaville, validateDRC, validateEquatorialGuinea, validateGabon, validateGhana, validateIvoryCoast, validateNigeria, validateSenegal, validateTogo, validateZambia };
 //# sourceMappingURL=valinum.mjs.map

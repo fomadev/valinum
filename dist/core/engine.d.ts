@@ -17,6 +17,11 @@ export interface NumberRange {
     prefix: string;
     operator: string;
     lineType: LineType;
+    /**
+     * Optional full-number rule for plans that a prefix
+     * alone cannot describe (complex fixed-line blocks).
+     */
+    pattern?: RegExp;
 }
 export interface CountryDefinition {
     info: CountryInfo;
@@ -34,7 +39,17 @@ export interface CountryDefinition {
 /**
  * Build ranges sharing the same operator and line type.
  */
-export declare function ranges(operator: string, lineType: LineType, prefixes: string[]): NumberRange[];
+export declare function ranges(operator: string, lineType: LineType, prefixes: string[], pattern?: RegExp): NumberRange[];
+/**
+ * Build the national and international formatters of a
+ * country from its digit groups.
+ *
+ * groupedFormats("233", [2, 3, 4], "0")
+ *
+ * national:      024 123 4567
+ * international: +233 24 123 4567
+ */
+export declare function groupedFormats(dialCode: string, groups: number[], nationalPrefix?: string): Pick<CountryDefinition, "formatNational" | "formatInternational">;
 /**
  * Find the most specific range matching a national number.
  */

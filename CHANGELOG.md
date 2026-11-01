@@ -9,6 +9,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **MINOR** (`2.X.0`): new features that stay backward compatible (new countries, new options)
 - **PATCH** (`2.1.X`): backward compatible bug fixes and operator data corrections
 
+## [2.2.0] - 2026-11-01
+
+### Added
+
+- Ten new countries, with every active mobile range and the fixed-line ranges whose operator is known:
+  - **Angola** (`AO`, `+244`): Unitel, Movicel, Africell (mobile)
+  - **Gabon** (`GA`, `+241`): Airtel, Moov Africa (8-digit plan in force since 2019)
+  - **Central African Republic** (`CF`, `+236`): Orange, Telecel, Moov Africa, Socatel (fixed)
+  - **Equatorial Guinea** (`GQ`, `+240`): GETESA, Muni
+  - **Nigeria** (`NG`, `+234`): MTN, Airtel, Glo, 9mobile, Ntel, Smile, MAFAB and others (mobile)
+  - **Benin** (`BJ`, `+229`): MTN, Moov, Celtiis (10-digit plan in force since 2024)
+  - **Togo** (`TG`, `+228`): Yas (formerly Togocom), Moov Africa
+  - **Ghana** (`GH`, `+233`): MTN, Telecel (formerly Vodafone), AT (formerly AirtelTigo) (mobile)
+  - **Zambia** (`ZM`, `+260`): Airtel, MTN, Zamtel, Zedmobile
+  - **Burkina Faso** (`BF`, `+226`): Orange, Moov Africa, Telecel Faso
+- Dedicated validators for each new country (`validateAngola`, `validateGabon`, `validateCentralAfricanRepublic`, `validateEquatorialGuinea`, `validateNigeria`, `validateBenin`, `validateTogo`, `validateGhana`, `validateZambia`, `validateBurkinaFaso`).
+- Number ranges can carry a full-number pattern, for fixed-line plans that a prefix alone cannot describe.
+
+### Changed
+
+- Auto-detection of national numbers tries the countries supported since 2.1.0 first. A number that 2.1.0 recognized keeps the same country, even when it is also valid in a new country (for example `077 123 4567`: Côte d'Ivoire, also Zambia).
+
 ## [2.1.0] - 2026-10-18
 
 ### Added
