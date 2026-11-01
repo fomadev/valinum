@@ -15,7 +15,9 @@
  *   default country is tried first; if it rejects the
  *   number and exactly one other country accepts it,
  *   that country wins. Ambiguous numbers are never
- *   guessed.
+ *   guessed, and countries added in later releases
+ *   never take over a number an earlier release
+ *   already recognized.
  */
 
 import {
@@ -25,7 +27,11 @@ import {
 } from "./types";
 import { CountryDefinition, validateWithDefinition } from "./core/engine";
 import { normalize } from "./core/normalize";
-import { COUNTRIES, getCountryDefinition } from "./countries";
+import {
+  COUNTRIES,
+  DETECTION_TIERS,
+  getCountryDefinition,
+} from "./countries";
 
 function candidates(
   options: ValidationOptions
@@ -135,15 +141,24 @@ export function validate(
   /*
    * 4. NATIONAL NUMBER OF ANOTHER COUNTRY
    *
-   * Only when a single country recognizes it.
+   * Only when a single country recognizes it. Older
+   * tiers are tried first; an ambiguous tier stops the
+   * search instead of guessing.
    */
   if (!options.strict) {
-    const matches = others
-      .map((c) => validateWithDefinition(input, c, options))
-      .filter((r) => r.valid);
+    for (const tier of DETECTION_TIERS) {
+      const matches = others
+        .filter((c) => tier.includes(c.info.iso2 as CountryCode))
+        .map((c) => validateWithDefinition(input, c, options))
+        .filter((r) => r.valid);
 
-    if (matches.length === 1) {
-      return matches[0];
+      if (matches.length === 1) {
+        return matches[0];
+      }
+
+      if (matches.length > 1) {
+        break;
+      }
     }
   }
 

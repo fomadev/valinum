@@ -11,14 +11,49 @@ import { CONGO } from "./congo";
 import { CAMEROON } from "./cameroon";
 import { IVORY_COAST } from "./ivory-coast";
 import { SENEGAL } from "./senegal";
+import { ANGOLA } from "./angola";
+import { GABON } from "./gabon";
+import { CENTRAL_AFRICAN_REPUBLIC } from "./central-african-republic";
+import { EQUATORIAL_GUINEA } from "./equatorial-guinea";
+import { NIGERIA } from "./nigeria";
+import { BENIN } from "./benin";
+import { TOGO } from "./togo";
+import { GHANA } from "./ghana";
+import { ZAMBIA } from "./zambia";
+import { BURKINA_FASO } from "./burkina-faso";
 
 export const COUNTRIES: Record<CountryCode, CountryDefinition> = {
+  // Since 2.1.0
   CD: DRC,
   CG: CONGO,
   CM: CAMEROON,
   CI: IVORY_COAST,
   SN: SENEGAL,
+
+  // Since 2.2.0
+  AO: ANGOLA,
+  GA: GABON,
+  CF: CENTRAL_AFRICAN_REPUBLIC,
+  GQ: EQUATORIAL_GUINEA,
+  NG: NIGERIA,
+  BJ: BENIN,
+  TG: TOGO,
+  GH: GHANA,
+  ZM: ZAMBIA,
+  BF: BURKINA_FASO,
 };
+
+/**
+ * Countries grouped by the release that added them.
+ *
+ * Auto-detection of national numbers tries older groups
+ * first, so adding a country never changes how a number
+ * that ValiNum already recognized is interpreted.
+ */
+export const DETECTION_TIERS: CountryCode[][] = [
+  ["CD", "CG", "CM", "CI", "SN"],
+  ["AO", "GA", "CF", "GQ", "NG", "BJ", "TG", "GH", "ZM", "BF"],
+];
 
 /**
  * Resolve a country code (case-insensitive).

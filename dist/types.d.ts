@@ -6,8 +6,18 @@
  * - CM: Cameroon
  * - CI: Côte d'Ivoire
  * - SN: Senegal
+ * - AO: Angola
+ * - GA: Gabon
+ * - CF: Central African Republic
+ * - GQ: Equatorial Guinea
+ * - NG: Nigeria
+ * - BJ: Benin
+ * - TG: Togo
+ * - GH: Ghana
+ * - ZM: Zambia
+ * - BF: Burkina Faso
  */
-export type CountryCode = "CD" | "CG" | "CM" | "CI" | "SN";
+export type CountryCode = "CD" | "CG" | "CM" | "CI" | "SN" | "AO" | "GA" | "CF" | "GQ" | "NG" | "BJ" | "TG" | "GH" | "ZM" | "BF";
 /**
  * Kind of line a number belongs to.
  */

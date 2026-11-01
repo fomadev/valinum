@@ -1,6 +1,6 @@
 # ValiNum
 
-ValiNum is a lightweight JavaScript and TypeScript library for validating and formatting phone numbers in Central and West Africa. You pass it whatever the user typed; ValiNum works out the country, the operator, the line type and the standard formats. You never have to hard-code prefixes such as "82 is Vodacom" in your own code.
+ValiNum is a lightweight JavaScript and TypeScript library for validating and formatting phone numbers in 15 African countries. You pass it whatever the user typed; ValiNum works out the country, the operator, the line type and the standard formats. You never have to hard-code prefixes such as "82 is Vodacom" in your own code.
 
 For the full beginner-friendly guide, see [DOCUMENTATION.md](DOCUMENTATION.md). Release notes are in [CHANGELOG.md](CHANGELOG.md).
 
@@ -13,6 +13,16 @@ For the full beginner-friendly guide, see [DOCUMENTATION.md](DOCUMENTATION.md). 
 | Cameroon | `CM` | `+237` | MTN, Orange, Nexttel, Camtel |
 | Côte d'Ivoire | `CI` | `+225` | Orange, MTN, Moov |
 | Senegal | `SN` | `+221` | Orange, Yas, Expresso, Promobile, Hayo, ADIE |
+| Angola | `AO` | `+244` | Unitel, Movicel, Africell |
+| Gabon | `GA` | `+241` | Airtel, Moov Africa |
+| Central African Republic | `CF` | `+236` | Orange, Telecel, Moov Africa, Socatel |
+| Equatorial Guinea | `GQ` | `+240` | GETESA, Muni |
+| Nigeria | `NG` | `+234` | MTN, Airtel, Glo, 9mobile, Ntel, Smile, MAFAB… |
+| Benin | `BJ` | `+229` | MTN, Moov, Celtiis |
+| Togo | `TG` | `+228` | Yas, Moov Africa |
+| Ghana | `GH` | `+233` | MTN, Telecel, AT |
+| Zambia | `ZM` | `+260` | Airtel, MTN, Zamtel, Zedmobile |
+| Burkina Faso | `BF` | `+226` | Orange, Moov Africa, Telecel Faso |
 
 ## What ValiNum can do
 
@@ -57,7 +67,9 @@ validate(input: string, options?: ValidationOptions)
 ### Per-country validators
 
 ```ts
-validateDRC, validateCongoBrazzaville, validateCameroon, validateIvoryCoast, validateSenegal
+validateDRC, validateCongoBrazzaville, validateCameroon, validateIvoryCoast, validateSenegal,
+validateAngola, validateGabon, validateCentralAfricanRepublic, validateEquatorialGuinea,
+validateNigeria, validateBenin, validateTogo, validateGhana, validateZambia, validateBurkinaFaso
 ```
 
 ## Result shape

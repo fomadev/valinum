@@ -13,6 +13,16 @@
  * - CM: Cameroon
  * - CI: Côte d'Ivoire
  * - SN: Senegal
+ * - AO: Angola
+ * - GA: Gabon
+ * - CF: Central African Republic
+ * - GQ: Equatorial Guinea
+ * - NG: Nigeria
+ * - BJ: Benin
+ * - TG: Togo
+ * - GH: Ghana
+ * - ZM: Zambia
+ * - BF: Burkina Faso
  */
 
 export * from "./types";
@@ -27,6 +37,16 @@ export { validateCongoBrazzaville } from "./countries/congo";
 export { validateCameroon } from "./countries/cameroon";
 export { validateIvoryCoast } from "./countries/ivory-coast";
 export { validateSenegal } from "./countries/senegal";
+export { validateAngola } from "./countries/angola";
+export { validateGabon } from "./countries/gabon";
+export { validateCentralAfricanRepublic } from "./countries/central-african-republic";
+export { validateEquatorialGuinea } from "./countries/equatorial-guinea";
+export { validateNigeria } from "./countries/nigeria";
+export { validateBenin } from "./countries/benin";
+export { validateTogo } from "./countries/togo";
+export { validateGhana } from "./countries/ghana";
+export { validateZambia } from "./countries/zambia";
+export { validateBurkinaFaso } from "./countries/burkina-faso";
 
 /**
  * Validate a phone number from any supported country.

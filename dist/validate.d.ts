@@ -9,7 +9,9 @@
  *   default country is tried first; if it rejects the
  *   number and exactly one other country accepts it,
  *   that country wins. Ambiguous numbers are never
- *   guessed.
+ *   guessed, and countries added in later releases
+ *   never take over a number an earlier release
+ *   already recognized.
  */
 import { ValidationOptions, ValidationResult } from "./types";
 /**

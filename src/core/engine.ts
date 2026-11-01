@@ -26,7 +26,7 @@ import {
 import { normalize } from "./normalize";
 import { parse } from "./parser";
 import { validateBasic } from "./validator";
-import { formatE164 } from "./formatter";
+import { formatE164, formatGroups } from "./formatter";
 
 /**
  * One allocated block of the national numbering plan.
@@ -36,6 +36,12 @@ export interface NumberRange {
   prefix: string;
   operator: string;
   lineType: LineType;
+
+  /**
+   * Optional full-number rule for plans that a prefix
+   * alone cannot describe (complex fixed-line blocks).
+   */
+  pattern?: RegExp;
 }
 
 export interface CountryDefinition {
@@ -62,13 +68,37 @@ export interface CountryDefinition {
 export function ranges(
   operator: string,
   lineType: LineType,
-  prefixes: string[]
+  prefixes: string[],
+  pattern?: RegExp
 ): NumberRange[] {
   return prefixes.map((prefix) => ({
     prefix,
     operator,
     lineType,
+    ...(pattern && { pattern }),
   }));
+}
+
+/**
+ * Build the national and international formatters of a
+ * country from its digit groups.
+ *
+ * groupedFormats("233", [2, 3, 4], "0")
+ *
+ * national:      024 123 4567
+ * international: +233 24 123 4567
+ */
+export function groupedFormats(
+  dialCode: string,
+  groups: number[],
+  nationalPrefix = ""
+): Pick<CountryDefinition, "formatNational" | "formatInternational"> {
+  return {
+    formatNational: (national) =>
+      nationalPrefix + formatGroups(national, groups),
+    formatInternational: (national) =>
+      `+${dialCode} ${formatGroups(national, groups)}`,
+  };
 }
 
 /**
@@ -83,6 +113,7 @@ export function findRange(
   for (const range of numberRanges) {
     if (
       nationalNumber.startsWith(range.prefix) &&
+      (!range.pattern || range.pattern.test(nationalNumber)) &&
       (!best || range.prefix.length > best.prefix.length)
     ) {
       best = range;
