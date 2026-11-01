@@ -4,6 +4,8 @@
   "description": "Fast. Lightweight. Reliable phone number validation for 15 African countries, with automatic country and operator detection.",
   "module": "./dist/valinum.mjs",
   "types": "./dist/index.d.ts",
+  "jsdelivr": "dist/valinum.min.js",
+  "unpkg": "dist/valinum.min.js",
   "type": "module",
   "files": [
     "dist"

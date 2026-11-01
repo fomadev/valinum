@@ -51,3 +51,18 @@ jobs:
 
           echo ""
           echo "✓ Tous les fichiers de distribution sont présents."
+
+      # dist/ is committed so that CDNs (jsDelivr, unpkg) can serve
+      # it straight from GitHub: it must match the sources.
+      - name: Check that committed dist/ is up to date
+        run: |
+          UNTRACKED="$(git ls-files --others --exclude-standard -- dist)"
+
+          if ! git diff --quiet -- dist || [ -n "$UNTRACKED" ]; then
+            echo "::error::dist/ is out of date. Run 'npm run build' and commit the result."
+            git diff --stat -- dist
+            [ -n "$UNTRACKED" ] && echo "Not committed:" && echo "$UNTRACKED"
+            exit 1
+          fi
+
+          echo "✓ dist/ correspond aux sources."

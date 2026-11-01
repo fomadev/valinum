@@ -26,6 +26,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - **Burkina Faso** (`BF`, `+226`): Orange, Moov Africa, Telecel Faso
 - Dedicated validators for each new country (`validateAngola`, `validateGabon`, `validateCentralAfricanRepublic`, `validateEquatorialGuinea`, `validateNigeria`, `validateBenin`, `validateTogo`, `validateGhana`, `validateZambia`, `validateBurkinaFaso`).
 - Number ranges can carry a full-number pattern, for fixed-line plans that a prefix alone cannot describe.
+- CDN support: `jsdelivr` and `unpkg` fields in `package.json`, so the short URLs `cdn.jsdelivr.net/npm/valinum@x.y.z` and `unpkg.com/valinum@x.y.z` serve `dist/valinum.min.js`. CDN usage is documented in the README and DOCUMENTATION.
+- CI check that the committed `dist/` matches a fresh build, since CDNs serve it straight from GitHub.
 
 ### Changed
 

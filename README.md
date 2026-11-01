@@ -38,6 +38,42 @@ For the full beginner-friendly guide, see [DOCUMENTATION.md](DOCUMENTATION.md). 
 npm install valinum
 ```
 
+### Without installing (CDN)
+
+The built files in `dist/` are published on npm and committed to GitHub, so you can load them straight from a CDN. Pin an exact version in production.
+
+| File | Format | Use it for |
+| --- | --- | --- |
+| `dist/valinum.min.js` | UMD, minified | `<script>` tag, exposes `window.ValiNum` |
+| `dist/valinum.js` | UMD | same, readable for debugging |
+| `dist/valinum.mjs` | ES module | `import` in modern browsers and Deno |
+
+**Script tag** (global `ValiNum`):
+
+```html
+<!-- From npm -->
+<script src="https://cdn.jsdelivr.net/npm/valinum@2.2.0/dist/valinum.min.js"></script>
+
+<!-- Or straight from GitHub (needs the v2.2.0 tag) -->
+<script src="https://cdn.jsdelivr.net/gh/fomadev/valinum@v2.2.0/dist/valinum.min.js"></script>
+
+<script>
+  ValiNum.validate("0824708027").operator.name; // "Vodacom"
+</script>
+```
+
+**ES module**:
+
+```html
+<script type="module">
+  import { validate } from "https://cdn.jsdelivr.net/npm/valinum@2.2.0/dist/valinum.mjs";
+
+  validate("+237 671 23 45 67").country.name; // "Cameroon"
+</script>
+```
+
+Short URLs also work and serve the minified file: `https://cdn.jsdelivr.net/npm/valinum@2.2.0` and `https://unpkg.com/valinum@2.2.0`.
+
 ## Quick example
 
 ```ts
