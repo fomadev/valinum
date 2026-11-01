@@ -8,21 +8,21 @@ For the full beginner-friendly guide, see [DOCUMENTATION.md](DOCUMENTATION.md). 
 
 | Country | Code | Dial code | Operators |
 | --- | --- | --- | --- |
-| Democratic Republic of the Congo | `CD` | `+243` | Vodacom, Orange, Airtel, Africell |
-| Republic of the Congo (Congo-Brazzaville) | `CG` | `+242` | MTN, Airtel, Equateur Telecom, Congo Telecom |
-| Cameroon | `CM` | `+237` | MTN, Orange, Nexttel, Camtel |
-| Côte d'Ivoire | `CI` | `+225` | Orange, MTN, Moov |
-| Senegal | `SN` | `+221` | Orange, Yas, Expresso, Promobile, Hayo, ADIE |
 | Angola | `AO` | `+244` | Unitel, Movicel, Africell |
-| Gabon | `GA` | `+241` | Airtel, Moov Africa |
-| Central African Republic | `CF` | `+236` | Orange, Telecel, Moov Africa, Socatel |
-| Equatorial Guinea | `GQ` | `+240` | GETESA, Muni |
-| Nigeria | `NG` | `+234` | MTN, Airtel, Glo, 9mobile, Ntel, Smile, MAFAB… |
 | Benin | `BJ` | `+229` | MTN, Moov, Celtiis |
-| Togo | `TG` | `+228` | Yas, Moov Africa |
-| Ghana | `GH` | `+233` | MTN, Telecel, AT |
-| Zambia | `ZM` | `+260` | Airtel, MTN, Zamtel, Zedmobile |
 | Burkina Faso | `BF` | `+226` | Orange, Moov Africa, Telecel Faso |
+| Cameroon | `CM` | `+237` | MTN, Orange, Nexttel, Camtel |
+| Central African Republic | `CF` | `+236` | Orange, Telecel, Moov Africa, Socatel |
+| Côte d'Ivoire | `CI` | `+225` | Orange, MTN, Moov |
+| Democratic Republic of the Congo | `CD` | `+243` | Vodacom, Orange, Airtel, Africell |
+| Equatorial Guinea | `GQ` | `+240` | GETESA, Muni |
+| Gabon | `GA` | `+241` | Airtel, Moov Africa |
+| Ghana | `GH` | `+233` | MTN, Telecel, AT |
+| Nigeria | `NG` | `+234` | MTN, Airtel, Glo, 9mobile, Ntel, Smile, MAFAB… |
+| Republic of the Congo (Congo-Brazzaville) | `CG` | `+242` | MTN, Airtel, Equateur Telecom, Congo Telecom |
+| Senegal | `SN` | `+221` | Orange, Yas, Expresso, Promobile, Hayo, ADIE |
+| Togo | `TG` | `+228` | Yas, Moov Africa |
+| Zambia | `ZM` | `+260` | Airtel, MTN, Zamtel, Zedmobile |
 
 ## What ValiNum can do
 
