@@ -54,7 +54,50 @@ Install the package with npm:
 npm install valinum
 ```
 
-If you are using a browser directly, you can also load one of the built files from the distribution folder.
+### Using ValiNum without a build step
+
+If you are using a browser directly, load a built file from a CDN. ValiNum ships three files in `dist/`:
+
+- `valinum.min.js`: minified UMD build. Loaded with a `<script>` tag, it creates a global `ValiNum` object.
+- `valinum.js`: the same UMD build, not minified, easier to debug.
+- `valinum.mjs`: ES module build, for `import` in modern browsers.
+
+These files are published on npm and committed to the GitHub repository, so both of these work:
+
+```html
+<!-- From npm, through jsDelivr -->
+<script src="https://cdn.jsdelivr.net/npm/valinum@2.2.0/dist/valinum.min.js"></script>
+
+<!-- From the GitHub repository, through jsDelivr (uses the v2.2.0 tag) -->
+<script src="https://cdn.jsdelivr.net/gh/fomadev/valinum@v2.2.0/dist/valinum.min.js"></script>
+```
+
+Then use the global object:
+
+```html
+<input id="phone" />
+<script>
+  document.getElementById("phone").addEventListener("input", (event) => {
+    const result = ValiNum.validate(event.target.value);
+    console.log(result.valid, result.country?.name, result.operator?.name);
+  });
+</script>
+```
+
+With an ES module:
+
+```html
+<script type="module">
+  import { validate } from "https://cdn.jsdelivr.net/npm/valinum@2.2.0/dist/valinum.mjs";
+
+  console.log(validate("77 123 45 67").country.name); // "Senegal"
+</script>
+```
+
+Tips:
+
+- Always pin an exact version (`@2.2.0`) in production. A branch such as `@main` can change at any time and is cached by the CDN.
+- The short URLs `https://cdn.jsdelivr.net/npm/valinum@2.2.0` and `https://unpkg.com/valinum@2.2.0` serve the minified file.
 
 ## Your first example
 
