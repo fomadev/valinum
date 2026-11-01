@@ -40,10 +40,12 @@ jobs:
           test -f dist/valinum.js
           test -f dist/valinum.min.js
           test -f dist/valinum.mjs
+          test -f dist/valinum.cjs
 
           echo "✓ dist/valinum.js"
           echo "✓ dist/valinum.min.js"
           echo "✓ dist/valinum.mjs"
+          echo "✓ dist/valinum.cjs"
 
           echo ""
           echo "=== Distribution ValiNum ==="

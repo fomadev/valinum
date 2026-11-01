@@ -2,10 +2,20 @@
   "name": "valinum",
   "version": "2.2.0",
   "description": "Fast. Lightweight. Reliable phone number validation for 15 African countries, with automatic country and operator detection.",
+  "main": "./dist/valinum.cjs",
   "module": "./dist/valinum.mjs",
   "types": "./dist/index.d.ts",
   "jsdelivr": "dist/valinum.min.js",
   "unpkg": "dist/valinum.min.js",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/valinum.mjs",
+      "require": "./dist/valinum.cjs"
+    },
+    "./dist/*": "./dist/*",
+    "./package.json": "./package.json"
+  },
   "type": "module",
   "files": [
     "dist"
