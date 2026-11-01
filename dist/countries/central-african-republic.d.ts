@@ -8,8 +8,8 @@
  *
  * 75 12 34 56 / +236 75 12 34 56
  */
-import { ValidationOptions, ValidationResult } from "../types";
-import { CountryDefinition } from "../core/engine";
+import { ValidationOptions, ValidationResult } from "../types.js";
+import { CountryDefinition } from "../core/engine.js";
 export declare const CENTRAL_AFRICAN_REPUBLIC: CountryDefinition;
 /**
  * Validate a Central African Republic phone number.

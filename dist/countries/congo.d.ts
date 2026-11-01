@@ -8,8 +8,8 @@
  *
  * 06 123 4567 / +242 06 123 4567
  */
-import { ValidationOptions, ValidationResult } from "../types";
-import { CountryDefinition } from "../core/engine";
+import { ValidationOptions, ValidationResult } from "../types.js";
+import { CountryDefinition } from "../core/engine.js";
 export declare const CONGO: CountryDefinition;
 /**
  * Validate a Republic of the Congo phone number.

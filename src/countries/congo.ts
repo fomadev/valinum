@@ -15,13 +15,13 @@
  * 06 123 4567 / +242 06 123 4567
  */
 
-import { ValidationOptions, ValidationResult } from "../types";
+import { ValidationOptions, ValidationResult } from "../types.js";
 import {
   CountryDefinition,
   ranges,
   validateWithDefinition,
-} from "../core/engine";
-import { formatGroups } from "../core/formatter";
+} from "../core/engine.js";
+import { formatGroups } from "../core/formatter.js";
 
 export const CONGO: CountryDefinition = {
   info: {

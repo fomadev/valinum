@@ -7,8 +7,8 @@
  *
  * 222 123 456 / +240 222 123 456
  */
-import { ValidationOptions, ValidationResult } from "../types";
-import { CountryDefinition } from "../core/engine";
+import { ValidationOptions, ValidationResult } from "../types.js";
+import { CountryDefinition } from "../core/engine.js";
 export declare const EQUATORIAL_GUINEA: CountryDefinition;
 /**
  * Validate an Equatorial Guinea phone number.

@@ -8,8 +8,8 @@
  *
  * 024 123 4567 / +233 24 123 4567
  */
-import { ValidationOptions, ValidationResult } from "../types";
-import { CountryDefinition } from "../core/engine";
+import { ValidationOptions, ValidationResult } from "../types.js";
+import { CountryDefinition } from "../core/engine.js";
 export declare const GHANA: CountryDefinition;
 /**
  * Validate a Ghana phone number.

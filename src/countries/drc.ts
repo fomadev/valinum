@@ -14,16 +14,16 @@
  * 082 470 8027 / +243 824 708 027
  */
 
-import { ValidationOptions, ValidationResult } from "../types";
+import { ValidationOptions, ValidationResult } from "../types.js";
 import {
   CountryDefinition,
   ranges,
   validateWithDefinition,
-} from "../core/engine";
+} from "../core/engine.js";
 import {
   formatInternational,
   formatNational,
-} from "../core/formatter";
+} from "../core/formatter.js";
 
 export const DRC: CountryDefinition = {
   info: {

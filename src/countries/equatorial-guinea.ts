@@ -14,13 +14,13 @@
  * 222 123 456 / +240 222 123 456
  */
 
-import { ValidationOptions, ValidationResult } from "../types";
+import { ValidationOptions, ValidationResult } from "../types.js";
 import {
   CountryDefinition,
   groupedFormats,
   ranges,
   validateWithDefinition,
-} from "../core/engine";
+} from "../core/engine.js";
 
 export const EQUATORIAL_GUINEA: CountryDefinition = {
   info: {

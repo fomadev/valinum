@@ -18,31 +18,31 @@
  * - ZM: Zambia
  * - BF: Burkina Faso
  */
-export * from "./types";
-export * from "./core/normalize";
-export * from "./core/parser";
-export * from "./core/validator";
-export * from "./core/formatter";
-export { getSupportedCountries } from "./countries";
-export { validateDRC } from "./countries/drc";
-export { validateCongoBrazzaville } from "./countries/congo";
-export { validateCameroon } from "./countries/cameroon";
-export { validateIvoryCoast } from "./countries/ivory-coast";
-export { validateSenegal } from "./countries/senegal";
-export { validateAngola } from "./countries/angola";
-export { validateGabon } from "./countries/gabon";
-export { validateCentralAfricanRepublic } from "./countries/central-african-republic";
-export { validateEquatorialGuinea } from "./countries/equatorial-guinea";
-export { validateNigeria } from "./countries/nigeria";
-export { validateBenin } from "./countries/benin";
-export { validateTogo } from "./countries/togo";
-export { validateGhana } from "./countries/ghana";
-export { validateZambia } from "./countries/zambia";
-export { validateBurkinaFaso } from "./countries/burkina-faso";
+export * from "./types.js";
+export * from "./core/normalize.js";
+export * from "./core/parser.js";
+export * from "./core/validator.js";
+export * from "./core/formatter.js";
+export { getSupportedCountries } from "./countries/index.js";
+export { validateDRC } from "./countries/drc.js";
+export { validateCongoBrazzaville } from "./countries/congo.js";
+export { validateCameroon } from "./countries/cameroon.js";
+export { validateIvoryCoast } from "./countries/ivory-coast.js";
+export { validateSenegal } from "./countries/senegal.js";
+export { validateAngola } from "./countries/angola.js";
+export { validateGabon } from "./countries/gabon.js";
+export { validateCentralAfricanRepublic } from "./countries/central-african-republic.js";
+export { validateEquatorialGuinea } from "./countries/equatorial-guinea.js";
+export { validateNigeria } from "./countries/nigeria.js";
+export { validateBenin } from "./countries/benin.js";
+export { validateTogo } from "./countries/togo.js";
+export { validateGhana } from "./countries/ghana.js";
+export { validateZambia } from "./countries/zambia.js";
+export { validateBurkinaFaso } from "./countries/burkina-faso.js";
 /**
  * Validate a phone number from any supported country.
  *
  * National numbers default to the DRC
  * (see the defaultCountry option).
  */
-export { validate } from "./validate";
+export { validate } from "./validate.js";

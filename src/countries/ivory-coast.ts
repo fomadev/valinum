@@ -16,13 +16,13 @@
  * 07 07 12 34 56 / +225 07 07 12 34 56
  */
 
-import { ValidationOptions, ValidationResult } from "../types";
+import { ValidationOptions, ValidationResult } from "../types.js";
 import {
   CountryDefinition,
   ranges,
   validateWithDefinition,
-} from "../core/engine";
-import { formatGroups } from "../core/formatter";
+} from "../core/engine.js";
+import { formatGroups } from "../core/formatter.js";
 
 export const IVORY_COAST: CountryDefinition = {
   info: {

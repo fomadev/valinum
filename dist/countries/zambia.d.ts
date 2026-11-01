@@ -7,8 +7,8 @@
  *
  * 097 123 4567 / +260 97 123 4567
  */
-import { ValidationOptions, ValidationResult } from "../types";
-import { CountryDefinition } from "../core/engine";
+import { ValidationOptions, ValidationResult } from "../types.js";
+import { CountryDefinition } from "../core/engine.js";
 export declare const ZAMBIA: CountryDefinition;
 /**
  * Validate a Zambia phone number.

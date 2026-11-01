@@ -8,8 +8,8 @@
  *
  * 77 123 45 67 / +221 77 123 45 67
  */
-import { ValidationOptions, ValidationResult } from "../types";
-import { CountryDefinition } from "../core/engine";
+import { ValidationOptions, ValidationResult } from "../types.js";
+import { CountryDefinition } from "../core/engine.js";
 export declare const SENEGAL: CountryDefinition;
 /**
  * Validate a Senegal phone number.

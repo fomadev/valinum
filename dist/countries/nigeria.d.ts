@@ -8,8 +8,8 @@
  *
  * 0803 123 4567 / +234 803 123 4567
  */
-import { ValidationOptions, ValidationResult } from "../types";
-import { CountryDefinition } from "../core/engine";
+import { ValidationOptions, ValidationResult } from "../types.js";
+import { CountryDefinition } from "../core/engine.js";
 export declare const NIGERIA: CountryDefinition;
 /**
  * Validate a Nigeria phone number.

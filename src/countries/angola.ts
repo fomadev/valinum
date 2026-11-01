@@ -15,13 +15,13 @@
  * 923 123 456 / +244 923 123 456
  */
 
-import { ValidationOptions, ValidationResult } from "../types";
+import { ValidationOptions, ValidationResult } from "../types.js";
 import {
   CountryDefinition,
   groupedFormats,
   ranges,
   validateWithDefinition,
-} from "../core/engine";
+} from "../core/engine.js";
 
 export const ANGOLA: CountryDefinition = {
   info: {

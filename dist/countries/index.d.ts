@@ -1,5 +1,5 @@
-import { CountryCode, CountryInfo } from "../types";
-import { CountryDefinition } from "../core/engine";
+import { CountryCode, CountryInfo } from "../types.js";
+import { CountryDefinition } from "../core/engine.js";
 export declare const COUNTRIES: Record<CountryCode, CountryDefinition>;
 /**
  * Countries grouped by the release that added them.

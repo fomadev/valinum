@@ -8,8 +8,8 @@
  *
  * 923 123 456 / +244 923 123 456
  */
-import { ValidationOptions, ValidationResult } from "../types";
-import { CountryDefinition } from "../core/engine";
+import { ValidationOptions, ValidationResult } from "../types.js";
+import { CountryDefinition } from "../core/engine.js";
 export declare const ANGOLA: CountryDefinition;
 /**
  * Validate an Angola phone number.
