@@ -753,6 +753,8 @@ getSupportedCountries().length; // 26
 
 ## Chapter 11. The 26 supported countries
 
+![Map of Africa showing the 26 countries supported by ValiNum](assets/supported-countries.svg)
+
 This chapter is a reference: for each country, the number format and every operator prefix ValiNum recognizes. Prefixes are the first digits of the **national** number. A dash means a range: `650`–`654` is `650`, `651`, `652`, `653` and `654`.
 
 ### Angola (`AO`, `+244`)
