@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/logo.png" alt="ValiNum logo" width="440">
+</p>
+
 # ValiNum
 
 ValiNum is a lightweight JavaScript and TypeScript library for validating and formatting phone numbers in 26 African countries. You pass it whatever the user typed; ValiNum works out the country, the operator, the line type and the standard formats. You never have to hard-code prefixes such as "82 is Vodacom" in your own code.
