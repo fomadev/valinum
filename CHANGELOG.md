@@ -9,6 +9,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **MINOR** (`2.X.0`): new features that stay backward compatible (new countries, new options)
 - **PATCH** (`2.1.X`): backward compatible bug fixes and operator data corrections
 
+## [2.3.0] - 2026-11-20
+
+### Added
+
+- Eleven new countries in East and Southern Africa, with every active mobile range:
+  - **Botswana** (`BW`, `+267`): Mascom, Orange, BTC
+  - **Zimbabwe** (`ZW`, `+263`): NetOne, Telecel, Econet
+  - **Mozambique** (`MZ`, `+258`): Tmcel (formerly mcel), Vodacom, Movitel
+  - **South Sudan** (`SS`, `+211`): Zain, MTN, Digitel
+  - **Kenya** (`KE`, `+254`): Safaricom, Airtel, Telkom, Finserve (Equitel), JTL (Faiba) and others, including the `01xx` ranges
+  - **Uganda** (`UG`, `+256`): MTN, Airtel, UTL, Lycamobile, Talkio
+  - **Rwanda** (`RW`, `+250`): MTN, Airtel, KTRN
+  - **Burundi** (`BI`, `+257`): Leo, Lumitel, Onatel (mobile and fixed)
+  - **Tanzania** (`TZ`, `+255`): Vodacom, Airtel, Yas (formerly Tigo and Zantel), Halotel, TTCL
+  - **Malawi** (`MW`, `+265`): Airtel, TNM
+  - **Namibia** (`NA`, `+264`): MTC, TN Mobile, Telecom Namibia
+- Dedicated validators for each new country (`validateBotswana`, `validateZimbabwe`, `validateMozambique`, `validateSouthSudan`, `validateKenya`, `validateUganda`, `validateRwanda`, `validateBurundi`, `validateTanzania`, `validateMalawi`, `validateNamibia`).
+- Inactive ranges are excluded: South Sudan `95` (Vivacell) and `97` (Gemtel), Uganda `720` (Smile) and `798`/`799` (Africell), Burundi `75`/`78` (Smart).
+
+### Changed
+
+- The new countries form a third detection tier, so a national number recognized by 2.2.0 keeps the same country. A national number that no earlier country accepted can now match one of the new countries (for example `0922345678` is now a valid MTN South Sudan number). Use `{ country: "CD" }` to keep accepting DRC numbers only.
+
 ## [2.2.0] - 2026-11-01
 
 ### Added

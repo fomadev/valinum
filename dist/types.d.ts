@@ -16,8 +16,19 @@
  * - GH: Ghana
  * - ZM: Zambia
  * - BF: Burkina Faso
+ * - BW: Botswana
+ * - ZW: Zimbabwe
+ * - MZ: Mozambique
+ * - SS: South Sudan
+ * - KE: Kenya
+ * - UG: Uganda
+ * - RW: Rwanda
+ * - BI: Burundi
+ * - TZ: Tanzania
+ * - MW: Malawi
+ * - NA: Namibia
  */
-export type CountryCode = "CD" | "CG" | "CM" | "CI" | "SN" | "AO" | "GA" | "CF" | "GQ" | "NG" | "BJ" | "TG" | "GH" | "ZM" | "BF";
+export type CountryCode = "CD" | "CG" | "CM" | "CI" | "SN" | "AO" | "GA" | "CF" | "GQ" | "NG" | "BJ" | "TG" | "GH" | "ZM" | "BF" | "BW" | "ZW" | "MZ" | "SS" | "KE" | "UG" | "RW" | "BI" | "TZ" | "MW" | "NA";
 /**
  * Kind of line a number belongs to.
  */

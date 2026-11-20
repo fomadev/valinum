@@ -1,6 +1,6 @@
 # The ValiNum Course
 
-**Version 2.2.0** · From zero to expert, one chapter at a time.
+**Version 2.3.0** · From zero to expert, one chapter at a time.
 
 This document is a complete course. You can read it from top to bottom like a book: every chapter builds on the previous one, and no prior knowledge of phone numbers or of ValiNum is needed. If you already know the basics, use the table of contents to jump straight to what you need.
 
@@ -17,7 +17,7 @@ This document is a complete course. You can read it from top to bottom like a bo
 - [Chapter 8. Automatic country detection](#chapter-8-automatic-country-detection)
 - [Chapter 9. Options](#chapter-9-options)
 - [Chapter 10. One validator per country](#chapter-10-one-validator-per-country)
-- [Chapter 11. The 15 supported countries](#chapter-11-the-15-supported-countries)
+- [Chapter 11. The 26 supported countries](#chapter-11-the-26-supported-countries)
 - [Chapter 12. Practical recipes](#chapter-12-practical-recipes)
 - [Chapter 13. The building blocks (advanced)](#chapter-13-the-building-blocks-advanced)
 - [Chapter 14. How ValiNum works inside](#chapter-14-how-valinum-works-inside)
@@ -33,7 +33,7 @@ This document is a complete course. You can read it from top to bottom like a bo
 
 ### What is ValiNum?
 
-ValiNum is a small JavaScript library that **checks and understands phone numbers** from 15 African countries.
+ValiNum is a small JavaScript library that **checks and understands phone numbers** from 26 African countries.
 
 You give it what a person typed in a form, for example `082 470 80 27`. ValiNum tells you:
 
@@ -178,7 +178,7 @@ Every form gives the same answer. Your code stays short and the rules stay up to
 ### 2.3 What ValiNum checks
 
 - The number contains only digits (after removing spaces and separators).
-- The country code is one of the 15 supported countries.
+- The country code is one of the 26 supported countries.
 - The length is right for that country.
 - The prefix is really allocated to an operator in that country.
 
@@ -188,7 +188,7 @@ It is important to know the limits of any tool:
 
 - **It does not call the number.** A valid number has the right shape and an allocated prefix, but nobody can tell, without calling or sending a code by SMS, whether the SIM card is active. To verify that a number belongs to your user, send them a code.
 - **It cannot see number portability.** In some countries you can keep your number when you change operators. The prefix then shows the *original* operator, not necessarily the current one.
-- **It only knows 15 countries.** Numbers from other countries (France `+33`, USA `+1`…) are reported as unsupported.
+- **It only knows 26 countries.** Numbers from other countries (France `+33`, USA `+1`…) are reported as unsupported.
 
 ---
 
@@ -223,7 +223,7 @@ TypeScript types are included: there is nothing else to install. They work with 
 For a simple HTML page, load ValiNum from a CDN, a public server that hosts the library files for you. Add this line to your page:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/valinum@2.2.0/dist/valinum.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/valinum@2.3.0/dist/valinum.min.js"></script>
 ```
 
 This creates a global object called `ValiNum`. You use it like this:
@@ -239,7 +239,7 @@ If you prefer modern ES modules in the browser:
 
 ```html
 <script type="module">
-  import { validate } from "https://cdn.jsdelivr.net/npm/valinum@2.2.0/dist/valinum.mjs";
+  import { validate } from "https://cdn.jsdelivr.net/npm/valinum@2.3.0/dist/valinum.mjs";
 
   console.log(validate("77 123 45 67").country.name); // "Senegal"
 </script>
@@ -248,7 +248,7 @@ If you prefer modern ES modules in the browser:
 The files are also served straight from the GitHub repository:
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/fomadev/valinum@v2.2.0/dist/valinum.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/fomadev/valinum@v2.3.0/dist/valinum.min.js"></script>
 ```
 
 ### 3.3 Which file should I use?
@@ -264,7 +264,7 @@ The `dist/` folder contains the ready-to-use files:
 
 With npm you never choose: the right file is picked automatically.
 
-> **Tip:** in production, always write an exact version in CDN links (`@2.2.0`). A link without a version, or pointing to a branch such as `@main`, can change at any moment.
+> **Tip:** in production, always write an exact version in CDN links (`@2.3.0`). A link without a version, or pointing to a branch such as `@main`, can change at any moment.
 
 ---
 
@@ -577,15 +577,15 @@ validate("+226 70 12 34 56").country.iso2; // "BF"
 
 ### 8.3 Older countries keep their numbers
 
-ValiNum added countries over time: five in version 2.1.0, ten more in 2.2.0. To make sure an update never changes the meaning of a number your app already accepted, step 4 tries the **older countries first**:
+ValiNum added countries over time: five in version 2.1.0, ten more in 2.2.0 and eleven more in 2.3.0. To make sure an update never changes the meaning of a number your app already accepted, step 4 tries the **older countries first**:
 
-- `077 123 4567` stays a Côte d'Ivoire number, even though it is also a valid Zambian number.
+- `077 123 4567` stays a Côte d'Ivoire number, even though it is also a valid number in Zambia, Zimbabwe, Kenya, Uganda, Rwanda and Tanzania.
 - `062 123 456` stays a Congo-Brazzaville number, even though it is also valid in Gabon.
 - Every Benin number (`01 …`) is also a valid Moov Côte d'Ivoire number. So for Benin, use `defaultCountry: "BJ"` or the `+229` prefix.
 
 ### 8.4 Choosing the right strategy
 
-With 15 countries, many national numbers look alike. Choose based on where your users are:
+With 26 countries, many national numbers look alike. Choose based on where your users are:
 
 | Your users are… | Do this |
 | --- | --- |
@@ -668,11 +668,11 @@ You will rarely need it; keep the default unless your users type numbers that re
 | --- | --- | --- | --- |
 | `defaultCountry` | country code | `"CD"` | Country tried first for national numbers |
 | `country` | country code | none | Accept only this country |
-| `countries` | list of codes | all 15 | Countries allowed for detection |
+| `countries` | list of codes | all 26 | Countries allowed for detection |
 | `strict` | `true` / `false` | `false` | Require a country code |
 | `accept00Prefix` | `true` / `false` | `true` | Treat `00` like `+` |
 
-Country codes are the two-letter codes of Chapter 11: `"CD"`, `"CG"`, `"CM"`, `"CI"`, `"SN"`, `"AO"`, `"GA"`, `"CF"`, `"GQ"`, `"NG"`, `"BJ"`, `"TG"`, `"GH"`, `"ZM"`, `"BF"`.
+Country codes are the two-letter codes of Chapter 11: `"CD"`, `"CG"`, `"CM"`, `"CI"`, `"SN"`, `"AO"`, `"GA"`, `"CF"`, `"GQ"`, `"NG"`, `"BJ"`, `"TG"`, `"GH"`, `"ZM"`, `"BF"`, `"BW"`, `"ZW"`, `"MZ"`, `"SS"`, `"KE"`, `"UG"`, `"RW"`, `"BI"`, `"TZ"`, `"MW"`, `"NA"`.
 
 ---
 
@@ -684,7 +684,9 @@ Besides `validate()`, ValiNum offers one function per country. Each one checks t
 | --- | --- |
 | `validateAngola` | Angola |
 | `validateBenin` | Benin |
+| `validateBotswana` | Botswana |
 | `validateBurkinaFaso` | Burkina Faso |
+| `validateBurundi` | Burundi |
 | `validateCameroon` | Cameroon |
 | `validateCentralAfricanRepublic` | Central African Republic |
 | `validateIvoryCoast` | Côte d'Ivoire |
@@ -692,11 +694,20 @@ Besides `validate()`, ValiNum offers one function per country. Each one checks t
 | `validateEquatorialGuinea` | Equatorial Guinea |
 | `validateGabon` | Gabon |
 | `validateGhana` | Ghana |
+| `validateKenya` | Kenya |
+| `validateMalawi` | Malawi |
+| `validateMozambique` | Mozambique |
+| `validateNamibia` | Namibia |
 | `validateNigeria` | Nigeria |
 | `validateCongoBrazzaville` | Republic of the Congo |
+| `validateRwanda` | Rwanda |
 | `validateSenegal` | Senegal |
+| `validateSouthSudan` | South Sudan |
+| `validateTanzania` | Tanzania |
 | `validateTogo` | Togo |
+| `validateUganda` | Uganda |
 | `validateZambia` | Zambia |
+| `validateZimbabwe` | Zimbabwe |
 
 ```js
 import { validateSenegal } from "valinum";
@@ -717,12 +728,12 @@ import { getSupportedCountries } from "valinum";
 getSupportedCountries()[0];
 // { iso2: "CD", dialCode: "243", name: "Democratic Republic of the Congo" }
 
-getSupportedCountries().length; // 15
+getSupportedCountries().length; // 26
 ```
 
 ---
 
-## Chapter 11. The 15 supported countries
+## Chapter 11. The 26 supported countries
 
 This chapter is a reference: for each country, the number format and every operator prefix ValiNum recognizes. Prefixes are the first digits of the **national** number. A dash means a range: `650`–`654` is `650`, `651`, `652`, `653` and `654`.
 
@@ -742,6 +753,14 @@ This chapter is a reference: for each country, the number format and every opera
 - Moov: `0145`, `0155`, `0158`, `0160`, `0163`–`0165`, `0168`, `0194`, `0195`, `0198`, `0199`
 - Celtiis (SBIN): mobile `0128`, `014`, `0192`, `0193`; fixed `0120`–`0124`
 
+### Botswana (`BW`, `+267`)
+
+8 digits, no trunk prefix (`71 123 456`). Mobile only: fixed lines have 7 digits and are not supported yet.
+
+- Mascom: `71`, `740`–`742`, `745`–`747`, `754`–`756`, `759`–`762`, `766`, `767`, `770`, `771`, `776`–`778`, `789`, `7923`–`7927`
+- Orange: `72`, `743`, `744`, `748`, `750`–`753`, `757`, `763`–`765`, `769`, `773`–`775`, `779`, `780`–`788`, `790`, `7920`, `7922`, `793`
+- BTC: `73`, `749`, `758`, `768`, `772`, `7921`
+
 ### Burkina Faso (`BF`, `+226`)
 
 8 digits, no trunk prefix (`70 12 34 56`).
@@ -749,6 +768,14 @@ This chapter is a reference: for each country, the number format and every opera
 - Orange: `04`–`07`, `44`–`46`, `54`–`57`, `64`–`67`, `74`–`77`
 - Moov Africa (ONATEL): mobile `01`–`03`, `50`–`53`, `60`–`63`, `70`–`73`; fixed `20`, `24` and `25` blocks
 - Telecel Faso: `58`, `68`, `69`, `78`, `79`
+
+### Burundi (`BI`, `+257`)
+
+8 digits, no trunk prefix (`79 12 34 56`).
+
+- Leo (Econet Leo): `29`, `71`, `72`, `76`, `79`
+- Lumitel (Viettel): `61`–`69`
+- Onatel: mobile `77` (Onamob), fixed `22`
 
 ### Cameroon (`CM`, `+237`)
 
@@ -807,6 +834,38 @@ This chapter is a reference: for each country, the number format and every opera
 - Telecel (formerly Vodafone): `20`, `50`
 - AT (formerly AirtelTigo): `23`, `26`, `27`, `56`, `57`
 
+### Kenya (`KE`, `+254`)
+
+9 digits, trunk prefix `0` (`0712 345 678`). Mobile only.
+
+- Safaricom: `70`, `71`, `72`, `74`, `757`–`759`, `768`, `769`, `79`, `11`, `140`–`146`, `18`
+- Airtel: `73`, `75`, `76`, `78`, `100`–`108`, `135`–`139`
+- Telkom: `77`, `761`, `120`
+- Finserve (Equitel): `124` · JTL (Faiba): `747` · Homeland Media: `744` · Infura: `121` · NRG Media: `130`
+
+### Malawi (`MW`, `+265`)
+
+9 digits, trunk prefix `0` (`0991 23 45 67`). Mobile only: fixed lines have 7 digits and are not supported yet.
+
+- Airtel: `98`, `99`
+- TNM: `88`, `89`
+
+### Mozambique (`MZ`, `+258`)
+
+9 digits, no trunk prefix (`84 123 4567`). Mobile only: fixed lines have 8 digits and are not supported yet.
+
+- Tmcel (formerly mcel): `82`, `83`
+- Vodacom: `84`, `85`
+- Movitel: `86`, `87`
+
+### Namibia (`NA`, `+264`)
+
+9 digits, trunk prefix `0` (`081 123 4567`). Mobile only.
+
+- MTC: `81`
+- TN Mobile: `85`
+- Telecom Namibia: `60`, `82`
+
 ### Nigeria (`NG`, `+234`)
 
 10 digits, trunk prefix `0` (`0803 123 4567`). Mobile only.
@@ -826,6 +885,14 @@ This chapter is a reference: for each country, the number format and every opera
 - Equateur Telecom: `01`
 - Congo Telecom: mobile `0240`, `0255`–`0258`, `0260`, `02610`–`02615`, `02666`–`02669`, `0267`–`0269`; fixed `2221`–`2225`, `2228`, `2229`
 
+### Rwanda (`RW`, `+250`)
+
+9 digits, trunk prefix `0` (`0781 234 567`). Mobile only.
+
+- MTN: `78`, `79`
+- Airtel: `72`, `73`
+- KTRN (KT Rwanda Networks): `77`
+
 ### Senegal (`SN`, `+221`)
 
 9 digits, no trunk prefix (`77 123 45 67`).
@@ -837,12 +904,40 @@ This chapter is a reference: for each country, the number format and every opera
 - Hayo: mobile `721`, fixed `36`
 - ADIE: `790`
 
+### South Sudan (`SS`, `+211`)
+
+9 digits, trunk prefix `0` (`0921 234 567`). Mobile only.
+
+- Zain: `91`
+- MTN: `92`
+- Digitel: `98`
+
+### Tanzania (`TZ`, `+255`)
+
+9 digits, trunk prefix `0` (`0754 123 456`). Mobile only.
+
+- Vodacom: `72`, `74`, `75`, `76`, `79`
+- Airtel: `60`, `66`, `68`, `69`, `78`
+- Yas (formerly Tigo and Zantel): `65`, `67`, `70`, `71`, `77`
+- Halotel (Viettel): `61`, `62`, `63`
+- TTCL: `73`
+
 ### Togo (`TG`, `+228`)
 
 8 digits, no trunk prefix (`90 12 34 56`).
 
 - Yas (formerly Togocom): mobile `70`–`73`, `90`–`93`; fixed `222`–`227`, `232`, `233`, `244`, `245`, `255`, `266`, `267`, `277`
 - Moov Africa: `78`, `79`, `96`–`99`
+
+### Uganda (`UG`, `+256`)
+
+9 digits, trunk prefix `0` (`0772 123 456`). Mobile only.
+
+- MTN: `76`, `77`, `78`, `790`–`795`, `724`, `737`
+- Airtel: `70`, `74`, `75`, `730`–`732`
+- UTL (Uganda Telecom): `71`
+- Lycamobile: `721`, `726`, `727`
+- Talkio: `7280`
 
 ### Zambia (`ZM`, `+260`)
 
@@ -853,9 +948,17 @@ This chapter is a reference: for each country, the number format and every opera
 - Zamtel: mobile `95`, `75`, `55`; fixed `211`–`218`
 - Zedmobile: `98`
 
+### Zimbabwe (`ZW`, `+263`)
+
+9 digits, trunk prefix `0` (`077 123 4567`). Mobile only.
+
+- NetOne: `71`, `72`
+- Telecel: `73`
+- Econet: `77`, `78`
+
 ### Where does this data come from?
 
-Number ranges come from Google's libphonenumber numbering data, cross-checked with national regulators and recent news for operator names (rebrandings such as Togocom → Yas or Vodafone Ghana → Telecel). Ranges that are not in service (licence revoked, reserved, operator closed) are left out on purpose.
+Number ranges come from Google's libphonenumber numbering data, cross-checked with national regulators and recent news for operator names (rebrandings such as Togocom → Yas or Vodafone Ghana → Telecel, Tigo Tanzania → Yas). Ranges that are not in service (licence revoked, reserved, operator closed) are left out on purpose.
 
 ---
 
@@ -873,7 +976,7 @@ A complete HTML page you can copy, save as `index.html` and open in a browser:
 <head>
   <meta charset="UTF-8">
   <title>Phone field</title>
-  <script src="https://cdn.jsdelivr.net/npm/valinum@2.2.0/dist/valinum.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/valinum@2.3.0/dist/valinum.min.js"></script>
 </head>
 <body>
   <label for="phone">Phone number</label>
@@ -1151,7 +1254,7 @@ src/
 │   └── formatter.ts    output formats
 ├── countries/
 │   ├── index.ts        list of countries and detection tiers
-│   └── *.ts            one numbering plan per country (15 files)
+│   └── *.ts            one numbering plan per country (26 files)
 ├── validate.ts         automatic country detection
 ├── types.ts            TypeScript types (Chapter 15)
 └── index.ts            everything the library exports
@@ -1186,7 +1289,10 @@ getSupportedCountries(): CountryInfo[];
 type CountryCode =
   | "CD" | "CG" | "CM" | "CI" | "SN"
   | "AO" | "GA" | "CF" | "GQ" | "NG"
-  | "BJ" | "TG" | "GH" | "ZM" | "BF";
+  | "BJ" | "TG" | "GH" | "ZM" | "BF"
+  | "BW" | "ZW" | "MZ" | "SS" | "KE"
+  | "UG" | "RW" | "BI" | "TZ" | "MW"
+  | "NA";
 
 type LineType = "mobile" | "fixed";
 
@@ -1340,7 +1446,7 @@ validate(input, { country: "SN" }); // Senegal only
 validate(input, { countries: ["CD", "CG"] }); // these countries only
 validate(input, { strict: true }); // require +country code
 
-getSupportedCountries(); // the 15 countries
+getSupportedCountries(); // the 26 countries
 ```
 
 ---

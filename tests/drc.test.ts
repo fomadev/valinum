@@ -244,7 +244,8 @@ describe("ValiNum v2.0.0 - Democratic Republic of the Congo", () => {
     });
 
     it("rejects another unknown prefix", () => {
-      const result = validate("0922345678");
+      // 092 is MTN in South Sudan, so restrict to the DRC.
+      const result = validate("0922345678", { country: "CD" });
 
       expect(result.valid).toBe(false);
       expect(result.error).toBe("INVALID_PREFIX");

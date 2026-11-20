@@ -246,6 +246,7 @@ describe("Automatic country detection", () => {
     expect(getSupportedCountries().map((c) => c.iso2)).toEqual([
       "CD", "CG", "CM", "CI", "SN",
       "AO", "GA", "CF", "GQ", "NG", "BJ", "TG", "GH", "ZM", "BF",
+      "BW", "ZW", "MZ", "SS", "KE", "UG", "RW", "BI", "TZ", "MW", "NA",
     ]);
   });
 
