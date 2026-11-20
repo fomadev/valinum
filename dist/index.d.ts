@@ -17,6 +17,17 @@
  * - GH: Ghana
  * - ZM: Zambia
  * - BF: Burkina Faso
+ * - BW: Botswana
+ * - ZW: Zimbabwe
+ * - MZ: Mozambique
+ * - SS: South Sudan
+ * - KE: Kenya
+ * - UG: Uganda
+ * - RW: Rwanda
+ * - BI: Burundi
+ * - TZ: Tanzania
+ * - MW: Malawi
+ * - NA: Namibia
  */
 export * from "./types.js";
 export * from "./core/normalize.js";
@@ -39,6 +50,17 @@ export { validateTogo } from "./countries/togo.js";
 export { validateGhana } from "./countries/ghana.js";
 export { validateZambia } from "./countries/zambia.js";
 export { validateBurkinaFaso } from "./countries/burkina-faso.js";
+export { validateBotswana } from "./countries/botswana.js";
+export { validateZimbabwe } from "./countries/zimbabwe.js";
+export { validateMozambique } from "./countries/mozambique.js";
+export { validateSouthSudan } from "./countries/south-sudan.js";
+export { validateKenya } from "./countries/kenya.js";
+export { validateUganda } from "./countries/uganda.js";
+export { validateRwanda } from "./countries/rwanda.js";
+export { validateBurundi } from "./countries/burundi.js";
+export { validateTanzania } from "./countries/tanzania.js";
+export { validateMalawi } from "./countries/malawi.js";
+export { validateNamibia } from "./countries/namibia.js";
 /**
  * Validate a phone number from any supported country.
  *

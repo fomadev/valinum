@@ -21,6 +21,17 @@ import { TOGO } from "./togo.js";
 import { GHANA } from "./ghana.js";
 import { ZAMBIA } from "./zambia.js";
 import { BURKINA_FASO } from "./burkina-faso.js";
+import { BOTSWANA } from "./botswana.js";
+import { ZIMBABWE } from "./zimbabwe.js";
+import { MOZAMBIQUE } from "./mozambique.js";
+import { SOUTH_SUDAN } from "./south-sudan.js";
+import { KENYA } from "./kenya.js";
+import { UGANDA } from "./uganda.js";
+import { RWANDA } from "./rwanda.js";
+import { BURUNDI } from "./burundi.js";
+import { TANZANIA } from "./tanzania.js";
+import { MALAWI } from "./malawi.js";
+import { NAMIBIA } from "./namibia.js";
 
 export const COUNTRIES: Record<CountryCode, CountryDefinition> = {
   // Since 2.1.0
@@ -41,6 +52,19 @@ export const COUNTRIES: Record<CountryCode, CountryDefinition> = {
   GH: GHANA,
   ZM: ZAMBIA,
   BF: BURKINA_FASO,
+
+  // Since 2.3.0
+  BW: BOTSWANA,
+  ZW: ZIMBABWE,
+  MZ: MOZAMBIQUE,
+  SS: SOUTH_SUDAN,
+  KE: KENYA,
+  UG: UGANDA,
+  RW: RWANDA,
+  BI: BURUNDI,
+  TZ: TANZANIA,
+  MW: MALAWI,
+  NA: NAMIBIA,
 };
 
 /**
@@ -53,6 +77,7 @@ export const COUNTRIES: Record<CountryCode, CountryDefinition> = {
 export const DETECTION_TIERS: CountryCode[][] = [
   ["CD", "CG", "CM", "CI", "SN"],
   ["AO", "GA", "CF", "GQ", "NG", "BJ", "TG", "GH", "ZM", "BF"],
+  ["BW", "ZW", "MZ", "SS", "KE", "UG", "RW", "BI", "TZ", "MW", "NA"],
 ];
 
 /**

@@ -931,6 +931,357 @@ function validateBurkinaFaso(input, options = {}) {
  * Licensed under the Fordima Public License (FPL) v1.0.
  * See the LICENSE file in the project root for full license information.
  */
+const BOTSWANA = {
+    info: {
+        iso2: "BW",
+        dialCode: "267",
+        name: "Botswana",
+    },
+    nationalLength: 8,
+    trunkPrefix: null,
+    ranges: [
+        ...ranges("Mascom", "mobile", [
+            "71", "74",
+            "754", "755", "756", "759",
+            "760", "761", "762", "766", "767",
+            "770", "771", "776", "777", "778",
+            "789",
+            "7923", "7924", "7925", "7926", "7927",
+        ]),
+        ...ranges("Orange", "mobile", [
+            "72", "743", "744", "748",
+            "750", "751", "752", "753", "757",
+            "763", "764", "765", "769",
+            "773", "774", "775", "779",
+            "78",
+            "790", "7920", "7922", "793",
+        ]),
+        // Botswana Telecommunications Corporation (formerly beMOBILE).
+        ...ranges("BTC", "mobile", [
+            "73", "749", "758", "768", "772", "7921",
+        ]),
+    ],
+    ...groupedFormats("267", [2, 3, 3]),
+};
+/**
+ * Validate a Botswana phone number.
+ */
+function validateBotswana(input, options = {}) {
+    return validateWithDefinition(input, BOTSWANA, options);
+}
+
+/*
+ * Copyright (c) 2026 Fordima Inc. All rights reserved.
+ * Licensed under the Fordima Public License (FPL) v1.0.
+ * See the LICENSE file in the project root for full license information.
+ */
+const ZIMBABWE = {
+    info: {
+        iso2: "ZW",
+        dialCode: "263",
+        name: "Zimbabwe",
+    },
+    nationalLength: 9,
+    trunkPrefix: "0",
+    ranges: [
+        ...ranges("NetOne", "mobile", ["71", "72"]),
+        ...ranges("Telecel", "mobile", ["73"]),
+        ...ranges("Econet", "mobile", ["77", "78"]),
+    ],
+    ...groupedFormats("263", [2, 3, 4], "0"),
+};
+/**
+ * Validate a Zimbabwe phone number.
+ */
+function validateZimbabwe(input, options = {}) {
+    return validateWithDefinition(input, ZIMBABWE, options);
+}
+
+/*
+ * Copyright (c) 2026 Fordima Inc. All rights reserved.
+ * Licensed under the Fordima Public License (FPL) v1.0.
+ * See the LICENSE file in the project root for full license information.
+ */
+const MOZAMBIQUE = {
+    info: {
+        iso2: "MZ",
+        dialCode: "258",
+        name: "Mozambique",
+    },
+    nationalLength: 9,
+    trunkPrefix: null,
+    ranges: [
+        // Formerly mcel.
+        ...ranges("Tmcel", "mobile", ["82", "83"]),
+        ...ranges("Vodacom", "mobile", ["84", "85"]),
+        ...ranges("Movitel", "mobile", ["86", "87"]),
+    ],
+    ...groupedFormats("258", [2, 3, 4]),
+};
+/**
+ * Validate a Mozambique phone number.
+ */
+function validateMozambique(input, options = {}) {
+    return validateWithDefinition(input, MOZAMBIQUE, options);
+}
+
+/*
+ * Copyright (c) 2026 Fordima Inc. All rights reserved.
+ * Licensed under the Fordima Public License (FPL) v1.0.
+ * See the LICENSE file in the project root for full license information.
+ */
+const SOUTH_SUDAN = {
+    info: {
+        iso2: "SS",
+        dialCode: "211",
+        name: "South Sudan",
+    },
+    nationalLength: 9,
+    trunkPrefix: "0",
+    ranges: [
+        ...ranges("Zain", "mobile", ["91"]),
+        ...ranges("MTN", "mobile", ["92"]),
+        ...ranges("Digitel", "mobile", ["98"]),
+        // 95 (Vivacell, closed in 2018) and 97 (Gemtel) are not active.
+    ],
+    ...groupedFormats("211", [3, 3, 3], "0"),
+};
+/**
+ * Validate a South Sudan phone number.
+ */
+function validateSouthSudan(input, options = {}) {
+    return validateWithDefinition(input, SOUTH_SUDAN, options);
+}
+
+/*
+ * Copyright (c) 2026 Fordima Inc. All rights reserved.
+ * Licensed under the Fordima Public License (FPL) v1.0.
+ * See the LICENSE file in the project root for full license information.
+ */
+const KENYA = {
+    info: {
+        iso2: "KE",
+        dialCode: "254",
+        name: "Kenya",
+    },
+    nationalLength: 9,
+    trunkPrefix: "0",
+    ranges: [
+        ...ranges("Safaricom", "mobile", [
+            "70", "71", "72", "74", "757", "758", "759", "768", "769", "79",
+            "11", "140", "141", "142", "143", "144", "145", "146", "18",
+        ]),
+        ...ranges("Airtel", "mobile", [
+            "73", "75", "76", "78",
+            "100", "101", "102", "103", "104", "105", "106", "107", "108",
+            "135", "136", "137", "138", "139",
+        ]),
+        ...ranges("Telkom", "mobile", ["77", "761", "120"]),
+        // Equitel.
+        ...ranges("Finserve", "mobile", ["124"]),
+        // Faiba.
+        ...ranges("JTL", "mobile", ["747"]),
+        ...ranges("Homeland Media", "mobile", ["744"]),
+        ...ranges("Infura", "mobile", ["121"]),
+        ...ranges("NRG Media", "mobile", ["130"]),
+    ],
+    ...groupedFormats("254", [3, 3, 3], "0"),
+};
+/**
+ * Validate a Kenya phone number.
+ */
+function validateKenya(input, options = {}) {
+    return validateWithDefinition(input, KENYA, options);
+}
+
+/*
+ * Copyright (c) 2026 Fordima Inc. All rights reserved.
+ * Licensed under the Fordima Public License (FPL) v1.0.
+ * See the LICENSE file in the project root for full license information.
+ */
+const UGANDA = {
+    info: {
+        iso2: "UG",
+        dialCode: "256",
+        name: "Uganda",
+    },
+    nationalLength: 9,
+    trunkPrefix: "0",
+    ranges: [
+        ...ranges("MTN", "mobile", [
+            "76", "77", "78",
+            "790", "791", "792", "793", "794", "795",
+            "724", "737",
+        ]),
+        ...ranges("Airtel", "mobile", ["70", "74", "75", "730", "731", "732"]),
+        // Uganda Telecom.
+        ...ranges("UTL", "mobile", ["71"]),
+        ...ranges("Lycamobile", "mobile", ["721", "726", "727"]),
+        ...ranges("Talkio", "mobile", ["7280"]),
+        // 720 (Smile) and 798/799 (Africell) closed.
+    ],
+    ...groupedFormats("256", [3, 3, 3], "0"),
+};
+/**
+ * Validate a Uganda phone number.
+ */
+function validateUganda(input, options = {}) {
+    return validateWithDefinition(input, UGANDA, options);
+}
+
+/*
+ * Copyright (c) 2026 Fordima Inc. All rights reserved.
+ * Licensed under the Fordima Public License (FPL) v1.0.
+ * See the LICENSE file in the project root for full license information.
+ */
+const RWANDA = {
+    info: {
+        iso2: "RW",
+        dialCode: "250",
+        name: "Rwanda",
+    },
+    nationalLength: 9,
+    trunkPrefix: "0",
+    ranges: [
+        ...ranges("MTN", "mobile", ["78", "79"]),
+        ...ranges("Airtel", "mobile", ["72", "73"]),
+        // KT Rwanda Networks (4G LTE).
+        ...ranges("KTRN", "mobile", ["77"]),
+    ],
+    ...groupedFormats("250", [3, 3, 3], "0"),
+};
+/**
+ * Validate a Rwanda phone number.
+ */
+function validateRwanda(input, options = {}) {
+    return validateWithDefinition(input, RWANDA, options);
+}
+
+/*
+ * Copyright (c) 2026 Fordima Inc. All rights reserved.
+ * Licensed under the Fordima Public License (FPL) v1.0.
+ * See the LICENSE file in the project root for full license information.
+ */
+const BURUNDI = {
+    info: {
+        iso2: "BI",
+        dialCode: "257",
+        name: "Burundi",
+    },
+    nationalLength: 8,
+    trunkPrefix: null,
+    ranges: [
+        // Mobile
+        // Econet Leo.
+        ...ranges("Leo", "mobile", ["29", "71", "72", "76", "79"]),
+        // Viettel Burundi.
+        ...ranges("Lumitel", "mobile", [
+            "61", "62", "63", "64", "65", "66", "67", "68", "69",
+        ]),
+        // Onamob.
+        ...ranges("Onatel", "mobile", ["77"]),
+        // 75 and 78 (Smart) closed in 2022.
+        // Fixed
+        ...ranges("Onatel", "fixed", ["22"]),
+    ],
+    ...groupedFormats("257", [2, 2, 2, 2]),
+};
+/**
+ * Validate a Burundi phone number.
+ */
+function validateBurundi(input, options = {}) {
+    return validateWithDefinition(input, BURUNDI, options);
+}
+
+/*
+ * Copyright (c) 2026 Fordima Inc. All rights reserved.
+ * Licensed under the Fordima Public License (FPL) v1.0.
+ * See the LICENSE file in the project root for full license information.
+ */
+const TANZANIA = {
+    info: {
+        iso2: "TZ",
+        dialCode: "255",
+        name: "Tanzania",
+    },
+    nationalLength: 9,
+    trunkPrefix: "0",
+    ranges: [
+        ...ranges("Vodacom", "mobile", ["72", "74", "75", "76", "79"]),
+        ...ranges("Airtel", "mobile", ["60", "66", "68", "69", "78"]),
+        // Formerly Tigo and Zantel.
+        ...ranges("Yas", "mobile", ["65", "67", "70", "71", "77"]),
+        // Viettel Tanzania.
+        ...ranges("Halotel", "mobile", ["61", "62", "63"]),
+        ...ranges("TTCL", "mobile", ["73"]),
+    ],
+    ...groupedFormats("255", [3, 3, 3], "0"),
+};
+/**
+ * Validate a Tanzania phone number.
+ */
+function validateTanzania(input, options = {}) {
+    return validateWithDefinition(input, TANZANIA, options);
+}
+
+/*
+ * Copyright (c) 2026 Fordima Inc. All rights reserved.
+ * Licensed under the Fordima Public License (FPL) v1.0.
+ * See the LICENSE file in the project root for full license information.
+ */
+const MALAWI = {
+    info: {
+        iso2: "MW",
+        dialCode: "265",
+        name: "Malawi",
+    },
+    nationalLength: 9,
+    trunkPrefix: "0",
+    ranges: [
+        ...ranges("Airtel", "mobile", ["98", "99"]),
+        ...ranges("TNM", "mobile", ["88", "89"]),
+    ],
+    ...groupedFormats("265", [3, 2, 2, 2], "0"),
+};
+/**
+ * Validate a Malawi phone number.
+ */
+function validateMalawi(input, options = {}) {
+    return validateWithDefinition(input, MALAWI, options);
+}
+
+/*
+ * Copyright (c) 2026 Fordima Inc. All rights reserved.
+ * Licensed under the Fordima Public License (FPL) v1.0.
+ * See the LICENSE file in the project root for full license information.
+ */
+const NAMIBIA = {
+    info: {
+        iso2: "NA",
+        dialCode: "264",
+        name: "Namibia",
+    },
+    nationalLength: 9,
+    trunkPrefix: "0",
+    ranges: [
+        ...ranges("MTC", "mobile", ["81"]),
+        ...ranges("TN Mobile", "mobile", ["85"]),
+        ...ranges("Telecom Namibia", "mobile", ["60", "82"]),
+    ],
+    ...groupedFormats("264", [2, 3, 4], "0"),
+};
+/**
+ * Validate a Namibia phone number.
+ */
+function validateNamibia(input, options = {}) {
+    return validateWithDefinition(input, NAMIBIA, options);
+}
+
+/*
+ * Copyright (c) 2026 Fordima Inc. All rights reserved.
+ * Licensed under the Fordima Public License (FPL) v1.0.
+ * See the LICENSE file in the project root for full license information.
+ */
 const COUNTRIES = {
     // Since 2.1.0
     CD: DRC,
@@ -949,6 +1300,18 @@ const COUNTRIES = {
     GH: GHANA,
     ZM: ZAMBIA,
     BF: BURKINA_FASO,
+    // Since 2.3.0
+    BW: BOTSWANA,
+    ZW: ZIMBABWE,
+    MZ: MOZAMBIQUE,
+    SS: SOUTH_SUDAN,
+    KE: KENYA,
+    UG: UGANDA,
+    RW: RWANDA,
+    BI: BURUNDI,
+    TZ: TANZANIA,
+    MW: MALAWI,
+    NA: NAMIBIA,
 };
 /**
  * Countries grouped by the release that added them.
@@ -960,6 +1323,7 @@ const COUNTRIES = {
 const DETECTION_TIERS = [
     ["CD", "CG", "CM", "CI", "SN"],
     ["AO", "GA", "CF", "GQ", "NG", "BJ", "TG", "GH", "ZM", "BF"],
+    ["BW", "ZW", "MZ", "SS", "KE", "UG", "RW", "BI", "TZ", "MW", "NA"],
 ];
 /**
  * Resolve a country code (case-insensitive).
@@ -1070,5 +1434,5 @@ function validate(input, options = {}) {
     return primaryResult;
 }
 
-export { formatE164, formatGroups, formatInternational, formatNational, getSupportedCountries, normalize, parse, validate, validateAngola, validateBasic, validateBenin, validateBurkinaFaso, validateCameroon, validateCentralAfricanRepublic, validateCongoBrazzaville, validateDRC, validateEquatorialGuinea, validateGabon, validateGhana, validateIvoryCoast, validateNigeria, validateSenegal, validateTogo, validateZambia };
+export { formatE164, formatGroups, formatInternational, formatNational, getSupportedCountries, normalize, parse, validate, validateAngola, validateBasic, validateBenin, validateBotswana, validateBurkinaFaso, validateBurundi, validateCameroon, validateCentralAfricanRepublic, validateCongoBrazzaville, validateDRC, validateEquatorialGuinea, validateGabon, validateGhana, validateIvoryCoast, validateKenya, validateMalawi, validateMozambique, validateNamibia, validateNigeria, validateRwanda, validateSenegal, validateSouthSudan, validateTanzania, validateTogo, validateUganda, validateZambia, validateZimbabwe };
 //# sourceMappingURL=valinum.mjs.map

@@ -1,6 +1,6 @@
 # ValiNum
 
-ValiNum is a lightweight JavaScript and TypeScript library for validating and formatting phone numbers in 15 African countries. You pass it whatever the user typed; ValiNum works out the country, the operator, the line type and the standard formats. You never have to hard-code prefixes such as "82 is Vodacom" in your own code.
+ValiNum is a lightweight JavaScript and TypeScript library for validating and formatting phone numbers in 26 African countries. You pass it whatever the user typed; ValiNum works out the country, the operator, the line type and the standard formats. You never have to hard-code prefixes such as "82 is Vodacom" in your own code.
 
 New to ValiNum, or even to phone numbers? Read **[The ValiNum Course](DOCUMENTATION.md)**: it explains everything from Chapter 0 to the last chapter, with no prior knowledge needed. Release notes are in [CHANGELOG.md](CHANGELOG.md).
 
@@ -10,7 +10,9 @@ New to ValiNum, or even to phone numbers? Read **[The ValiNum Course](DOCUMENTAT
 | --- | --- | --- | --- |
 | Angola | `AO` | `+244` | Unitel, Movicel, Africell |
 | Benin | `BJ` | `+229` | MTN, Moov, Celtiis |
+| Botswana | `BW` | `+267` | Mascom, Orange, BTC |
 | Burkina Faso | `BF` | `+226` | Orange, Moov Africa, Telecel Faso |
+| Burundi | `BI` | `+257` | Leo, Lumitel, Onatel |
 | Cameroon | `CM` | `+237` | MTN, Orange, Nexttel, Camtel |
 | Central African Republic | `CF` | `+236` | Orange, Telecel, Moov Africa, Socatel |
 | Côte d'Ivoire | `CI` | `+225` | Orange, MTN, Moov |
@@ -18,11 +20,20 @@ New to ValiNum, or even to phone numbers? Read **[The ValiNum Course](DOCUMENTAT
 | Equatorial Guinea | `GQ` | `+240` | GETESA, Muni |
 | Gabon | `GA` | `+241` | Airtel, Moov Africa |
 | Ghana | `GH` | `+233` | MTN, Telecel, AT |
+| Kenya | `KE` | `+254` | Safaricom, Airtel, Telkom, Equitel… |
+| Malawi | `MW` | `+265` | Airtel, TNM |
+| Mozambique | `MZ` | `+258` | Tmcel, Vodacom, Movitel |
+| Namibia | `NA` | `+264` | MTC, TN Mobile, Telecom Namibia |
 | Nigeria | `NG` | `+234` | MTN, Airtel, Glo, 9mobile, Ntel, Smile, MAFAB… |
 | Republic of the Congo (Congo-Brazzaville) | `CG` | `+242` | MTN, Airtel, Equateur Telecom, Congo Telecom |
+| Rwanda | `RW` | `+250` | MTN, Airtel, KTRN |
 | Senegal | `SN` | `+221` | Orange, Yas, Expresso, Promobile, Hayo, ADIE |
+| South Sudan | `SS` | `+211` | Zain, MTN, Digitel |
+| Tanzania | `TZ` | `+255` | Vodacom, Airtel, Yas, Halotel, TTCL |
 | Togo | `TG` | `+228` | Yas, Moov Africa |
+| Uganda | `UG` | `+256` | MTN, Airtel, UTL, Lycamobile, Talkio |
 | Zambia | `ZM` | `+260` | Airtel, MTN, Zamtel, Zedmobile |
+| Zimbabwe | `ZW` | `+263` | NetOne, Telecel, Econet |
 
 ## What ValiNum can do
 
@@ -59,10 +70,10 @@ The built files in `dist/` are published on npm and committed to GitHub, so you 
 
 ```html
 <!-- From npm -->
-<script src="https://cdn.jsdelivr.net/npm/valinum@2.2.0/dist/valinum.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/valinum@2.3.0/dist/valinum.min.js"></script>
 
-<!-- Or straight from GitHub (needs the v2.2.0 tag) -->
-<script src="https://cdn.jsdelivr.net/gh/fomadev/valinum@v2.2.0/dist/valinum.min.js"></script>
+<!-- Or straight from GitHub (needs the v2.3.0 tag) -->
+<script src="https://cdn.jsdelivr.net/gh/fomadev/valinum@v2.3.0/dist/valinum.min.js"></script>
 
 <script>
   ValiNum.validate("0824708027").operator.name; // "Vodacom"
@@ -73,13 +84,13 @@ The built files in `dist/` are published on npm and committed to GitHub, so you 
 
 ```html
 <script type="module">
-  import { validate } from "https://cdn.jsdelivr.net/npm/valinum@2.2.0/dist/valinum.mjs";
+  import { validate } from "https://cdn.jsdelivr.net/npm/valinum@2.3.0/dist/valinum.mjs";
 
   validate("+237 671 23 45 67").country.name; // "Cameroon"
 </script>
 ```
 
-Short URLs also work and serve the minified file: `https://cdn.jsdelivr.net/npm/valinum@2.2.0` and `https://unpkg.com/valinum@2.2.0`.
+Short URLs also work and serve the minified file: `https://cdn.jsdelivr.net/npm/valinum@2.3.0` and `https://unpkg.com/valinum@2.3.0`.
 
 ## Quick example
 
@@ -112,7 +123,9 @@ validate(input: string, options?: ValidationOptions)
 ```ts
 validateDRC, validateCongoBrazzaville, validateCameroon, validateIvoryCoast, validateSenegal,
 validateAngola, validateGabon, validateCentralAfricanRepublic, validateEquatorialGuinea,
-validateNigeria, validateBenin, validateTogo, validateGhana, validateZambia, validateBurkinaFaso
+validateNigeria, validateBenin, validateTogo, validateGhana, validateZambia, validateBurkinaFaso,
+validateBotswana, validateZimbabwe, validateMozambique, validateSouthSudan, validateKenya,
+validateUganda, validateRwanda, validateBurundi, validateTanzania, validateMalawi, validateNamibia
 ```
 
 ## Result shape
@@ -142,4 +155,4 @@ npm run build
 
 ## More information
 
-[The ValiNum Course](DOCUMENTATION.md) covers everything in 19 chapters: phone number basics, every option and error code, the 15 countries, ready-to-use recipes, how the library works inside, and how to contribute.
+[The ValiNum Course](DOCUMENTATION.md) covers everything in 19 chapters: phone number basics, every option and error code, the 26 countries, ready-to-use recipes, how the library works inside, and how to contribute.
