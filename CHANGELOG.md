@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **MINOR** (`2.X.0`): new features that stay backward compatible (new countries, new options)
 - **PATCH** (`2.1.X`): backward compatible bug fixes and operator data corrections
 
+## [Unreleased]
+
+### Documentation
+
+- README, DOCUMENTATION and CONTRIBUTING realigned on 2.3.0: new examples for the 2.3.0 countries, version examples updated, and Chapter 8.3 now explains which national numbers of the new countries are read as Côte d'Ivoire, DR Congo or Burkina Faso numbers, and how `defaultCountry` fixes it.
+
 ## [2.3.0] - 2026-11-20
 
 ### Added

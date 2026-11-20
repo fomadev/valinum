@@ -102,7 +102,11 @@ validate("+237 671 23 45 67").country?.name;     // "Cameroon"
 validate("07 07 12 34 56").number?.e164;          // "+2250707123456"
 validate("77 123 45 67").number?.international;   // "+221 77 123 45 67"
 validate("06 123 4567").lineType;                 // "mobile"
+validate("+254 712 345 678").operator?.name;      // "Safaricom"
+validate("0754 123 456", { defaultCountry: "TZ" }).operator?.name; // "Vodacom"
 ```
+
+> National numbers are matched against the countries supported since 2.1.0 first, then 2.2.0, then 2.3.0. Many East and Southern African numbers written without `+` look like Côte d'Ivoire or DR Congo numbers, so set `defaultCountry` (for example `"KE"`) or ask for the international format. See [Chapter 8.3](DOCUMENTATION.md#83-older-countries-keep-their-numbers).
 
 ## Main API
 
