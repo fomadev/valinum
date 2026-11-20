@@ -6,6 +6,8 @@ New to ValiNum, or even to phone numbers? Read **[The ValiNum Course](DOCUMENTAT
 
 ## Supported countries
 
+![Map of Africa showing the 26 countries supported by ValiNum](assets/supported-countries.svg)
+
 | Country | Code | Dial code | Operators |
 | --- | --- | --- | --- |
 | Angola | `AO` | `+244` | Unitel, Movicel, Africell |
