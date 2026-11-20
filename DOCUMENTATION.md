@@ -561,6 +561,7 @@ validate("+242 06 123 4567").country.iso2; // "CG"
 validate("237671234567").country.iso2; // "CM"
 validate("07 07 12 34 56").country.iso2; // "CI"
 validate("77 123 45 67").country.iso2; // "SN"
+validate("+254 712 345 678").country.iso2; // "KE"
 ```
 
 ### 8.2 When a number fits several countries
@@ -582,6 +583,23 @@ ValiNum added countries over time: five in version 2.1.0, ten more in 2.2.0 and 
 - `077 123 4567` stays a Côte d'Ivoire number, even though it is also a valid number in Zambia, Zimbabwe, Kenya, Uganda, Rwanda and Tanzania.
 - `062 123 456` stays a Congo-Brazzaville number, even though it is also valid in Gabon.
 - Every Benin number (`01 …`) is also a valid Moov Côte d'Ivoire number. So for Benin, use `defaultCountry: "BJ"` or the `+229` prefix.
+
+The countries added in 2.3.0 are tried last, so many of their national numbers are claimed by an older country:
+
+| Number typed | Country | Read as | Why |
+| --- | --- | --- | --- |
+| `0712 345 678`, `0772 123 456`, `0754 123 456` | Kenya, Uganda, Tanzania (also Rwanda, Zimbabwe) | Côte d'Ivoire | 10 digits starting with `07`, `05` or `01` are Côte d'Ivoire mobiles |
+| `84 123 4567`, `0991 23 45 67`, `081 123 4567` | Mozambique, Malawi, Namibia | DR Congo | Same length and prefix as a DRC number |
+| `68 12 34 56` | Burundi | Burkina Faso | Valid Telecel Faso number |
+| `71 123 456`, `79 12 34 56` | Botswana, Burundi | not recognized | Several 2.2.0 countries match (Togo, Burkina Faso…), so ValiNum refuses to guess |
+
+If your users are in one of these countries, set `defaultCountry` (or `country`), or ask for the international format:
+
+```js
+validate("0712 345 678").country.iso2; // "CI"
+validate("0712 345 678", { defaultCountry: "KE" }).country.iso2; // "KE"
+validate("+254 712 345 678").operator.name; // "Safaricom"
+```
 
 ### 8.4 Choosing the right strategy
 
@@ -1236,6 +1254,8 @@ Ranges can overlap. In Cameroon, `65` is split between MTN (`650`–`654`) and O
 655123456 → candidates: none for "65", Orange for "655" → Orange
 ```
 
+The same rule splits Botswana's `74`: Mascom by default, but Orange for `743`, `744`, `748` and BTC for `749`.
+
 For complex fixed-line plans (Equatorial Guinea, Burkina Faso), a range can also carry a full **pattern** (a regular expression) that the whole number must match.
 
 ### 14.4 Detection across countries
@@ -1402,15 +1422,15 @@ ValiNum follows [Semantic Versioning](https://semver.org). A version number has 
 
 | Change | Example | Meaning for you |
 | --- | --- | --- |
-| **PATCH** (`2.2.0` → `2.2.1`) | A corrected prefix, a bug fix | Update without worry |
-| **MINOR** (`2.2.0` → `2.3.0`) | A new country, a new option | Update without worry; you get new features |
-| **MAJOR** (`2.2.0` → `3.0.0`) | A change that can break existing code | Read the changelog before updating |
+| **PATCH** (`2.3.0` → `2.3.1`) | A corrected prefix, a bug fix | Update without worry |
+| **MINOR** (`2.3.0` → `2.4.0`) | A new country, a new option | Update without worry; you get new features |
+| **MAJOR** (`2.3.0` → `3.0.0`) | A change that can break existing code | Read the changelog before updating |
 
 Every change is listed in [CHANGELOG.md](CHANGELOG.md).
 
 ### 17.4 Releases
 
-A release is published by pushing a tag such as `v2.2.0`. GitHub Actions then runs the tests, builds the files, creates the GitHub release with notes taken from the changelog, and publishes the package to npm. The tag must match the version in `package.json`.
+A release is published by pushing a tag such as `v2.3.0`. GitHub Actions then runs the tests, builds the files, creates the GitHub release with notes taken from the changelog, and publishes the package to npm. The tag must match the version in `package.json`.
 
 ---
 

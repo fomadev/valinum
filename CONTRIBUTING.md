@@ -25,7 +25,7 @@ By contributing to this repository, you agree that:
 ### 2. Suggesting Enhancements
 
 - We are always looking to improve the UX and logic.
-- If you want to add support for a new country (e.g., Mali, Kenya), please provide the official numbering plan: number length, trunk prefix, and the operator of each prefix, with a source (regulator or ITU document).
+- If you want to add support for a new country (e.g., Mali, Ethiopia), please provide the official numbering plan: number length, trunk prefix, and the operator of each prefix, with a source (regulator or ITU document).
 - If an operator received a new prefix or changed its name, open an issue with the prefix and a source.
 
 ### 3. Pull Requests (The Process)
