@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/icon.png" alt="ValiNum icon" width="96">
+</p>
+
 # The ValiNum Course
 
 **Version 2.3.0** · From zero to expert, one chapter at a time.
